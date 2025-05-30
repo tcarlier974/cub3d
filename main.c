@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/05/30 17:08:20 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/05/30 17:30:15 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	recup_texture(t_cube *cube)
 {
 	int	i = 0;
 	char	*textures[] = {
-		"./textures/texture2.xpm"
+		"test.xpm"
 	};
 	cube->texture[i].img = mlx_xpm_file_to_image(cube->mlx, textures[i], &cube->texture[i].width, &cube->texture[i].height);
 	if (!cube->texture[i].img)
@@ -224,11 +224,9 @@ void raycast(t_cube *cube)
 					wall_x = cube->player_x + ray.perp_wall_dist * ray.ray_dir_x;
 				wall_x -= floor(wall_x);
 				int tex_x = (int)(wall_x * (double)tex_width);
-				if (ray.side == 0 && ray.ray_dir_x > 0)
-					tex_x = tex_width - tex_x - 1;
-				if (ray.side == 1 && ray.ray_dir_y < 0)
-					tex_x = tex_width - tex_x - 1;
 				if (tex_x < 0) tex_x += tex_width;
+				if ((ray.side == 0 && ray.ray_dir_x < 0) || (ray.side == 1 && ray.ray_dir_y > 0))
+					tex_x = tex_width - tex_x - 1;
 				if (tex_y < 0) tex_y += tex_height;
 				color = *(unsigned int *)(cube->texture[0].addr + (tex_y * cube->texture[0].line_length + tex_x * (cube->texture[0].bits_per_pixel / 8)));
 			}

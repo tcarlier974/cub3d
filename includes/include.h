@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/05/30 12:17:05 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/05/30 18:04:33 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@
 # define TEXTURE_COUNT 1
 # define RENDER_FPS 30
 # ifndef WIDTH
-#  define WIDTH 800
+#  define WIDTH 1800
 # endif
 # ifndef HEIGHT
-#  define HEIGHT 600
+#  define HEIGHT 1169
 # endif
 
 typedef struct s_raycast
