@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/05/30 17:30:15 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/05/31 02:32:33 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	recup_texture(t_cube *cube)
 {
 	int	i = 0;
 	char	*textures[] = {
-		"test.xpm"
+		"./textures/texture2.xpm"
 	};
 	cube->texture[i].img = mlx_xpm_file_to_image(cube->mlx, textures[i], &cube->texture[i].width, &cube->texture[i].height);
 	if (!cube->texture[i].img)
@@ -185,6 +185,52 @@ void	dda_algo(t_raycast *ray, t_cube *cube)
 	}
 }
 
+void	draw_square(t_cube *cube, int color, int x, int y, int square_size)
+{
+	int i, j;
+
+	for (j = 0; j < square_size; j++)
+	{
+		for (i = 0; i < square_size; i++)
+		{
+			my_mlx_pixel_put(&cube->img, x + i, y + j, color);
+		}
+	}
+}
+
+void	draw_minimap(t_cube *cube)
+{
+	int x, y, i, j;
+	int color;
+	int square_size;
+
+	i = 0;
+	j = 0;
+
+	if (cube->map_height > cube->map_width)
+		square_size = (int)((float)(HEIGHT / 8) / (float)cube->map_height);
+	else
+		square_size = (int)((float)(WIDTH / 8) / (float)cube->map_width);
+
+	printf("Map dimensions: %d x %d\n", cube->map_height, cube->map_width);
+	printf("Square size: %d\n", square_size);
+	for (y = 0; y < cube->map_height * square_size; y+= square_size)
+	{
+		for (x = 0; x < cube->map_width * square_size; x+= square_size)
+		{
+			if (cube->map[y / square_size][x / square_size] == '1')
+				color = 0xFFFFF0;
+			else if (cube->map[y / square_size][x / square_size] == '0')
+				color = 0x000000;
+			else if (cube->map[y / square_size][x / square_size] == cube->map[(int)cube->player_y][(int)cube->player_x])
+				color = 0xFF0000;
+			else
+				color = 0x00FF00;
+			draw_square(cube, color, x, y, square_size);
+		}
+	}
+}
+
 void raycast(t_cube *cube)
 {
 	t_raycast ray;
@@ -238,6 +284,7 @@ void raycast(t_cube *cube)
 			y++;
 		}
 		x++;
+		// draw_minimap(cube);
 	}
 
 }
@@ -285,41 +332,41 @@ int key_hook(int keycode, t_cube *cube)
 	{
 		if (cube->map[(int)(cube->player_y + (cube->dir_y * 0.09))] != NULL)
 		{
-			if(cube->map[(int)(cube->player_y + (cube->dir_y * 0.09))][(int)(cube->player_x)])
+			if(cube->map[(int)(cube->player_y + (cube->dir_y * 0.09))][(int)(cube->player_x)] == '0')
 				cube->player_y += (cube->dir_y * 0.09);
 		}
-		if(cube->map[(int)(cube->player_y)][(int)(cube->player_x + (cube->dir_x * 0.09))])
+		if(cube->map[(int)(cube->player_y)][(int)(cube->player_x + (cube->dir_x * 0.09))] == '0')
 			cube->player_x += (cube->dir_x * 0.09);
     }
 	if (keycode == 0)
 	{
 		if (cube->map[(int)(cube->player_y - (cube->dir_y * 0.09))] != NULL)
 		{
-			if(cube->map[(int)(cube->player_y - (cube->dir_y * 0.09))][(int)(cube->player_x)])
+			if(cube->map[(int)(cube->player_y - (cube->plane_y * 0.09))][(int)(cube->player_x)] == '0')
 				cube->player_y -= (cube->plane_y * 0.09);
 		}
-		if(cube->map[(int)(cube->player_y)][(int)(cube->player_x - (cube->dir_x * 0.09))])
+		if(cube->map[(int)(cube->player_y)][(int)(cube->player_x - (cube->plane_x * 0.09))] == '0')
 			cube->player_x -= (cube->plane_x * 0.09);
 	}
 	if (keycode == 2)
 	{
 		if (cube->map[(int)(cube->player_y + (cube->plane_y * 0.09))] != NULL)
 		{
-			if(cube->map[(int)(cube->player_y + (cube->plane_y * 0.09))][(int)(cube->player_x)])
+			if(cube->map[(int)(cube->player_y + (cube->plane_y * 0.09))][(int)(cube->player_x)] == '0')
 				cube->player_y += (cube->plane_y * 0.09);
 		}
-		if(cube->map[(int)(cube->player_y)][(int)(cube->player_x + (cube->plane_x * 0.09))])
+		if(cube->map[(int)(cube->player_y)][(int)(cube->player_x + (cube->plane_x * 0.09))] == '0')
 			cube->player_x += (cube->plane_x * 0.09);
 	}
 	if (keycode == 1)
 	{
 		if (cube->map[(int)(cube->player_y - (cube->dir_y * 0.09))])
 		{
-			if(cube->map[(int)(cube->player_y - (cube->dir_y * 0.09))][(int)(cube->player_x)])
-				cube->player_x -= (cube->dir_x * 0.09);
+			if(cube->map[(int)(cube->player_y - (cube->dir_y * 0.09))][(int)(cube->player_x)] == '0')
+				cube->player_y -= (cube->dir_y * 0.09);
 		}
-      	if(cube->map[(int)(cube->player_y)][(int)(cube->player_x - (cube->dir_x * 0.09))])
-	  		cube->player_y -= (cube->dir_y * 0.09);
+      	if(cube->map[(int)(cube->player_y)][(int)(cube->player_x - (cube->dir_x * 0.09))] == '0')
+	  		cube->player_x -= (cube->dir_x * 0.09);
 	}
 	printf("Player at x = %.2f  y = %.2f\n", cube->player_x, cube->player_y);
 	printf("keycode = %d\n", keycode);
