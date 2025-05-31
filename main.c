@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/05/31 02:32:33 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/05/31 10:31:47 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,7 +254,12 @@ void raycast(t_cube *cube)
       	ray.draw_end = (ray.line_height / 2) + (HEIGHT / 2);
       	if(ray.draw_end >= HEIGHT)
 	  		ray.draw_end = HEIGHT - 1;
-		y = ray.draw_start;
+		y = 0;
+		while (y < ray.draw_start)
+		{
+			my_mlx_pixel_put(&cube->img, x, y, 0x00FFFF);
+			y++;
+		}
 		while (y < ray.draw_end)
 		{
 			if (cube->map[ray.map_y][ray.map_x] == '1')
@@ -281,6 +286,11 @@ void raycast(t_cube *cube)
 			if (ray.side == 1)
 				color = (color >> 1) & 8355711;
 			my_mlx_pixel_put(&cube->img, x, y, color);
+			y++;
+		}
+		while (y < HEIGHT)
+		{
+			my_mlx_pixel_put(&cube->img, x, y, 0x0F0F0F);
 			y++;
 		}
 		x++;
@@ -330,42 +340,42 @@ int key_hook(int keycode, t_cube *cube)
 	}
 	if (keycode == 13)
 	{
-		if (cube->map[(int)(cube->player_y + (cube->dir_y * 0.09))] != NULL)
+		if (cube->map[(int)(cube->player_y + (cube->dir_y * 0.095))] != NULL)
 		{
-			if(cube->map[(int)(cube->player_y + (cube->dir_y * 0.09))][(int)(cube->player_x)] == '0')
+			if(cube->map[(int)(cube->player_y + (cube->dir_y * 0.095))][(int)(cube->player_x)] == '0')
 				cube->player_y += (cube->dir_y * 0.09);
 		}
-		if(cube->map[(int)(cube->player_y)][(int)(cube->player_x + (cube->dir_x * 0.09))] == '0')
+		if(cube->map[(int)(cube->player_y)][(int)(cube->player_x + (cube->dir_x * 0.095))] == '0')
 			cube->player_x += (cube->dir_x * 0.09);
     }
 	if (keycode == 0)
 	{
-		if (cube->map[(int)(cube->player_y - (cube->dir_y * 0.09))] != NULL)
+		if (cube->map[(int)(cube->player_y - (cube->dir_y * 0.095))] != NULL)
 		{
-			if(cube->map[(int)(cube->player_y - (cube->plane_y * 0.09))][(int)(cube->player_x)] == '0')
+			if(cube->map[(int)(cube->player_y - (cube->plane_y * 0.095))][(int)(cube->player_x)] == '0')
 				cube->player_y -= (cube->plane_y * 0.09);
 		}
-		if(cube->map[(int)(cube->player_y)][(int)(cube->player_x - (cube->plane_x * 0.09))] == '0')
+		if(cube->map[(int)(cube->player_y)][(int)(cube->player_x - (cube->plane_x * 0.095))] == '0')
 			cube->player_x -= (cube->plane_x * 0.09);
 	}
 	if (keycode == 2)
 	{
-		if (cube->map[(int)(cube->player_y + (cube->plane_y * 0.09))] != NULL)
+		if (cube->map[(int)(cube->player_y + (cube->plane_y * 0.095))] != NULL)
 		{
-			if(cube->map[(int)(cube->player_y + (cube->plane_y * 0.09))][(int)(cube->player_x)] == '0')
+			if(cube->map[(int)(cube->player_y + (cube->plane_y * 0.095))][(int)(cube->player_x)] == '0')
 				cube->player_y += (cube->plane_y * 0.09);
 		}
-		if(cube->map[(int)(cube->player_y)][(int)(cube->player_x + (cube->plane_x * 0.09))] == '0')
+		if(cube->map[(int)(cube->player_y)][(int)(cube->player_x + (cube->plane_x * 0.095))] == '0')
 			cube->player_x += (cube->plane_x * 0.09);
 	}
 	if (keycode == 1)
 	{
-		if (cube->map[(int)(cube->player_y - (cube->dir_y * 0.09))])
+		if (cube->map[(int)(cube->player_y - (cube->dir_y * 0.095))])
 		{
-			if(cube->map[(int)(cube->player_y - (cube->dir_y * 0.09))][(int)(cube->player_x)] == '0')
+			if(cube->map[(int)(cube->player_y - (cube->dir_y * 0.095))][(int)(cube->player_x)] == '0')
 				cube->player_y -= (cube->dir_y * 0.09);
 		}
-      	if(cube->map[(int)(cube->player_y)][(int)(cube->player_x - (cube->dir_x * 0.09))] == '0')
+      	if(cube->map[(int)(cube->player_y)][(int)(cube->player_x - (cube->dir_x * 0.095))] == '0')
 	  		cube->player_x -= (cube->dir_x * 0.09);
 	}
 	printf("Player at x = %.2f  y = %.2f\n", cube->player_x, cube->player_y);
