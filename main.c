@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/05/31 10:31:47 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/05/31 18:31:42 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	init_cube(t_cube *cube, const char *map_file)
 	cube->img.width = WIDTH;
 	cube->img.height = HEIGHT;
 	cube->map = NULL;
-	cube->map_width = count_col(map_file);
+	cube->map_width = count_max_col(map_file);
 	cube->map_height = count_lines(map_file);
 }
 
@@ -88,7 +88,7 @@ void init_map(char ***map, const char *file_path, t_cube *cube)
 	while (line)
 	{
 		i = 0;
-		(*map)[line_count] = malloc(strlen(line) + 1);
+		(*map)[line_count] = malloc(sizeof(char *) * strlen(line) + 1);
 		if (!(*map)[line_count])
 		{
 			free(line);
@@ -108,8 +108,10 @@ void init_map(char ***map, const char *file_path, t_cube *cube)
 			}
 			else if (line[i] == ' ')
 				(*map)[line_count][i] = '0';
+			else if (line[i] > 48)
+				(*map)[line_count][i] = line[i];
 			else
-			(*map)[line_count][i] = line[i];
+				(*map)[line_count][i] = '0';
 			i++;
 		}
 		(*map)[line_count][i] = '\0';
@@ -409,7 +411,7 @@ int	main(int ac, char **av)
 		return (1);
 	}
 	
-	if (count_lines(av[1]) <= 0 || count_col(av[1]) <= 0)
+	if (count_lines(av[1]) <= 0 || count_max_col(av[1]) <= 0)
 	{
 		fprintf(stderr, "Invalid map file: %s\n", av[1]);
 		return (1);

@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/05/30 18:04:33 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/05/31 10:40:10 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	init_map(char ***map, const char *file_path, t_cube *cube);
 void	raycast(t_cube *cube);
 int     key_hook(int keycode, t_cube *cube);
 int     count_lines(const char *file_path);
-int     count_col(const char *file_path);
+int     count_max_col(const char *file_path);
 
 // Thread related functions
 int		update_game_state(t_cube *cube);
