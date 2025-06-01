@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/05/31 10:40:10 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/06/02 00:22:06 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # include "mlx.h"
 # include "../get_next_line/get_next_line.h"
 
-# define TEXTURE_COUNT 1
+# define TEXTURE_COUNT 4
 # define RENDER_FPS 30
 # ifndef WIDTH
 #  define WIDTH 1800
@@ -69,7 +69,9 @@ typedef struct s_cube
 	void	*mlx;
 	void	*win;
 	t_img	img;
-	t_img	texture[1];
+	t_img	texture[TEXTURE_COUNT];
+	int		ceiling_color;
+	int		floor_color;
 	char	**map;
 	int		map_width;
 	int		map_height;
@@ -84,7 +86,7 @@ typedef struct s_cube
 // Function prototypes
 void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
 void	init_cube(t_cube *cube, const char *map_file);
-void	recup_texture(t_cube *cube);
+void	recup_texture(t_cube *cube, const char *map_file);
 void	draw_texture(t_cube *cube, int x, int y, t_img texture);
 void	init_map(char ***map, const char *file_path, t_cube *cube);
 void	raycast(t_cube *cube);

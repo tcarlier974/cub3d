@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/05/31 18:31:42 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/06/02 00:48:30 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,21 +36,223 @@ void	init_cube(t_cube *cube, const char *map_file)
 	cube->map_height = count_lines(map_file);
 }
 
-void	recup_texture(t_cube *cube)
+int	rgb_to_int(const char *rgb)
 {
-	int	i = 0;
-	char	*textures[] = {
-		"./textures/texture2.xpm"
-	};
-	cube->texture[i].img = mlx_xpm_file_to_image(cube->mlx, textures[i], &cube->texture[i].width, &cube->texture[i].height);
-	if (!cube->texture[i].img)
+	int r, g, b;
+	int i = 0;
+	while (rgb[i] == ' ')
+		i++;
+	r = atoi(rgb + i);
+	while (rgb[i] >= '0' && rgb[i] <= '9')
+		i++;
+	i++;
+	g = atoi(rgb + i);
+	while (rgb[i] >= '0' && rgb[i] <= '9')
+		i++;
+	i++;
+	b = atoi(rgb + i);
+	if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
 	{
-		fprintf(stderr, "Failed to load texture: %s\n", textures[i]);
+		fprintf(stderr, "Invalid RGB value: %s\n", rgb);
 		exit(EXIT_FAILURE);
 	}
-	cube->texture[i].addr = mlx_get_data_addr(cube->texture[i].img, &cube->texture[i].bits_per_pixel, &cube->texture[i].line_length, &cube->texture[i].endian);
-	printf("Texture %d loaded: %dx%d\n", i, cube->texture[i].width, cube->texture[i].height);
-	i++;
+	write(1, "RGB values: ", 12);
+	printf("R: %d, G: %d, B: %d\n", r, g, b);
+	return (r << 16 | g << 8 | b);
+}
+
+void	recup_textures_path(char **textures, const char *map_file, t_cube *cube)
+{
+	int	fd;
+
+	fd = open(map_file, O_RDONLY);
+	if (fd < 0)
+	{
+		fprintf(stderr, "Failed to open map file: %s\n", map_file);
+		exit(EXIT_FAILURE);
+	}
+	char	*line;
+	int	i = 0;
+	int j = 0;
+	write(1, "Recuperation des textures...\n", 28);
+	line = get_next_line(fd);
+	while (i < TEXTURE_COUNT + 2 && line)
+	{
+		printf("Processing line: %s", line);
+		while (line[0] == '\n' || line[0] == '\0')
+		{
+			free(line);
+			line = get_next_line(fd);
+		}
+		while (line[j] == ' ')
+			j++;
+		if (line[j] == 'N')
+		{
+			j+=2;
+			while (line[j] == ' ')
+				j++;
+			printf("Texture N path: %s\n", line + j);
+			textures[0] = strdup(line + j);
+			if (textures[0]) 
+			{
+				char *newline = strchr(textures[0], '\n');
+				if (newline)
+					*newline = '\0';
+				printf("Chemin nettoyé: '%s'\n", textures[0]);
+			}
+			if (!textures[0])
+			{
+				fprintf(stderr, "Failed to allocate memory for texture path\n");
+				exit(EXIT_FAILURE);
+			}
+			i++;
+		}
+		else if (line[j] == 'S')
+		{
+			j+=2;
+			while (line[j] == ' ')
+				j++;
+			textures[1] = strdup(line + j);
+			if (textures[1]) 
+			{
+				char *newline = strchr(textures[1], '\n');
+				if (newline)
+					*newline = '\0';
+				printf("Chemin nettoyé: '%s'\n", textures[1]);
+			}
+			if (!textures[1])
+			{
+				fprintf(stderr, "Failed to allocate memory for texture path\n");
+				exit(EXIT_FAILURE);
+			}
+			i++;
+		}
+		else if (line[j] == 'E')
+		{
+			j+=2;
+			while (line[j] == ' ')
+				j++;
+			textures[2] = strdup(line + j);
+			if (textures[2]) 
+			{
+				char *newline = strchr(textures[2], '\n');
+				if (newline)
+					*newline = '\0';
+				printf("Chemin nettoyé: '%s'\n", textures[2]);
+			}
+			if (!textures[2])
+			{
+				fprintf(stderr, "Failed to allocate memory for texture path\n");
+				exit(EXIT_FAILURE);
+			}
+			i++;
+		}
+		else if (line[j] == 'W')
+		{
+			j+=2;
+			while (line[j] == ' ')
+				j++;
+			textures[3] = strdup(line + j);
+			if (textures[3]) 
+			{
+				char *newline = strchr(textures[3], '\n');
+				if (newline)
+					*newline = '\0';
+				printf("Chemin nettoyé: '%s'\n", textures[3]);
+			}
+			if (!textures[3])
+			{
+				fprintf(stderr, "Failed to allocate memory for texture path\n");
+				exit(EXIT_FAILURE);
+			}
+			i++;
+		}
+		else if (line[j] == 'F')
+		{
+			j++;
+			while (line[j] == ' ')
+				j++;
+			printf("Floor color: %s\n", line + j);
+			cube->floor_color = rgb_to_int(line + j);
+			if (cube->floor_color < 0 || cube->floor_color > 0xFFFFFF)
+			{
+				fprintf(stderr, "Invalid floor color value: %d\n", cube->floor_color);
+				exit(EXIT_FAILURE);
+			}
+			printf("Floor color: %d\n", cube->floor_color);
+			i++;
+		}
+		else if (line[j] == 'C')
+		{
+			j++;
+			while (line[j] == ' ')
+				j++;
+			cube->ceiling_color = rgb_to_int(line + j);
+			if (cube->ceiling_color < 0 || cube->ceiling_color > 0xFFFFFF)
+			{
+				fprintf(stderr, "Invalid ceiling color value: %d\n", cube->ceiling_color);
+				exit(EXIT_FAILURE);
+			}
+			printf("Ceiling color: %d\n", cube->ceiling_color);
+			i++;
+		}
+		else
+		{
+			fprintf(stderr, "Unknown texture identifier: %c\n", line[j]);
+			exit(EXIT_FAILURE);
+		}
+		free(line);
+		line = get_next_line(fd);
+		j = 0;
+	}
+	close(fd);
+	if (i < TEXTURE_COUNT)
+	{
+		fprintf(stderr, "Not enough textures found in the map file: %s\n", map_file);
+		exit(EXIT_FAILURE);
+	}
+}
+
+void	recup_texture(t_cube *cube, const char *map_file)
+{
+	int	i = 0;
+	char	**textures;
+
+	textures = malloc(sizeof(char *) * TEXTURE_COUNT);
+	if (!textures)
+	{
+		fprintf(stderr, "Failed to allocate memory for textures\n");
+		exit(EXIT_FAILURE);
+	}
+	write(1, "Recuperation des textures...\n", 28);
+	recup_textures_path(textures, map_file, cube);
+	write(1, "Textures recuperées.\n", 22);
+	while (i < TEXTURE_COUNT)
+	{
+		if (!textures[i])
+		{
+			fprintf(stderr, "Texture path not found for index %d\n", i);
+			exit(EXIT_FAILURE);
+		}
+		printf("Loading texture %d: %s\n", i, textures[i]);
+		cube->texture[i].img = NULL;
+		cube->texture[i].bits_per_pixel = 0;
+		cube->texture[i].line_length = 0;
+		cube->texture[i].endian = 0;
+		cube->texture[i].width = 0;
+		cube->texture[i].height = 0;
+		cube->texture[i].img = mlx_xpm_file_to_image(cube->mlx, textures[i], &cube->texture[i].width, &cube->texture[i].height);
+		if (!cube->texture[i].img)
+		{
+			fprintf(stderr, "Failed to load texture: %s\n", textures[i]);
+			exit(EXIT_FAILURE);
+		}
+		free(textures[i]);
+		cube->texture[i].addr = mlx_get_data_addr(cube->texture[i].img, &cube->texture[i].bits_per_pixel, &cube->texture[i].line_length, &cube->texture[i].endian);
+		printf("Texture %d loaded: %dx%d\n", i, cube->texture[i].width, cube->texture[i].height);
+		i++;
+	}
+	free(textures);
 }
 void	draw_texture(t_cube *cube, int x, int y, t_img texture)
 {
@@ -74,6 +276,7 @@ void init_map(char ***map, const char *file_path, t_cube *cube)
 	char	*line;
 	int		line_count = 0;
 	int		i = 0;
+	int		j = 0;
 
 	fd = open(file_path, O_RDONLY);
 	if (fd < 0)
@@ -83,8 +286,22 @@ void init_map(char ***map, const char *file_path, t_cube *cube)
 	}
 	*map = malloc(sizeof(char *) * count_lines(file_path));
 	if (!*map)
-		return;
+	return;
 	line = get_next_line(fd);
+	while (j < 6)
+	{
+		while(line[0] == '\n')
+		{
+			free(line);
+			line = get_next_line(fd);
+		}
+		if (line[0] != '\n' && line[0] != '\0')
+		{
+			j++;
+		}
+		free(line);
+		line = get_next_line(fd);
+	}
 	while (line)
 	{
 		i = 0;
@@ -239,6 +456,7 @@ void raycast(t_cube *cube)
 	int x;
 	int	y;
 	int	color;
+	int tex_num = 0;
 
 	x = 0;
 	while (x < WIDTH)
@@ -259,7 +477,7 @@ void raycast(t_cube *cube)
 		y = 0;
 		while (y < ray.draw_start)
 		{
-			my_mlx_pixel_put(&cube->img, x, y, 0x00FFFF);
+			my_mlx_pixel_put(&cube->img, x, y, cube->ceiling_color);
 			y++;
 		}
 		while (y < ray.draw_end)
@@ -281,7 +499,21 @@ void raycast(t_cube *cube)
 				if ((ray.side == 0 && ray.ray_dir_x < 0) || (ray.side == 1 && ray.ray_dir_y > 0))
 					tex_x = tex_width - tex_x - 1;
 				if (tex_y < 0) tex_y += tex_height;
-				color = *(unsigned int *)(cube->texture[0].addr + (tex_y * cube->texture[0].line_length + tex_x * (cube->texture[0].bits_per_pixel / 8)));
+				if (ray.side == 0)
+				{
+					if (ray.ray_dir_x < 0)
+						tex_num = 3;
+					else
+						tex_num = 2;
+				}
+				else
+				{
+					if (ray.ray_dir_y < 0)
+						tex_num = 0;
+					else
+						tex_num = 1;
+				}
+				color = *(unsigned int *)(cube->texture[tex_num].addr + (tex_y * cube->texture[tex_num].line_length + tex_x * (cube->texture[tex_num].bits_per_pixel / 8)));
 			}
 			else if (cube->map[ray.map_y][ray.map_x] == '2')
 				color = 0xFF0000;
@@ -292,7 +524,7 @@ void raycast(t_cube *cube)
 		}
 		while (y < HEIGHT)
 		{
-			my_mlx_pixel_put(&cube->img, x, y, 0x0F0F0F);
+			my_mlx_pixel_put(&cube->img, x, y, cube->floor_color);
 			y++;
 		}
 		x++;
@@ -342,42 +574,42 @@ int key_hook(int keycode, t_cube *cube)
 	}
 	if (keycode == 13)
 	{
-		if (cube->map[(int)(cube->player_y + (cube->dir_y * 0.095))] != NULL)
+		if (cube->map[(int)(cube->player_y + (cube->dir_y * 0.15))] != NULL)
 		{
-			if(cube->map[(int)(cube->player_y + (cube->dir_y * 0.095))][(int)(cube->player_x)] == '0')
+			if(cube->map[(int)(cube->player_y + (cube->dir_y * 0.15))][(int)(cube->player_x)] == '0')
 				cube->player_y += (cube->dir_y * 0.09);
 		}
-		if(cube->map[(int)(cube->player_y)][(int)(cube->player_x + (cube->dir_x * 0.095))] == '0')
+		if(cube->map[(int)(cube->player_y)][(int)(cube->player_x + (cube->dir_x * 0.15))] == '0')
 			cube->player_x += (cube->dir_x * 0.09);
     }
 	if (keycode == 0)
 	{
-		if (cube->map[(int)(cube->player_y - (cube->dir_y * 0.095))] != NULL)
+		if (cube->map[(int)(cube->player_y - (cube->dir_y * 0.15))] != NULL)
 		{
-			if(cube->map[(int)(cube->player_y - (cube->plane_y * 0.095))][(int)(cube->player_x)] == '0')
+			if(cube->map[(int)(cube->player_y - (cube->plane_y * 0.15))][(int)(cube->player_x)] == '0')
 				cube->player_y -= (cube->plane_y * 0.09);
 		}
-		if(cube->map[(int)(cube->player_y)][(int)(cube->player_x - (cube->plane_x * 0.095))] == '0')
+		if(cube->map[(int)(cube->player_y)][(int)(cube->player_x - (cube->plane_x * 0.15))] == '0')
 			cube->player_x -= (cube->plane_x * 0.09);
 	}
 	if (keycode == 2)
 	{
-		if (cube->map[(int)(cube->player_y + (cube->plane_y * 0.095))] != NULL)
+		if (cube->map[(int)(cube->player_y + (cube->plane_y * 0.15))] != NULL)
 		{
-			if(cube->map[(int)(cube->player_y + (cube->plane_y * 0.095))][(int)(cube->player_x)] == '0')
+			if(cube->map[(int)(cube->player_y + (cube->plane_y * 0.15))][(int)(cube->player_x)] == '0')
 				cube->player_y += (cube->plane_y * 0.09);
 		}
-		if(cube->map[(int)(cube->player_y)][(int)(cube->player_x + (cube->plane_x * 0.095))] == '0')
+		if(cube->map[(int)(cube->player_y)][(int)(cube->player_x + (cube->plane_x * 0.15))] == '0')
 			cube->player_x += (cube->plane_x * 0.09);
 	}
 	if (keycode == 1)
 	{
-		if (cube->map[(int)(cube->player_y - (cube->dir_y * 0.095))])
+		if (cube->map[(int)(cube->player_y - (cube->dir_y * 0.15))])
 		{
-			if(cube->map[(int)(cube->player_y - (cube->dir_y * 0.095))][(int)(cube->player_x)] == '0')
+			if(cube->map[(int)(cube->player_y - (cube->dir_y * 0.15))][(int)(cube->player_x)] == '0')
 				cube->player_y -= (cube->dir_y * 0.09);
 		}
-      	if(cube->map[(int)(cube->player_y)][(int)(cube->player_x - (cube->dir_x * 0.095))] == '0')
+      	if(cube->map[(int)(cube->player_y)][(int)(cube->player_x - (cube->dir_x * 0.15))] == '0')
 	  		cube->player_x -= (cube->dir_x * 0.09);
 	}
 	printf("Player at x = %.2f  y = %.2f\n", cube->player_x, cube->player_y);
@@ -417,7 +649,7 @@ int	main(int ac, char **av)
 		return (1);
 	}
 	init_cube(&cube, av[1]);
-	recup_texture(&cube);
+	recup_texture(&cube, av[1]);
 	init_map(&cube.map, av[1], &cube);
 	printf("Carte chargée:\n");
 	for (int y = 0; y < cube.map_height; y++) {
