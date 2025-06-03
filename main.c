@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/06/02 00:48:30 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/06/03 16:42:24 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -404,48 +404,63 @@ void	dda_algo(t_raycast *ray, t_cube *cube)
 	}
 }
 
-void	draw_square(t_cube *cube, int color, int x, int y, int square_size)
+void	draw_minimap(t_cube *cube)
 {
-	int i, j;
+	int x, y;
+	int map_x, map_y;
 
-	for (j = 0; j < square_size; j++)
+	for (map_y = 0; map_y < cube->map_height; map_y++)
 	{
-		for (i = 0; i < square_size; i++)
+		for (map_x = 0; map_x < cube->map_width; map_x++)
 		{
-			my_mlx_pixel_put(&cube->img, x + i, y + j, color);
+			if (cube->map[map_y][map_x] == '1')
+			{
+				for (y = 0; y < MINIMAP_SIZE; y++)
+				{
+					for (x = 0; x < MINIMAP_SIZE; x++)
+					{
+						my_mlx_pixel_put(&cube->img, map_x * MINIMAP_SIZE + x, map_y * MINIMAP_SIZE + y, 0x808080);
+					}
+				}
+			}
+			else if (cube->map[map_y][map_x] == '2')
+			{
+				for (y = 0; y < MINIMAP_SIZE; y++)
+				{
+					for (x = 0; x < MINIMAP_SIZE; x++)
+					{
+						my_mlx_pixel_put(&cube->img, map_x * MINIMAP_SIZE + x, map_y * MINIMAP_SIZE + y, 0xFF0000);
+					}
+				}
+			}
+			else if (cube->map[map_y][map_x] == '0')
+			{
+				for (y = 0; y < MINIMAP_SIZE; y++)
+				{
+					for (x = 0; x < MINIMAP_SIZE; x++)
+					{
+						my_mlx_pixel_put(&cube->img, map_x * MINIMAP_SIZE + x, map_y * MINIMAP_SIZE + y, 0x000000);
+					}
+				}
+			}
 		}
 	}
 }
 
-void	draw_minimap(t_cube *cube)
+void	draw_position(t_cube *cube)
 {
-	int x, y, i, j;
-	int color;
-	int square_size;
+	int x, y;
+	int player_x = (int)cube->player_x;
+	int player_y = (int)cube->player_y;
 
-	i = 0;
-	j = 0;
-
-	if (cube->map_height > cube->map_width)
-		square_size = (int)((float)(HEIGHT / 8) / (float)cube->map_height);
-	else
-		square_size = (int)((float)(WIDTH / 8) / (float)cube->map_width);
-
-	printf("Map dimensions: %d x %d\n", cube->map_height, cube->map_width);
-	printf("Square size: %d\n", square_size);
-	for (y = 0; y < cube->map_height * square_size; y+= square_size)
+	for (y = -MINIMAP_SIZE / 2; y < MINIMAP_SIZE / 2; y++)
 	{
-		for (x = 0; x < cube->map_width * square_size; x+= square_size)
+		for (x = -MINIMAP_SIZE / 2; x < MINIMAP_SIZE / 2; x++)
 		{
-			if (cube->map[y / square_size][x / square_size] == '1')
-				color = 0xFFFFF0;
-			else if (cube->map[y / square_size][x / square_size] == '0')
-				color = 0x000000;
-			else if (cube->map[y / square_size][x / square_size] == cube->map[(int)cube->player_y][(int)cube->player_x])
-				color = 0xFF0000;
+			if (x == 0 && y == 0)
+				my_mlx_pixel_put(&cube->img, player_x * MINIMAP_SIZE + x + MINIMAP_SIZE / 2, player_y * MINIMAP_SIZE + y + MINIMAP_SIZE / 2, 0xFFFFFF);
 			else
-				color = 0x00FF00;
-			draw_square(cube, color, x, y, square_size);
+				my_mlx_pixel_put(&cube->img, player_x * MINIMAP_SIZE + x + MINIMAP_SIZE / 2, player_y * MINIMAP_SIZE + y + MINIMAP_SIZE / 2, 0xFF0000);
 		}
 	}
 }
@@ -484,21 +499,6 @@ void raycast(t_cube *cube)
 		{
 			if (cube->map[ray.map_y][ray.map_x] == '1')
 			{
-				int tex_height = cube->texture[0].height;
-				int tex_width = cube->texture[0].width;
-				int d = y * 256 - HEIGHT * 128 + ray.line_height * 128;
-				int tex_y = ((d * tex_height) / ray.line_height) / 256;
-				double wall_x;
-				if (ray.side == 0)
-					wall_x = cube->player_y + ray.perp_wall_dist * ray.ray_dir_y;
-				else
-					wall_x = cube->player_x + ray.perp_wall_dist * ray.ray_dir_x;
-				wall_x -= floor(wall_x);
-				int tex_x = (int)(wall_x * (double)tex_width);
-				if (tex_x < 0) tex_x += tex_width;
-				if ((ray.side == 0 && ray.ray_dir_x < 0) || (ray.side == 1 && ray.ray_dir_y > 0))
-					tex_x = tex_width - tex_x - 1;
-				if (tex_y < 0) tex_y += tex_height;
 				if (ray.side == 0)
 				{
 					if (ray.ray_dir_x < 0)
@@ -513,6 +513,21 @@ void raycast(t_cube *cube)
 					else
 						tex_num = 1;
 				}
+				int tex_height = cube->texture[tex_num].height;
+				int tex_width = cube->texture[tex_num].width;
+				int d = y * 256 - HEIGHT * 128 + ray.line_height * 128;
+				int tex_y = ((d * tex_height) / ray.line_height) / 256;
+				double wall_x;
+				if (ray.side == 0)
+					wall_x = cube->player_y + ray.perp_wall_dist * ray.ray_dir_y;
+				else
+					wall_x = cube->player_x + ray.perp_wall_dist * ray.ray_dir_x;
+				wall_x -= floor(wall_x);
+				int tex_x = (int)(wall_x * (double)tex_width);
+				if (tex_x < 0) tex_x += tex_width;
+				if ((ray.side == 0 && ray.ray_dir_x < 0) || (ray.side == 1 && ray.ray_dir_y > 0))
+					tex_x = tex_width - tex_x - 1;
+				if (tex_y < 0) tex_y += tex_height;
 				color = *(unsigned int *)(cube->texture[tex_num].addr + (tex_y * cube->texture[tex_num].line_length + tex_x * (cube->texture[tex_num].bits_per_pixel / 8)));
 			}
 			else if (cube->map[ray.map_y][ray.map_x] == '2')
@@ -528,7 +543,8 @@ void raycast(t_cube *cube)
 			y++;
 		}
 		x++;
-		// draw_minimap(cube);
+		draw_minimap(cube);
+		draw_position(cube);
 	}
 
 }
@@ -614,6 +630,14 @@ int key_hook(int keycode, t_cube *cube)
 	}
 	printf("Player at x = %.2f  y = %.2f\n", cube->player_x, cube->player_y);
 	printf("keycode = %d\n", keycode);
+	return (0);
+}
+
+int	update_game_state(t_cube *cube)
+{
+	mlx_hook(cube->win, 17, 0, ft_mlx_loop_end, cube);
+	mlx_hook(cube->win, 2, 1L << 0, key_hook, cube);
+	mlx_hook(cube->win, 3, 1L << 1, key_release_hook, cube);
 	mlx_destroy_image(cube->mlx, cube->img.img);
 	cube->img.img = mlx_new_image(cube->mlx, WIDTH, HEIGHT);
 	cube->img.addr = mlx_get_data_addr(cube->img.img,
@@ -621,6 +645,7 @@ int key_hook(int keycode, t_cube *cube)
 			&cube->img.endian);
 	raycast(cube);
 	mlx_put_image_to_window(cube->mlx, cube->win, cube->img.img, 0, 0);
+	return (0);
 }
 
 int key_release_hook(int keycode, t_cube *cube)
@@ -661,9 +686,7 @@ int	main(int ac, char **av)
 	printf("Direction: (%.2f, %.2f)\n", cube.dir_x, cube.dir_y);
 	raycast(&cube);
 	mlx_put_image_to_window(cube.mlx, cube.win, cube.img.img, 0, 0);
-	mlx_hook(cube.win, 17, 0, ft_mlx_loop_end, &cube);
-	mlx_hook(cube.win, 2, 1L << 0, key_hook, &cube);
-	mlx_hook(cube.win, 3, 1L << 1, key_release_hook, &cube);
+	mlx_loop_hook(cube.mlx, update_game_state, &cube);
 	mlx_loop(cube.mlx);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/06/02 00:22:06 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/06/03 16:25:46 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,12 @@
 # define TEXTURE_COUNT 4
 # define RENDER_FPS 30
 # ifndef WIDTH
-#  define WIDTH 1800
+#  define WIDTH 1600
 # endif
 # ifndef HEIGHT
-#  define HEIGHT 1169
+#  define HEIGHT 1200
 # endif
+# define MINIMAP_SIZE 5
 
 typedef struct s_raycast
 {
