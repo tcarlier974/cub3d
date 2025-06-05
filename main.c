@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/06/03 16:42:24 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/06/04 00:54:56 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -325,7 +325,7 @@ void init_map(char ***map, const char *file_path, t_cube *cube)
 			}
 			else if (line[i] == ' ')
 				(*map)[line_count][i] = '0';
-			else if (line[i] > 48)
+			else if (line[i] > '0')
 				(*map)[line_count][i] = line[i];
 			else
 				(*map)[line_count][i] = '0';
