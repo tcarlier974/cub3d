@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/06/05 18:23:07 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/06/05 20:27:47 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,12 @@
 #  define HEIGHT 1200
 # endif
 # define MINIMAP_SIZE 5
+# ifndef SPRINT_SPEED
+#  define SPRINT_SPEED 0.2
+# endif
+# ifndef WALK_SPEED
+#  define WALK_SPEED 0.09
+# endif
 
 typedef enum e_keycode
 {
@@ -42,12 +48,13 @@ typedef enum e_keycode
 	KEY_D,
 	KEY_LEFT,
 	KEY_RIGHT,
-	KEY_ESC
+	KEY_ESC,
+	KEY_SHIFT,
 }	t_keycode;
 
 typedef struct s_hook
 {
-	bool key_pressed[7];
+	bool key_pressed[8];
 	bool mouse_pos[2];
 	int mouse_x;
 }	t_hook;
@@ -102,6 +109,7 @@ typedef struct s_cube
 	double	plane_x;
 	double	plane_y;
 	t_hook	hook;
+	double	move_speed;
 }	t_cube;
 
 // Function prototypes

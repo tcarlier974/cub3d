@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/06/05 18:26:34 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/06/05 20:27:09 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -595,11 +595,17 @@ int key_hook_press(int keycode, t_hook *hook)
 		hook->key_pressed[KEY_D] = true;
 	if (keycode == 1)
 		hook->key_pressed[KEY_S] = true;
+	if (keycode == 257)
+		hook->key_pressed[KEY_SHIFT] = true;
 	return (0);
 }
 
 int	update_game_state(t_cube *cube)
 {
+	if (cube->hook.key_pressed[KEY_SHIFT])
+		cube->move_speed = SPRINT_SPEED;
+	else
+		cube->move_speed = WALK_SPEED;
 	if (cube->hook.key_pressed[KEY_ESC])
 	{
 		ft_mlx_loop_end(cube);
@@ -625,51 +631,60 @@ int	update_game_state(t_cube *cube)
 	}
 	if (cube->hook.key_pressed[KEY_W])
 	{
-		if (cube->map[(int)(cube->player_y + (cube->dir_y * 0.15))] != NULL)
+		if (cube->map[(int)(cube->player_y + (cube->dir_y * cube->move_speed) * (5/3))] != NULL)
 		{
-			if(cube->map[(int)(cube->player_y + (cube->dir_y * 0.15))][(int)(cube->player_x)] == '0')
-				cube->player_y += (cube->dir_y * 0.09);
+			if(cube->map[(int)(cube->player_y + (cube->dir_y * cube->move_speed) * (5/3))][(int)(cube->player_x)] == '0')
+				cube->player_y += (cube->dir_y * cube->move_speed);
 		}
-		if(cube->map[(int)(cube->player_y)][(int)(cube->player_x + (cube->dir_x * 0.15))] == '0')
-			cube->player_x += (cube->dir_x * 0.09);
+		if(cube->map[(int)(cube->player_y)][(int)(cube->player_x + (cube->dir_x * cube->move_speed) * (5/3))] == '0')
+			cube->player_x += (cube->dir_x * cube->move_speed);
     }
 	if (cube->hook.key_pressed[KEY_A])
 	{
-		if (cube->map[(int)(cube->player_y - (cube->dir_y * 0.15))] != NULL)
+		if (cube->map[(int)(cube->player_y - (cube->dir_y * cube->move_speed) * (5/3))] != NULL)
 		{
-			if(cube->map[(int)(cube->player_y - (cube->plane_y * 0.15))][(int)(cube->player_x)] == '0')
-				cube->player_y -= (cube->plane_y * 0.09);
+			if(cube->map[(int)(cube->player_y - (cube->plane_y * cube->move_speed) * (5/3))][(int)(cube->player_x)] == '0')
+				cube->player_y -= (cube->plane_y * cube->move_speed);
 		}
-		if(cube->map[(int)(cube->player_y)][(int)(cube->player_x - (cube->plane_x * 0.15))] == '0')
-			cube->player_x -= (cube->plane_x * 0.09);
+		if(cube->map[(int)(cube->player_y)][(int)(cube->player_x - (cube->plane_x * cube->move_speed) * (5/3))] == '0')
+			cube->player_x -= (cube->plane_x * cube->move_speed);
 	}
 	if (cube->hook.key_pressed[KEY_D])
 	{
-		if (cube->map[(int)(cube->player_y + (cube->plane_y * 0.15))] != NULL)
+		if (cube->map[(int)(cube->player_y + (cube->plane_y * cube->move_speed) * (5/3))] != NULL)
 		{
-			if(cube->map[(int)(cube->player_y + (cube->plane_y * 0.15))][(int)(cube->player_x)] == '0')
-				cube->player_y += (cube->plane_y * 0.09);
+			if(cube->map[(int)(cube->player_y + (cube->plane_y * cube->move_speed) * (5/3))][(int)(cube->player_x)] == '0')
+				cube->player_y += (cube->plane_y * cube->move_speed);
 		}
-		if(cube->map[(int)(cube->player_y)][(int)(cube->player_x + (cube->plane_x * 0.15))] == '0')
-			cube->player_x += (cube->plane_x * 0.09);
+		if(cube->map[(int)(cube->player_y)][(int)(cube->player_x + (cube->plane_x * cube->move_speed) * (5/3))] == '0')
+			cube->player_x += (cube->plane_x * cube->move_speed);
 	}
 	if (cube->hook.key_pressed[KEY_S])
 	{
-		if (cube->map[(int)(cube->player_y - (cube->dir_y * 0.15))])
+		if (cube->map[(int)(cube->player_y - (cube->dir_y * cube->move_speed) * (5/3))])
 		{
-			if(cube->map[(int)(cube->player_y - (cube->dir_y * 0.15))][(int)(cube->player_x)] == '0')
-				cube->player_y -= (cube->dir_y * 0.09);
+			if(cube->map[(int)(cube->player_y - (cube->dir_y * cube->move_speed) * (5/3))][(int)(cube->player_x)] == '0')
+				cube->player_y -= (cube->dir_y * cube->move_speed);
 		}
-      	if(cube->map[(int)(cube->player_y)][(int)(cube->player_x - (cube->dir_x * 0.15))] == '0')
-	  		cube->player_x -= (cube->dir_x * 0.09);
+      	if(cube->map[(int)(cube->player_y)][(int)(cube->player_x - (cube->dir_x * cube->move_speed) * (5/3))] == '0')
+	  		cube->player_x -= (cube->dir_x * cube->move_speed);
 	}
-	mlx_destroy_image(cube->mlx, cube->img.img);
-	cube->img.img = mlx_new_image(cube->mlx, WIDTH, HEIGHT);
-	cube->img.addr = mlx_get_data_addr(cube->img.img,
-			&cube->img.bits_per_pixel, &cube->img.line_length,
-			&cube->img.endian);
-	raycast(cube);
-	mlx_put_image_to_window(cube->mlx, cube->win, cube->img.img, 0, 0);
+	int i = 0;
+	while (i < 6)
+	{
+		if (cube->hook.key_pressed[i])
+			{
+				mlx_destroy_image(cube->mlx, cube->img.img);
+				cube->img.img = mlx_new_image(cube->mlx, WIDTH, HEIGHT);
+				cube->img.addr = mlx_get_data_addr(cube->img.img,
+						&cube->img.bits_per_pixel, &cube->img.line_length,
+						&cube->img.endian);
+				raycast(cube);
+				mlx_put_image_to_window(cube->mlx, cube->win, cube->img.img, 0, 0);
+				break;
+			}
+			i++;
+	}
 	return (0);
 }
 
@@ -687,6 +702,8 @@ int key_release_hook(int keycode, t_hook *hook)
 		hook->key_pressed[KEY_D] = false;
 	if (keycode == 1)
 		hook->key_pressed[KEY_S] = false;
+	if (keycode == 257)
+		hook->key_pressed[KEY_SHIFT] = false;
 	return (0);
 }
 
