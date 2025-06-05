@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/06/03 16:25:46 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/06/05 18:23:07 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <pthread.h>
 # include "mlx.h"
 # include "../get_next_line/get_next_line.h"
+# include <stdbool.h>
 
 # define TEXTURE_COUNT 4
 # define RENDER_FPS 30
@@ -32,6 +33,24 @@
 #  define HEIGHT 1200
 # endif
 # define MINIMAP_SIZE 5
+
+typedef enum e_keycode
+{
+	KEY_W,
+	KEY_A,
+	KEY_S,
+	KEY_D,
+	KEY_LEFT,
+	KEY_RIGHT,
+	KEY_ESC
+}	t_keycode;
+
+typedef struct s_hook
+{
+	bool key_pressed[7];
+	bool mouse_pos[2];
+	int mouse_x;
+}	t_hook;
 
 typedef struct s_raycast
 {
@@ -82,6 +101,7 @@ typedef struct s_cube
 	double	dir_y;
 	double	plane_x;
 	double	plane_y;
+	t_hook	hook;
 }	t_cube;
 
 // Function prototypes
@@ -91,7 +111,7 @@ void	recup_texture(t_cube *cube, const char *map_file);
 void	draw_texture(t_cube *cube, int x, int y, t_img texture);
 void	init_map(char ***map, const char *file_path, t_cube *cube);
 void	raycast(t_cube *cube);
-int     key_hook(int keycode, t_cube *cube);
+int     key_hook_press(int keycode, t_hook *hook);
 int     count_lines(const char *file_path);
 int     count_max_col(const char *file_path);
 
@@ -99,7 +119,7 @@ int     count_max_col(const char *file_path);
 int		update_game_state(t_cube *cube);
 
 // Add new function prototypes
-int		key_release_hook(int keycode, t_cube *cube);
+int		key_release_hook(int keycode, t_hook *hook);
 void	process_keys(t_cube *cube);
 int     ft_mlx_loop_end(t_cube *cube);
 

@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/06/04 00:54:56 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/06/05 18:26:34 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	my_mlx_pixel_put(t_img *img, int x, int y, int color)
 
 void	init_cube(t_cube *cube, const char *map_file)
 {
+	int	i;
 	cube->mlx = mlx_init();
 	cube->win = mlx_new_window(cube->mlx, WIDTH, HEIGHT, "Cub3D");
 	cube->img.img = mlx_new_image(cube->mlx, WIDTH, HEIGHT);
@@ -34,6 +35,17 @@ void	init_cube(t_cube *cube, const char *map_file)
 	cube->map = NULL;
 	cube->map_width = count_max_col(map_file);
 	cube->map_height = count_lines(map_file);
+	i = 0;
+	while (i < 6)
+	{
+		cube->hook.key_pressed[i] = false;
+		i++;
+	}
+	while (i < 8)
+	{
+		cube->hook.mouse_pos[i - 6] = false;
+		i++;
+	}
 }
 
 int	rgb_to_int(const char *rgb)
@@ -399,6 +411,7 @@ void	dda_algo(t_raycast *ray, t_cube *cube)
 			ray->map_y += ray->step_y;
 			ray->side = 1;
 		}
+		// || sqrt((ray->side_dist_x * ray->side_dist_x) + (ray->side_dist_y * ray->side_dist_y)) > 4.0
 		if (cube->map[ray->map_y][ray->map_x] != '0')
 			ray->hit = 1;
 	}
@@ -478,18 +491,21 @@ void raycast(t_cube *cube)
 	{
 		init_raycast_values(&ray, cube, x);
 		dda_algo(&ray, cube);
-		if (ray.side == 0) 
-			ray.perp_wall_dist = (ray.side_dist_x - ray.delta_dist_x);
-     	else
-			ray.perp_wall_dist = (ray.side_dist_y - ray.delta_dist_y);
-		ray.line_height = (int)(HEIGHT / ray.perp_wall_dist);
-		ray.draw_start = (-ray.line_height / 2) + (HEIGHT / 2);
-      	if(ray.draw_start < 0)
-	  		ray.draw_start = 0;
-      	ray.draw_end = (ray.line_height / 2) + (HEIGHT / 2);
-      	if(ray.draw_end >= HEIGHT)
-	  		ray.draw_end = HEIGHT - 1;
-		y = 0;
+		if (cube->map[ray.map_y][ray.map_x] != '0')
+		{
+			if (ray.side == 0) 
+				ray.perp_wall_dist = (ray.side_dist_x - ray.delta_dist_x);
+			else
+				ray.perp_wall_dist = (ray.side_dist_y - ray.delta_dist_y);
+			ray.line_height = (int)(HEIGHT / ray.perp_wall_dist);
+			ray.draw_start = (-ray.line_height / 2) + (HEIGHT / 2);
+			if(ray.draw_start < 0)
+				ray.draw_start = 0;
+			ray.draw_end = (ray.line_height / 2) + (HEIGHT / 2);
+			if(ray.draw_end >= HEIGHT)
+				ray.draw_end = HEIGHT - 1;
+			y = 0;
+		}
 		while (y < ray.draw_start)
 		{
 			my_mlx_pixel_put(&cube->img, x, y, cube->ceiling_color);
@@ -563,14 +579,33 @@ int ft_mlx_loop_end(t_cube *cube)
 	return (0);
 }
 
-int key_hook(int keycode, t_cube *cube)
+int key_hook_press(int keycode, t_hook *hook)
 {
 	if (keycode == 53)
+		hook->key_pressed[KEY_ESC] = true;
+	if (keycode == 123)
+		hook->key_pressed[KEY_LEFT] = true;
+	if (keycode == 124)
+		hook->key_pressed[KEY_RIGHT] = true;
+	if (keycode == 13)
+		hook->key_pressed[KEY_W] = true;
+	if (keycode == 0)
+		hook->key_pressed[KEY_A] = true;
+	if (keycode == 2)
+		hook->key_pressed[KEY_D] = true;
+	if (keycode == 1)
+		hook->key_pressed[KEY_S] = true;
+	return (0);
+}
+
+int	update_game_state(t_cube *cube)
+{
+	if (cube->hook.key_pressed[KEY_ESC])
 	{
 		ft_mlx_loop_end(cube);
 		return (0);
 	}
-	if (keycode == 123)
+	if (cube->hook.key_pressed[KEY_LEFT])
 	{
 		double old_dir_x = cube->dir_x;
 		cube->dir_x = cube->dir_x * cos(-0.09) - cube->dir_y * sin(-0.09);
@@ -579,7 +614,7 @@ int key_hook(int keycode, t_cube *cube)
 		cube->plane_x = cube->plane_x * cos(-0.09) - cube->plane_y * sin(-0.09);
 		cube->plane_y = old_plane_x * sin(-0.09) + cube->plane_y * cos(-0.09);
 	}
-	if (keycode == 124)
+	if (cube->hook.key_pressed[KEY_RIGHT])
 	{
 		double old_dir_x = cube->dir_x;
 		cube->dir_x = cube->dir_x * cos(0.09) - cube->dir_y * sin(0.09);
@@ -588,7 +623,7 @@ int key_hook(int keycode, t_cube *cube)
 		cube->plane_x = cube->plane_x * cos(0.09) - cube->plane_y * sin(0.09);
 		cube->plane_y = old_plane_x * sin(0.09) + cube->plane_y * cos(0.09);
 	}
-	if (keycode == 13)
+	if (cube->hook.key_pressed[KEY_W])
 	{
 		if (cube->map[(int)(cube->player_y + (cube->dir_y * 0.15))] != NULL)
 		{
@@ -598,7 +633,7 @@ int key_hook(int keycode, t_cube *cube)
 		if(cube->map[(int)(cube->player_y)][(int)(cube->player_x + (cube->dir_x * 0.15))] == '0')
 			cube->player_x += (cube->dir_x * 0.09);
     }
-	if (keycode == 0)
+	if (cube->hook.key_pressed[KEY_A])
 	{
 		if (cube->map[(int)(cube->player_y - (cube->dir_y * 0.15))] != NULL)
 		{
@@ -608,7 +643,7 @@ int key_hook(int keycode, t_cube *cube)
 		if(cube->map[(int)(cube->player_y)][(int)(cube->player_x - (cube->plane_x * 0.15))] == '0')
 			cube->player_x -= (cube->plane_x * 0.09);
 	}
-	if (keycode == 2)
+	if (cube->hook.key_pressed[KEY_D])
 	{
 		if (cube->map[(int)(cube->player_y + (cube->plane_y * 0.15))] != NULL)
 		{
@@ -618,7 +653,7 @@ int key_hook(int keycode, t_cube *cube)
 		if(cube->map[(int)(cube->player_y)][(int)(cube->player_x + (cube->plane_x * 0.15))] == '0')
 			cube->player_x += (cube->plane_x * 0.09);
 	}
-	if (keycode == 1)
+	if (cube->hook.key_pressed[KEY_S])
 	{
 		if (cube->map[(int)(cube->player_y - (cube->dir_y * 0.15))])
 		{
@@ -628,16 +663,6 @@ int key_hook(int keycode, t_cube *cube)
       	if(cube->map[(int)(cube->player_y)][(int)(cube->player_x - (cube->dir_x * 0.15))] == '0')
 	  		cube->player_x -= (cube->dir_x * 0.09);
 	}
-	printf("Player at x = %.2f  y = %.2f\n", cube->player_x, cube->player_y);
-	printf("keycode = %d\n", keycode);
-	return (0);
-}
-
-int	update_game_state(t_cube *cube)
-{
-	mlx_hook(cube->win, 17, 0, ft_mlx_loop_end, cube);
-	mlx_hook(cube->win, 2, 1L << 0, key_hook, cube);
-	mlx_hook(cube->win, 3, 1L << 1, key_release_hook, cube);
 	mlx_destroy_image(cube->mlx, cube->img.img);
 	cube->img.img = mlx_new_image(cube->mlx, WIDTH, HEIGHT);
 	cube->img.addr = mlx_get_data_addr(cube->img.img,
@@ -648,13 +673,21 @@ int	update_game_state(t_cube *cube)
 	return (0);
 }
 
-int key_release_hook(int keycode, t_cube *cube)
+int key_release_hook(int keycode, t_hook *hook)
 {
-}
-
-void process_keys(t_cube *cube)
-{
-
+	if (keycode == 123)
+		hook->key_pressed[KEY_LEFT] = false;
+	if (keycode == 124)
+		hook->key_pressed[KEY_RIGHT] = false;
+	if (keycode == 13)
+		hook->key_pressed[KEY_W] = false;
+	if (keycode == 0)
+		hook->key_pressed[KEY_A] = false;
+	if (keycode == 2)
+		hook->key_pressed[KEY_D] = false;
+	if (keycode == 1)
+		hook->key_pressed[KEY_S] = false;
+	return (0);
 }
 
 int	main(int ac, char **av)
@@ -686,6 +719,10 @@ int	main(int ac, char **av)
 	printf("Direction: (%.2f, %.2f)\n", cube.dir_x, cube.dir_y);
 	raycast(&cube);
 	mlx_put_image_to_window(cube.mlx, cube.win, cube.img.img, 0, 0);
+	mlx_do_key_autorepeaton(cube.mlx);
+	mlx_hook(cube.win, 17, 0, ft_mlx_loop_end, &cube);
+	mlx_hook(cube.win, 2, 1L << 0, key_hook_press, &cube.hook);
+	mlx_hook(cube.win, 3, 1L << 1, key_release_hook, &cube.hook);
 	mlx_loop_hook(cube.mlx, update_game_state, &cube);
 	mlx_loop(cube.mlx);
 	return (0);
