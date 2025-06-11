@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/06/05 20:27:47 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/06/07 00:56:10 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ typedef struct s_hook
 	bool key_pressed[8];
 	bool mouse_pos[2];
 	int mouse_x;
+	int mouse_y;
 }	t_hook;
 
 typedef struct s_raycast
@@ -119,7 +120,7 @@ void	recup_texture(t_cube *cube, const char *map_file);
 void	draw_texture(t_cube *cube, int x, int y, t_img texture);
 void	init_map(char ***map, const char *file_path, t_cube *cube);
 void	raycast(t_cube *cube);
-int     key_hook_press(int keycode, t_hook *hook);
+int     key_hook_press(int keycode, t_cube *cube);
 int     count_lines(const char *file_path);
 int     count_max_col(const char *file_path);
 
