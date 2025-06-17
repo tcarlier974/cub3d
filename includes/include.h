@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   include.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/06/07 00:56:10 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/06/17 10:44:36 by igilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ void	raycast(t_cube *cube);
 int     key_hook_press(int keycode, t_cube *cube);
 int     count_lines(const char *file_path);
 int     count_max_col(const char *file_path);
+int		bcktrck(t_cube *cube, int x, int y, char **visited);
 
 // Thread related functions
 int		update_game_state(t_cube *cube);
