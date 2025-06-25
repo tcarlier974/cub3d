@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   Main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/06/17 11:01:17 by igilbert         ###   ########.fr       */
+/*   Updated: 2025/06/25 18:23:02 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -332,8 +332,8 @@ void init_map(char ***map, const char *file_path, t_cube *cube)
 				cube->dir_y = (line[i] == 'S') - (line[i] == 'N');
 				cube->plane_x = -cube->dir_y * 0.66;
 				cube->plane_y = cube->dir_x * 0.66;
-				cube->player_x = (float)i;
-				cube->player_y = (float)line_count;
+				cube->player_x = (float)i + 0.5;
+				cube->player_y = (float)line_count + 0.5;
 			}
 			else if (line[i] == ' ')
 				(*map)[line_count][i] = '0';
@@ -847,7 +847,6 @@ int	main(int ac, char **av)
 		if (cube.map[y])
 			printf("[%d] %s\n", y, cube.map[y]);
 	}
-	printf("map[6][5] = %c\n", cube.map[6][5]);
 	printf("Player initialized at position: %.2f, %.2f\n", cube.player_x, cube.player_y);
 	printf("Direction: (%.2f, %.2f)\n", cube.dir_x, cube.dir_y);
 	raycast(&cube);
