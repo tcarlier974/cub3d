@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   include.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/06/17 10:44:36 by igilbert         ###   ########.fr       */
+/*   Updated: 2025/07/07 14:50:52 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,9 @@
 # ifndef HEIGHT
 #  define HEIGHT 1200
 # endif
-# define MINIMAP_SIZE 5
+# ifndef MINIMAP_SIZE
+#  define MINIMAP_SIZE (WIDTH / 150)
+# endif
 # ifndef SPRINT_SPEED
 #  define SPRINT_SPEED 0.2
 # endif

@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/06/25 18:23:02 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/07/07 15:28:41 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -416,63 +416,52 @@ void	dda_algo(t_raycast *ray, t_cube *cube)
 	}
 }
 
+int color_map(char c)
+{
+	if (c == '1')
+		return (0xFFFFFF);
+	else if (c == '0')
+		return (0x000000);
+	else
+		return (0x808080);
+}
+
 void	draw_minimap(t_cube *cube)
 {
-	int x, y;
-	int map_x, map_y;
+	int minimap_width = 9 * MINIMAP_SIZE;
+	int minimap_height = 9 * MINIMAP_SIZE;
+	int offset_x = 20;
+	int offset_y = 20;
 
-	for (map_y = 0; map_y < cube->map_height; map_y++)
+	for (int j = 0; j < 9; j++)
 	{
-		for (map_x = 0; map_x < cube->map_width; map_x++)
+		int map_y = (int)cube->player_y - 4 + j;
+		if (map_y < 0 || map_y >= cube->map_height)
+			continue;
+		for (int i = 0; i < 9; i++)
 		{
-			if (cube->map[map_y][map_x] == '1')
+			int map_x = (int)cube->player_x - 4 + i;
+			if (map_x < 0 || map_x >= cube->map_width)
+				continue;
+			for (int y = 0; y < MINIMAP_SIZE; y++)
 			{
-				for (y = 0; y < MINIMAP_SIZE; y++)
+				for (int x = 0; x < MINIMAP_SIZE; x++)
 				{
-					for (x = 0; x < MINIMAP_SIZE; x++)
-					{
-						my_mlx_pixel_put(&cube->img, map_x * MINIMAP_SIZE + x, map_y * MINIMAP_SIZE + y, 0x808080);
-					}
-				}
-			}
-			else if (cube->map[map_y][map_x] == '2')
-			{
-				for (y = 0; y < MINIMAP_SIZE; y++)
-				{
-					for (x = 0; x < MINIMAP_SIZE; x++)
-					{
-						my_mlx_pixel_put(&cube->img, map_x * MINIMAP_SIZE + x, map_y * MINIMAP_SIZE + y, 0xFF0000);
-					}
-				}
-			}
-			else if (cube->map[map_y][map_x] == '0')
-			{
-				for (y = 0; y < MINIMAP_SIZE; y++)
-				{
-					for (x = 0; x < MINIMAP_SIZE; x++)
-					{
-						my_mlx_pixel_put(&cube->img, map_x * MINIMAP_SIZE + x, map_y * MINIMAP_SIZE + y, 0x000000);
-					}
+					my_mlx_pixel_put(&cube->img,
+						offset_x + i * MINIMAP_SIZE + x,
+						offset_y + j * MINIMAP_SIZE + y,
+						color_map(cube->map[map_y][map_x]));
 				}
 			}
 		}
 	}
-}
-
-void	draw_position(t_cube *cube)
-{
-	int x, y;
-	int player_x = (int)cube->player_x;
-	int player_y = (int)cube->player_y;
-
-	for (y = -MINIMAP_SIZE / 2; y < MINIMAP_SIZE / 2; y++)
+	int px = offset_x + 4 * MINIMAP_SIZE + MINIMAP_SIZE / 2;
+	int py = offset_y + 4 * MINIMAP_SIZE + MINIMAP_SIZE / 2;
+	for (int y = -2; y <= 2; y++)
 	{
-		for (x = -MINIMAP_SIZE / 2; x < MINIMAP_SIZE / 2; x++)
+		for (int x = -2; x <= 2; x++)
 		{
-			if (x == 0 && y == 0)
-				my_mlx_pixel_put(&cube->img, player_x * MINIMAP_SIZE + x + MINIMAP_SIZE / 2, player_y * MINIMAP_SIZE + y + MINIMAP_SIZE / 2, 0xFFFFFF);
-			else;
-				my_mlx_pixel_put(&cube->img, player_x * MINIMAP_SIZE + x + MINIMAP_SIZE / 2, player_y * MINIMAP_SIZE + y + MINIMAP_SIZE / 2, 0xFF0000);
+			my_mlx_pixel_put(&cube->img, px + x, py + y, 0xFF0000);
 		}
 	}
 }
@@ -555,7 +544,6 @@ void raycast(t_cube *cube)
 		}
 		x++;
 		draw_minimap(cube);
-		draw_position(cube);
 	}
 
 }
