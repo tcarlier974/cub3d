@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/07/12 09:32:47 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/07/12 09:35:42 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -500,7 +500,7 @@ void draw_sprite(t_cube *cube)
 				if (x + i < 0 || x + i >= WIDTH)
 					break;
 				unsigned int color = *(unsigned int *)(cube->sprite.addr + (y * cube->sprite.line_length + i * (cube->sprite.bits_per_pixel / 8)));
-				if (color != 0x000000) // Assuming black is the transparent color
+				if (color != 0x000000)
 					my_mlx_pixel_put(&cube->img, x + i, y, color);
 				i++;
 			}
