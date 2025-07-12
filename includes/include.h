@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/07/07 14:50:52 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/07/12 09:08:13 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,13 @@
 # define TEXTURE_COUNT 4
 # define RENDER_FPS 30
 # ifndef WIDTH
-#  define WIDTH 1600
+#  define WIDTH 1200
 # endif
 # ifndef HEIGHT
-#  define HEIGHT 1200
+#  define HEIGHT 800
 # endif
 # ifndef MINIMAP_SIZE
-#  define MINIMAP_SIZE (WIDTH / 150)
+#  define MINIMAP_SIZE (WIDTH / 120)
 # endif
 # ifndef SPRINT_SPEED
 #  define SPRINT_SPEED 0.2
@@ -100,6 +100,7 @@ typedef struct s_cube
 	void	*win;
 	t_img	img;
 	t_img	texture[TEXTURE_COUNT];
+	t_img	sprite;
 	int		ceiling_color;
 	int		floor_color;
 	char	**map;

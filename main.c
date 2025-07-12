@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/07/07 15:28:41 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/07/12 09:32:47 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,6 +264,7 @@ void	recup_texture(t_cube *cube, const char *map_file)
 		printf("Texture %d loaded: %dx%d\n", i, cube->texture[i].width, cube->texture[i].height);
 		i++;
 	}
+	cube->sprite.img = mlx_xpm_file_to_image(cube->mlx, "./textures/sprite/sprite.xpm", &cube->sprite.width, &cube->sprite.height);
 	free(textures);
 }
 void	draw_texture(t_cube *cube, int x, int y, t_img texture)
@@ -412,16 +413,22 @@ void	dda_algo(t_raycast *ray, t_cube *cube)
 			ray->side = 1;
 		}
 		if (cube->map[ray->map_y][ray->map_x] != '0')
+		{
 			ray->hit = 1;
+			if (ray->side == 0) 
+				ray->perp_wall_dist = (ray->side_dist_x - ray->delta_dist_x);
+			else
+				ray->perp_wall_dist = (ray->side_dist_y - ray->delta_dist_y);
+		}
 	}
 }
 
 int color_map(char c)
 {
 	if (c == '1')
-		return (0xFFFFFF);
+		return (0x222222);
 	else if (c == '0')
-		return (0x000000);
+		return (0xD3D3D3);
 	else
 		return (0x808080);
 }
@@ -430,15 +437,15 @@ void	draw_minimap(t_cube *cube)
 {
 	int minimap_width = 9 * MINIMAP_SIZE;
 	int minimap_height = 9 * MINIMAP_SIZE;
-	int offset_x = 20;
-	int offset_y = 20;
+	int offset_x = 50;
+	int offset_y = HEIGHT - minimap_height - 50;
 
-	for (int j = 0; j < 9; j++)
+	for (int j = 0; j <= 9; j++)
 	{
 		int map_y = (int)cube->player_y - 4 + j;
 		if (map_y < 0 || map_y >= cube->map_height)
 			continue;
-		for (int i = 0; i < 9; i++)
+		for (int i = 0; i <= 9; i++)
 		{
 			int map_x = (int)cube->player_x - 4 + i;
 			if (map_x < 0 || map_x >= cube->map_width)
@@ -464,6 +471,42 @@ void	draw_minimap(t_cube *cube)
 			my_mlx_pixel_put(&cube->img, px + x, py + y, 0xFF0000);
 		}
 	}
+	int dx = (int)(cube->dir_x * MINIMAP_SIZE * 2.5);
+	int dy = (int)(cube->dir_y * MINIMAP_SIZE * 2.5);
+	for (int y = -1; y <= 1; y++)
+	{
+		for (int x = -1; x <= 1; x++)
+		{
+			my_mlx_pixel_put(&cube->img, px + dx/2 + x, py + dy/2 + y, 0x00FF00);
+		}
+	}
+}
+
+void draw_sprite(t_cube *cube)
+{
+	if (cube->sprite.img)
+	{
+		int sprite_width = cube->sprite.width;
+		int sprite_height = cube->sprite.height;
+		int x = (WIDTH - sprite_width) / 2;
+		int y = HEIGHT - sprite_height - 30;
+		while (y < HEIGHT - 30 + sprite_height)
+		{
+			if (y < 0 || y >= HEIGHT)
+				break;
+			int i = 0;
+			while (i < sprite_width)
+			{
+				if (x + i < 0 || x + i >= WIDTH)
+					break;
+				unsigned int color = *(unsigned int *)(cube->sprite.addr + (y * cube->sprite.line_length + i * (cube->sprite.bits_per_pixel / 8)));
+				if (color != 0x000000) // Assuming black is the transparent color
+					my_mlx_pixel_put(&cube->img, x + i, y, color);
+				i++;
+			}
+			y++;
+		}
+	}
 }
 
 void raycast(t_cube *cube)
@@ -481,10 +524,6 @@ void raycast(t_cube *cube)
 		dda_algo(&ray, cube);
 		if (cube->map[ray.map_y][ray.map_x] != '0')
 		{
-			if (ray.side == 0) 
-				ray.perp_wall_dist = (ray.side_dist_x - ray.delta_dist_x);
-			else
-				ray.perp_wall_dist = (ray.side_dist_y - ray.delta_dist_y);
 			ray.line_height = (int)(HEIGHT / ray.perp_wall_dist);
 			ray.draw_start = (-ray.line_height / 2) + (HEIGHT / 2);
 			if(ray.draw_start < 0)
@@ -519,7 +558,7 @@ void raycast(t_cube *cube)
 				}
 				int tex_height = cube->texture[tex_num].height;
 				int tex_width = cube->texture[tex_num].width;
-				int d = y * 256 - HEIGHT * 128 + ray.line_height * 128;
+				int d = (y * 2 - HEIGHT + ray.line_height) * 128;
 				int tex_y = ((d * tex_height) / ray.line_height) / 256;
 				double wall_x;
 				if (ray.side == 0)
@@ -698,6 +737,7 @@ int	update_game_state(t_cube *cube)
 						&cube->img.bits_per_pixel, &cube->img.line_length,
 						&cube->img.endian);
 				raycast(cube);
+				// draw_sprite(cube);
 				mlx_put_image_to_window(cube->mlx, cube->win, cube->img.img, 0, 0);
 				break;
 			}
