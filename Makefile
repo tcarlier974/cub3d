@@ -3,10 +3,14 @@ CC = gcc
 CFLAGS = -I./includes
 LIBFT = ./libft/libft.a
 MLX = libmlx.a
-SRC = src/get_next_line/get_next_line.c \
-	src/get_next_line/get_next_line_utils.c \
+SRC = ./get_next_line/get_next_line.c \
+	./get_next_line/get_next_line_utils.c \
 	src/main.c \
 	src/utils.c \
+	src/init.c \
+	src/hook.c \
+	src/draw.c \
+	src/algo.c
 
 OBJ = $(SRC:.c=.o)
 
@@ -27,7 +31,6 @@ $(MLX):
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
-	mv $@ ../obj/
 
 clean:
 	rm -f $(OBJ)

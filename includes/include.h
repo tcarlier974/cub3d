@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/07/12 09:08:13 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/08/06 16:47:07 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,5 +135,9 @@ int		update_game_state(t_cube *cube);
 int		key_release_hook(int keycode, t_hook *hook);
 void	process_keys(t_cube *cube);
 int     ft_mlx_loop_end(t_cube *cube);
+int		rgb_to_int(const char *rgb);
+int		color_map(char c);
+void	draw_minimap(t_cube *cube);
+
 
 #endif

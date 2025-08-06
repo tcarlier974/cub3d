@@ -6,11 +6,11 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 12:00:00 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/05/31 18:42:21 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/08/06 16:30:30 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./includes/include.h"
+#include "../includes/include.h"
 
 int	count_lines(const char *file_path)
 {
