@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/08/30 17:51:44 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/08/31 02:18:34 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,16 @@
 #  define ENABLE_MINIMAP 1
 # endif
 # ifndef SPRINT_SPEED
-#  define SPRINT_SPEED 0.2
+#  define SPRINT_SPEED 0.02
 # endif
 # ifndef WALK_SPEED
 #  define WALK_SPEED 0.02
 # endif
 # ifndef SENSI
-# define SENSI 1
+# define SENSI 2.0
 # endif
 # ifndef LA_ROTA
-# define LA_ROTA 0.03
+# define LA_ROTA 0.01
 # endif
 # ifndef MARGE_COLLISION
 # define MARGE_COLLISION 0.1
