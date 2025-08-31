@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/08/06 16:47:07 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/08/30 17:51:44 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,25 @@
 #  define HEIGHT 800
 # endif
 # ifndef MINIMAP_SIZE
-#  define MINIMAP_SIZE (WIDTH / 120)
+#  define MINIMAP_SIZE (WIDTH / 100)
+# endif
+# ifndef ENABLE_MINIMAP
+#  define ENABLE_MINIMAP 1
 # endif
 # ifndef SPRINT_SPEED
 #  define SPRINT_SPEED 0.2
 # endif
 # ifndef WALK_SPEED
-#  define WALK_SPEED 0.09
+#  define WALK_SPEED 0.02
+# endif
+# ifndef SENSI
+# define SENSI 1
+# endif
+# ifndef LA_ROTA
+# define LA_ROTA 0.03
+# endif
+# ifndef MARGE_COLLISION
+# define MARGE_COLLISION 0.1
 # endif
 
 typedef enum e_keycode
@@ -114,6 +126,7 @@ typedef struct s_cube
 	double	plane_y;
 	t_hook	hook;
 	double	move_speed;
+	int		minimap_counter;
 }	t_cube;
 
 // Function prototypes
@@ -132,7 +145,7 @@ int		bcktrck(t_cube *cube, int x, int y, char **visited);
 int		update_game_state(t_cube *cube);
 
 // Add new function prototypes
-int		key_release_hook(int keycode, t_hook *hook);
+int		key_release_hook(int keycode, t_cube *cube);
 void	process_keys(t_cube *cube);
 int     ft_mlx_loop_end(t_cube *cube);
 int		rgb_to_int(const char *rgb);

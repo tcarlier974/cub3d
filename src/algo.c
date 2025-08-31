@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:44:29 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/08/06 16:45:10 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/08/30 17:48:06 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +165,7 @@ void raycast(t_cube *cube)
 			y++;
 		}
 		x++;
-		draw_minimap(cube);
 	}
+	if (ENABLE_MINIMAP)
+		draw_minimap(cube);
 }

@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:42:11 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/08/06 16:42:54 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/08/30 17:47:42 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ int key_hook_press(int keycode, t_cube *cube)
 	if (keycode == 1)
 		cube->hook.key_pressed[KEY_S] = true;
 	if (keycode == 257)
-		cube->hook.key_pressed[KEY_SHIFT] = true;
+		cube->hook.key_pressed[KEY_SHIFT] = !cube->hook.key_pressed[KEY_SHIFT];
+	
 	mlx_mouse_get_pos(cube->mlx, &cube->hook.mouse_x, &cube->hook.mouse_y);
 	if (cube->hook.mouse_x < WIDTH / 2)
 	{
@@ -65,10 +66,18 @@ int key_hook_press(int keycode, t_cube *cube)
 
 int	update_game_state(t_cube *cube)
 {
+	int	k;
+
+	k = 0;
+	
 	if (cube->hook.key_pressed[KEY_SHIFT])
-		cube->move_speed = SPRINT_SPEED;
+	{
+		cube->move_speed =  WALK_SPEED + SPRINT_SPEED;
+	}
 	else
+	{
 		cube->move_speed = WALK_SPEED;
+	}
 	if (cube->hook.key_pressed[KEY_ESC])
 	{
 		ft_mlx_loop_end(cube);
@@ -76,62 +85,82 @@ int	update_game_state(t_cube *cube)
 	}
 	if (cube->hook.key_pressed[KEY_LEFT] || cube->hook.mouse_pos[0])
 	{
-		double old_dir_x = cube->dir_x;
-		cube->dir_x = cube->dir_x * cos(-0.08) - cube->dir_y * sin(-0.08);
-		cube->dir_y = old_dir_x * sin(-0.08) + cube->dir_y * cos(-0.08);
-		double old_plane_x = cube->plane_x;
-		cube->plane_x = cube->plane_x * cos(-0.08) - cube->plane_y * sin(-0.08);
-		cube->plane_y = old_plane_x * sin(-0.08) + cube->plane_y * cos(-0.08);
-
+		while (k < SENSI)
+		{
+			double old_dir_x = cube->dir_x;
+			cube->dir_x = cube->dir_x * cos(-LA_ROTA) - cube->dir_y * sin(-LA_ROTA);
+			cube->dir_y = old_dir_x * sin(-LA_ROTA) + cube->dir_y * cos(-LA_ROTA);
+			double old_plane_x = cube->plane_x;
+			cube->plane_x = cube->plane_x * cos(-LA_ROTA) - cube->plane_y * sin(-LA_ROTA);
+			cube->plane_y = old_plane_x * sin(-LA_ROTA) + cube->plane_y * cos(-LA_ROTA);
+			k++;
+		}
 	}
+	k = 0;
 	if (cube->hook.key_pressed[KEY_RIGHT] || cube->hook.mouse_pos[1])
 	{
-		double old_dir_x = cube->dir_x;
-		cube->dir_x = cube->dir_x * cos(0.08) - cube->dir_y * sin(0.08);
-		cube->dir_y = old_dir_x * sin(0.08) + cube->dir_y * cos(0.08);
-		double old_plane_x = cube->plane_x;
-		cube->plane_x = cube->plane_x * cos(0.08) - cube->plane_y * sin(0.08);
-		cube->plane_y = old_plane_x * sin(0.08) + cube->plane_y * cos(0.08);
+		while (k < SENSI)
+		{
+			double old_dir_x = cube->dir_x;
+			cube->dir_x = cube->dir_x * cos(LA_ROTA) - cube->dir_y * sin(LA_ROTA);
+			cube->dir_y = old_dir_x * sin(LA_ROTA) + cube->dir_y * cos(LA_ROTA);
+			double old_plane_x = cube->plane_x;
+			cube->plane_x = cube->plane_x * cos(LA_ROTA) - cube->plane_y * sin(LA_ROTA);
+			cube->plane_y = old_plane_x * sin(LA_ROTA) + cube->plane_y * cos(LA_ROTA);
+			k++;
+		}
 	}
 	if (cube->hook.key_pressed[KEY_W])
 	{
-		if (cube->map[(int)(cube->player_y + (cube->dir_y * cube->move_speed) * (5/3))] != NULL)
-		{
-			if(cube->map[(int)(cube->player_y + (cube->dir_y * cube->move_speed) * (5/3))][(int)(cube->player_x)] == '0')
-				cube->player_y += (cube->dir_y * cube->move_speed);
-		}
-		if(cube->map[(int)(cube->player_y)][(int)(cube->player_x + (cube->dir_x * cube->move_speed) * (5/3))] == '0')
+		double new_x = cube->player_x + (cube->dir_x * cube->move_speed);
+		double new_y = cube->player_y + (cube->dir_y * cube->move_speed);
+		
+		bool can_move_x = (cube->map[(int)(cube->player_y)][(int)(new_x + (new_x > cube->player_x ? MARGE_COLLISION : -MARGE_COLLISION))] == '0');
+		bool can_move_y = (cube->map[(int)(new_y + (new_y > cube->player_y ? MARGE_COLLISION : -MARGE_COLLISION))] != NULL && 
+						   cube->map[(int)(new_y + (new_y > cube->player_y ? MARGE_COLLISION : -MARGE_COLLISION))][(int)(cube->player_x)] == '0');
+		if (can_move_x)
 			cube->player_x += (cube->dir_x * cube->move_speed);
+		if (can_move_y)
+			cube->player_y += (cube->dir_y * cube->move_speed);
     }
 	if (cube->hook.key_pressed[KEY_A])
 	{
-		if (cube->map[(int)(cube->player_y - (cube->dir_y * cube->move_speed) * (5/3))] != NULL)
-		{
-			if(cube->map[(int)(cube->player_y - (cube->plane_y * cube->move_speed) * (5/3))][(int)(cube->player_x)] == '0')
-				cube->player_y -= (cube->plane_y * cube->move_speed);
-		}
-		if(cube->map[(int)(cube->player_y)][(int)(cube->player_x - (cube->plane_x * cube->move_speed) * (5/3))] == '0')
+		double new_x = cube->player_x - (cube->plane_x * cube->move_speed);
+		double new_y = cube->player_y - (cube->plane_y * cube->move_speed);
+		
+		bool can_move_x = (cube->map[(int)(cube->player_y)][(int)(new_x + (new_x < cube->player_x ? -MARGE_COLLISION : MARGE_COLLISION))] == '0');
+		bool can_move_y = (cube->map[(int)(new_y + (new_y < cube->player_y ? -MARGE_COLLISION : MARGE_COLLISION))] != NULL && 
+						   cube->map[(int)(new_y + (new_y < cube->player_y ? -MARGE_COLLISION : MARGE_COLLISION))][(int)(cube->player_x)] == '0');
+		if (can_move_x)
 			cube->player_x -= (cube->plane_x * cube->move_speed);
+		if (can_move_y)
+			cube->player_y -= (cube->plane_y * cube->move_speed);
 	}
 	if (cube->hook.key_pressed[KEY_D])
 	{
-		if (cube->map[(int)(cube->player_y + (cube->plane_y * cube->move_speed) * (5/3))] != NULL)
-		{
-			if(cube->map[(int)(cube->player_y + (cube->plane_y * cube->move_speed) * (5/3))][(int)(cube->player_x)] == '0')
-				cube->player_y += (cube->plane_y * cube->move_speed);
-		}
-		if(cube->map[(int)(cube->player_y)][(int)(cube->player_x + (cube->plane_x * cube->move_speed) * (5/3))] == '0')
+		double new_x = cube->player_x + (cube->plane_x * cube->move_speed);
+		double new_y = cube->player_y + (cube->plane_y * cube->move_speed);
+		
+		bool can_move_x = (cube->map[(int)(cube->player_y)][(int)(new_x + (new_x > cube->player_x ? MARGE_COLLISION : -MARGE_COLLISION))] == '0');
+		bool can_move_y = (cube->map[(int)(new_y + (new_y > cube->player_y ? MARGE_COLLISION : -MARGE_COLLISION))] != NULL && 
+						   cube->map[(int)(new_y + (new_y > cube->player_y ? MARGE_COLLISION : -MARGE_COLLISION))][(int)(cube->player_x)] == '0');
+		if (can_move_x)
 			cube->player_x += (cube->plane_x * cube->move_speed);
+		if (can_move_y)
+			cube->player_y += (cube->plane_y * cube->move_speed);
 	}
 	if (cube->hook.key_pressed[KEY_S])
 	{
-		if (cube->map[(int)(cube->player_y - (cube->dir_y * cube->move_speed) * (5/3))])
-		{
-			if(cube->map[(int)(cube->player_y - (cube->dir_y * cube->move_speed) * (5/3))][(int)(cube->player_x)] == '0')
-				cube->player_y -= (cube->dir_y * cube->move_speed);
-		}
-      	if(cube->map[(int)(cube->player_y)][(int)(cube->player_x - (cube->dir_x * cube->move_speed) * (5/3))] == '0')
-	  		cube->player_x -= (cube->dir_x * cube->move_speed);
+		double new_x = cube->player_x - (cube->dir_x * cube->move_speed);
+		double new_y = cube->player_y - (cube->dir_y * cube->move_speed);
+
+		bool can_move_x = (cube->map[(int)(cube->player_y)][(int)(new_x + (new_x < cube->player_x ? -MARGE_COLLISION : MARGE_COLLISION))] == '0');
+		bool can_move_y = (cube->map[(int)(new_y + (new_y < cube->player_y ? -MARGE_COLLISION : MARGE_COLLISION))] != NULL && 
+						   cube->map[(int)(new_y + (new_y < cube->player_y ? -MARGE_COLLISION : MARGE_COLLISION))][(int)(cube->player_x)] == '0');
+		if (can_move_x)
+			cube->player_x -= (cube->dir_x * cube->move_speed);
+		if (can_move_y)
+			cube->player_y -= (cube->dir_y * cube->move_speed);
 	}
 	if (cube->hook.mouse_pos[0])
 	{
@@ -162,7 +191,6 @@ int	update_game_state(t_cube *cube)
 						&cube->img.bits_per_pixel, &cube->img.line_length,
 						&cube->img.endian);
 				raycast(cube);
-				// draw_sprite(cube);
 				mlx_put_image_to_window(cube->mlx, cube->win, cube->img.img, 0, 0);
 				break;
 			}
@@ -171,21 +199,19 @@ int	update_game_state(t_cube *cube)
 	return (0);
 }
 
-int key_release_hook(int keycode, t_hook *hook)
+int key_release_hook(int keycode, t_cube *cube)
 {
 	if (keycode == 123)
-		hook->key_pressed[KEY_LEFT] = false;
+		cube->hook.key_pressed[KEY_LEFT] = false;
 	if (keycode == 124)
-		hook->key_pressed[KEY_RIGHT] = false;
+		cube->hook.key_pressed[KEY_RIGHT] = false;
 	if (keycode == 13)
-		hook->key_pressed[KEY_W] = false;
+		cube->hook.key_pressed[KEY_W] = false;
 	if (keycode == 0)
-		hook->key_pressed[KEY_A] = false;
+		cube->hook.key_pressed[KEY_A] = false;
 	if (keycode == 2)
-		hook->key_pressed[KEY_D] = false;
+		cube->hook.key_pressed[KEY_D] = false;
 	if (keycode == 1)
-		hook->key_pressed[KEY_S] = false;
-	if (keycode == 257)
-		hook->key_pressed[KEY_SHIFT] = false;
+		cube->hook.key_pressed[KEY_S] = false;
 	return (0);
 }

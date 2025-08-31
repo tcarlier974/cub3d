@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:40:11 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/08/06 16:41:49 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/08/30 17:14:17 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	draw_texture(t_cube *cube, int x, int y, t_img texture)
 		}
 	}
 }
-
+//en gros la minimap est dessinee bloc par bloc et pas pixel par pixel donc c'est beaucoup plus opti
 void	draw_minimap(t_cube *cube)
 {
 	int minimap_width = 9 * MINIMAP_SIZE;
@@ -81,14 +81,24 @@ void	draw_minimap(t_cube *cube)
 			int map_x = (int)cube->player_x - 4 + i;
 			if (map_x < 0 || map_x >= cube->map_width)
 				continue;
-			for (int y = 0; y < MINIMAP_SIZE; y++)
+			int color = color_map(cube->map[map_y][map_x]);
+			int base_x = offset_x + i * MINIMAP_SIZE;
+			int base_y = offset_y + j * MINIMAP_SIZE;
+
+			if (MINIMAP_SIZE == 1)
 			{
-				for (int x = 0; x < MINIMAP_SIZE; x++)
+				my_mlx_pixel_put(&cube->img, base_x, base_y, color);
+			}
+			else
+			{
+				for (int y = 0; y < MINIMAP_SIZE; y++)
 				{
-					my_mlx_pixel_put(&cube->img,
-						offset_x + i * MINIMAP_SIZE + x,
-						offset_y + j * MINIMAP_SIZE + y,
-						color_map(cube->map[map_y][map_x]));
+					char *dst = cube->img.addr + ((base_y + y) * cube->img.line_length + base_x * (cube->img.bits_per_pixel / 8));
+					for (int x = 0; x < MINIMAP_SIZE; x++)
+					{
+						*(unsigned int*)dst = color;
+						dst += (cube->img.bits_per_pixel / 8);
+					}
 				}
 			}
 		}

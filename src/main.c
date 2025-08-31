@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/08/06 16:44:49 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/08/30 17:47:22 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ int	main(int ac, char **av)
 	mlx_do_key_autorepeaton(cube.mlx);
 	mlx_hook(cube.win, 17, 0, ft_mlx_loop_end, &cube);
 	mlx_hook(cube.win, 2, 1L << 0, key_hook_press, &cube);
-	mlx_hook(cube.win, 3, 1L << 1, key_release_hook, &cube.hook);
+	mlx_hook(cube.win, 3, 1L << 1, key_release_hook, &cube);
 	mlx_loop_hook(cube.mlx, update_game_state, &cube);
 	mlx_loop(cube.mlx);
 	return (0);
