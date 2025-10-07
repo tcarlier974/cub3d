@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/08/30 17:47:22 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/10/07 17:52:07 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,10 @@ int	bcktrck(t_cube *cube, int x, int y, char **visited)
     if (visited[y][x] == '1' || cube->map[y][x] == '1')
         return (1);
     if ((x == 0 || x == cube->map_width - 1 || y == 0 || y == cube->map_height - 1) 
-        && cube->map[y][x] == '0')
+        && cube->map[y][x] != '1')
         return (0);
     visited[y][x] = '1';
-    if (cube->map[y][x] == '0')
+    if (cube->map[y][x] != '1')
     {
         if (!bcktrck(cube, x + 1, y, visited))
             return (0);
