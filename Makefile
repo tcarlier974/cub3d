@@ -14,7 +14,6 @@ SRC = ./get_next_line/get_next_line.c \
 
 OBJ = $(SRC:.c=.o)
 
-# Add macOS framework flags
 MACOS_FRAMEWORKS = -framework OpenGL -framework AppKit -framework CoreFoundation
 
 all: $(NAME)

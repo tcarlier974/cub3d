@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:43:21 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/08/06 16:44:08 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/10/07 17:24:27 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	recup_textures_path(char **textures, const char *map_file, t_cube *cube)
 	int j = 0;
 	write(1, "Recuperation des textures...\n", 28);
 	line = get_next_line(fd);
-	while (i < TEXTURE_COUNT + 2 && line)
+	while (i < TEXTURE_COUNT + 1 && line)
 	{
 		printf("Processing line: %s", line);
 		while (line[0] == '\n' || line[0] == '\0')
@@ -182,6 +182,13 @@ void	recup_textures_path(char **textures, const char *map_file, t_cube *cube)
 		j = 0;
 	}
 	close(fd);
+	i++;
+	textures[4] = strdup("./textures/door.xpm");
+	if (!textures[4])
+	{
+		fprintf(stderr, "Failed to allocate memory for door texture path\n");
+		exit(EXIT_FAILURE);
+	}
 	if (i < TEXTURE_COUNT)
 	{
 		fprintf(stderr, "Not enough textures found in the map file: %s\n", map_file);
@@ -228,7 +235,7 @@ void	recup_texture(t_cube *cube, const char *map_file)
 		printf("Texture %d loaded: %dx%d\n", i, cube->texture[i].width, cube->texture[i].height);
 		i++;
 	}
-	cube->sprite.img = mlx_xpm_file_to_image(cube->mlx, "./textures/sprite/sprite.xpm", &cube->sprite.width, &cube->sprite.height);
+	
 	free(textures);
 }
 

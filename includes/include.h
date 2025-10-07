@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/08/31 02:18:34 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/10/07 17:45:06 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # include "../get_next_line/get_next_line.h"
 # include <stdbool.h>
 
-# define TEXTURE_COUNT 4
+# define TEXTURE_COUNT 5
 # define RENDER_FPS 30
 # ifndef WIDTH
 #  define WIDTH 1200
@@ -64,11 +64,12 @@ typedef enum e_keycode
 	KEY_RIGHT,
 	KEY_ESC,
 	KEY_SHIFT,
+	KEY_E,
 }	t_keycode;
 
 typedef struct s_hook
 {
-	bool key_pressed[8];
+	bool key_pressed[9];
 	bool mouse_pos[2];
 	int mouse_x;
 	int mouse_y;

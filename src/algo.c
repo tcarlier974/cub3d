@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:44:29 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/08/30 17:48:06 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/10/07 17:32:43 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,17 @@ void	dda_algo(t_raycast *ray, t_cube *cube)
 			ray->map_y += ray->step_y;
 			ray->side = 1;
 		}
-		if (cube->map[ray->map_y][ray->map_x] != '0')
+		if (cube->map[ray->map_y][ray->map_x] == '1')
 		{
 			ray->hit = 1;
+			if (ray->side == 0) 
+				ray->perp_wall_dist = (ray->side_dist_x - ray->delta_dist_x);
+			else
+				ray->perp_wall_dist = (ray->side_dist_y - ray->delta_dist_y);
+		}
+		else if (cube->map[ray->map_y][ray->map_x] == '2')
+		{
+			ray->hit = 2;
 			if (ray->side == 0) 
 				ray->perp_wall_dist = (ray->side_dist_x - ray->delta_dist_x);
 			else
@@ -105,7 +113,7 @@ void raycast(t_cube *cube)
 	{
 		init_raycast_values(&ray, cube, x);
 		dda_algo(&ray, cube);
-		if (cube->map[ray.map_y][ray.map_x] != '0')
+		if (cube->map[ray.map_y][ray.map_x] != '0' && cube->map[ray.map_y][ray.map_x] != '3')
 		{
 			ray.line_height = (int)(HEIGHT / ray.perp_wall_dist);
 			ray.draw_start = (-ray.line_height / 2) + (HEIGHT / 2);
@@ -123,7 +131,7 @@ void raycast(t_cube *cube)
 		}
 		while (y < ray.draw_end)
 		{
-			if (cube->map[ray.map_y][ray.map_x] == '1')
+			if (cube->map[ray.map_y][ray.map_x] != '0')
 			{
 				if (ray.side == 0)
 				{
@@ -139,6 +147,8 @@ void raycast(t_cube *cube)
 					else
 						tex_num = 1;
 				}
+				if (cube->map[ray.map_y][ray.map_x] == '2')
+					tex_num = 4;
 				int tex_height = cube->texture[tex_num].height;
 				int tex_width = cube->texture[tex_num].width;
 				int d = (y * 2 - HEIGHT + ray.line_height) * 128;
