@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:43:21 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/10/07 17:24:27 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/10/24 19:19:25 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,13 @@
 void	init_cube(t_cube *cube, const char *map_file)
 {
 	int	i;
+
 	cube->mlx = mlx_init();
 	cube->win = mlx_new_window(cube->mlx, WIDTH, HEIGHT, "Cub3D");
 	cube->img.img = mlx_new_image(cube->mlx, WIDTH, HEIGHT);
-	cube->img.addr = mlx_get_data_addr(cube->img.img, &cube->img.bits_per_pixel, &cube->img.line_length, &cube->img.endian);
+	cube->img.addr = mlx_get_data_addr(cube->img.img,
+			&cube->img.bits_per_pixel,
+			&cube->img.line_length, &cube->img.endian);
 	cube->img.width = WIDTH;
 	cube->img.height = HEIGHT;
 	cube->map = NULL;
@@ -39,7 +42,10 @@ void	init_cube(t_cube *cube, const char *map_file)
 
 void	recup_textures_path(char **textures, const char *map_file, t_cube *cube)
 {
-	int	fd;
+	int		fd;
+	char	*line;
+	int		i = 0;
+	int		j = 0;
 
 	fd = open(map_file, O_RDONLY);
 	if (fd < 0)
@@ -47,9 +53,6 @@ void	recup_textures_path(char **textures, const char *map_file, t_cube *cube)
 		fprintf(stderr, "Failed to open map file: %s\n", map_file);
 		exit(EXIT_FAILURE);
 	}
-	char	*line;
-	int	i = 0;
-	int j = 0;
 	write(1, "Recuperation des textures...\n", 28);
 	line = get_next_line(fd);
 	while (i < TEXTURE_COUNT + 1 && line)
@@ -253,7 +256,7 @@ void init_map(char ***map, const char *file_path, t_cube *cube)
 		perror("Failed to open map file");
 		return;
 	}
-	*map = malloc(sizeof(char *) * count_lines(file_path));
+	*map = malloc(sizeof(char *) * (count_lines(file_path) + 1));
 	if (!*map)
 	return;
 	line = get_next_line(fd);
