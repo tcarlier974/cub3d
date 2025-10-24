@@ -244,70 +244,84 @@ void	recup_texture(t_cube *cube, const char *map_file)
 
 void init_map(char ***map, const char *file_path, t_cube *cube)
 {
-	int		fd;
-	char	*line;
-	int		line_count = 0;
-	int		i = 0;
-	int		j = 0;
+    int		fd;
+    char	*line;
+    int		line_count = 0;
+    int		j = 0;
+    size_t	len;
 
-	fd = open(file_path, O_RDONLY);
-	if (fd < 0)
-	{
-		perror("Failed to open map file");
-		return;
-	}
-	*map = malloc(sizeof(char *) * (count_lines(file_path) + 1));
-	if (!*map)
-	return;
-	line = get_next_line(fd);
-	while (j < 6)
-	{
-		while(line[0] == '\n')
-		{
-			free(line);
-			line = get_next_line(fd);
-		}
-		if (line[0] != '\n' && line[0] != '\0')
-		{
-			j++;
-		}
-		free(line);
-		line = get_next_line(fd);
-	}
-	while (line)
-	{
-		i = 0;
-		(*map)[line_count] = malloc(sizeof(char *) * strlen(line) + 1);
-		if (!(*map)[line_count])
-		{
-			free(line);
-			return;
-		}
-		while(line[i] != '\0' && line[i] != '\n')
-		{
-			if (line[i] == 'N' || line[i] == 'S' || line[i] == 'E' || line[i] == 'W')
-			{
-				(*map)[line_count][i] = '0';
-				cube->dir_x = (line[i] == 'E') - (line[i] == 'W');
-				cube->dir_y = (line[i] == 'S') - (line[i] == 'N');
-				cube->plane_x = -cube->dir_y * 0.66;
-				cube->plane_y = cube->dir_x * 0.66;
-				cube->player_x = (float)i + 0.5;
-				cube->player_y = (float)line_count + 0.5;
-			}
-			else if (line[i] == ' ')
-				(*map)[line_count][i] = '0';
-			else if (line[i] > '0')
-				(*map)[line_count][i] = line[i];
-			else
-				(*map)[line_count][i] = '0';
-			i++;
-		}
-		(*map)[line_count][i] = '\0';
-		line_count++;
-		free(line);
-		line = get_next_line(fd);
-	}
-	(*map)[line_count] = NULL;
-	close(fd);
+    fd = open(file_path, O_RDONLY);
+    if (fd < 0)
+    {
+        perror("Failed to open map file");
+        return;
+    }
+    *map = malloc(sizeof(char *) * (cube->map_height + 1));
+    if (!*map)
+    {
+        close(fd);
+        return;
+    }
+    line = get_next_line(fd);
+    /* skip header/config lines (jusqu'à 6 lignes non vides) */
+    while (j < 6 && line)
+    {
+        while (line && (line[0] == '\n' || line[0] == '\0'))
+        {
+            free(line);
+            line = get_next_line(fd);
+        }
+        if (!line)
+            break;
+        if (line[0] != '\n' && line[0] != '\0')
+            j++;
+        free(line);
+        line = get_next_line(fd);
+    }
+    /* read map lines and normalize each row to cube->map_width */
+    while (line)
+    {
+        len = strlen(line);
+        (*map)[line_count] = malloc(sizeof(char) * (cube->map_width + 1));
+        if (!(*map)[line_count])
+        {
+            free(line);
+            /* cleanup already allocated rows */
+            for (int k = 0; k < line_count; k++)
+                free((*map)[k]);
+            free(*map);
+            close(fd);
+            return;
+        }
+        /* fill with '0' by default */
+        for (int t = 0; t < cube->map_width; t++)
+            (*map)[line_count][t] = '0';
+        (*map)[line_count][cube->map_width] = '\0';
+        /* copy characters from line (if any) */
+        for (int i = 0; i < (int)len && i < cube->map_width && line[i] != '\n'; i++)
+        {
+            char ch = line[i];
+            if (ch == 'N' || ch == 'S' || ch == 'E' || ch == 'W')
+            {
+                (*map)[line_count][i] = '0';
+                cube->dir_x = (ch == 'E') - (ch == 'W');
+                cube->dir_y = (ch == 'S') - (ch == 'N');
+                cube->plane_x = -cube->dir_y * 0.66;
+                cube->plane_y = cube->dir_x * 0.66;
+                cube->player_x = (double)i + 0.5;
+                cube->player_y = (double)line_count + 0.5;
+            }
+            else if (ch == ' ')
+                (*map)[line_count][i] = '0';
+            else if (ch > '0')
+                (*map)[line_count][i] = ch;
+            else
+                (*map)[line_count][i] = '0';
+        }
+        line_count++;
+        free(line);
+        line = get_next_line(fd);
+    }
+    (*map)[line_count] = NULL;
+    close(fd);
 }
