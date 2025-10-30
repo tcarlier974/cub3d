@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/10/25 00:08:46 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/10/30 19:44:17 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,13 @@ typedef struct s_img
 	int		height;
 }	t_img;
 
+typedef struct s_color
+{
+	int	r;
+	int	g;
+	int	b;
+}	t_color;
+
 typedef struct s_cube
 {
 	void	*mlx;
@@ -141,7 +148,7 @@ int     key_hook_press(int keycode, t_cube *cube);
 int     count_lines(const char *file_path);
 int     count_max_col(const char *file_path);
 int		bcktrck(t_cube *cube, int x, int y, char **visited);
-
+int		validate_map_closed(t_cube *cube);
 // Thread related functions
 int		update_game_state(t_cube *cube);
 

@@ -6,12 +6,11 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:40:11 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/10/24 19:31:38 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/10/30 19:47:34 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/include.h"
-
 
 void	my_mlx_pixel_put(t_img *img, int x, int y, int color)
 {
@@ -25,45 +24,52 @@ void	my_mlx_pixel_put(t_img *img, int x, int y, int color)
 
 int	rgb_to_int(const char *rgb)
 {
-	int r, g, b;
-	int i = 0;
+	t_color	c;
+	int		i;
+
+	i = 0;
 	while (rgb[i] == ' ')
 		i++;
-	r = atoi(rgb + i);
+	c.r = atoi(rgb + i);
 	while (rgb[i] >= '0' && rgb[i] <= '9')
 		i++;
 	i++;
-	g = atoi(rgb + i);
+	c.g = atoi(rgb + i);
 	while (rgb[i] >= '0' && rgb[i] <= '9')
 		i++;
 	i++;
-	b = atoi(rgb + i);
-	if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
+	c.b = atoi(rgb + i);
+	if (c.r < 0 || c.r > 255 || c.g < 0 || c.g > 255 || c.b < 0 || c.b > 255)
 	{
 		fprintf(stderr, "Invalid RGB value: %s\n", rgb);
 		exit(EXIT_FAILURE);
 	}
-	write(1, "RGB values: ", 12);
-	printf("R: %d, G: %d, B: %d\n", r, g, b);
-	return (r << 16 | g << 8 | b);
+	return (c.r << 16 | c.g << 8 | c.b);
 }
 
 void	draw_texture(t_cube *cube, int x, int y, t_img texture)
 {
-	int		i;
-	int		j;
+	int				i;
+	int				j;
 	unsigned int	color;
 
-	for (j = 0; j < texture.height; j++)
+	j = 0;
+	while (j < texture.height)
 	{
-		for (i = 0; i < texture.width; i++)
+		i = 0;
+		while (i < texture.width)
 		{
-			color = *(unsigned int *)(texture.addr + (j * texture.line_length + i * (texture.bits_per_pixel / 8)));
+			color = *(unsigned int *)(texture.addr + (j * texture.line_length
+						+ i * (texture.bits_per_pixel / 8)));
 			my_mlx_pixel_put(&cube->img, x + i, y + j, color);
+			i++;
 		}
+		j++;
 	}
 }
-//en gros la minimap est dessinee bloc par bloc et pas pixel par pixel donc c'est beaucoup plus opti
+
+//en gros la minimap est dessinee bloc par bloc et 
+//pas pixel par pixel donc c'est beaucoup plus opti
 void	draw_minimap(t_cube *cube)
 {
 	int minimap_width = 9 * MINIMAP_SIZE;
@@ -119,33 +125,6 @@ void	draw_minimap(t_cube *cube)
 		for (int x = -1; x <= 1; x++)
 		{
 			my_mlx_pixel_put(&cube->img, px + dx/2 + x, py + dy/2 + y, 0x00FF00);
-		}
-	}
-}
-
-void draw_sprite(t_cube *cube)
-{
-	if (cube->sprite.img)
-	{
-		int sprite_width = cube->sprite.width;
-		int sprite_height = cube->sprite.height;
-		int x = (WIDTH - sprite_width) / 2;
-		int y = HEIGHT - sprite_height - 30;
-		while (y < HEIGHT - 30 + sprite_height)
-		{
-			if (y < 0 || y >= HEIGHT)
-				break;
-			int i = 0;
-			while (i < sprite_width)
-			{
-				if (x + i < 0 || x + i >= WIDTH)
-					break;
-				unsigned int color = *(unsigned int *)(cube->sprite.addr + (y * cube->sprite.line_length + i * (cube->sprite.bits_per_pixel / 8)));
-				if (color != 0x000000)
-					my_mlx_pixel_put(&cube->img, x + i, y, color);
-				i++;
-			}
-			y++;
 		}
 	}
 }

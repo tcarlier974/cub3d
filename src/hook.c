@@ -6,27 +6,31 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:42:11 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/10/07 17:46:52 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/10/30 19:40:43 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/include.h"
 
-int ft_mlx_loop_end(t_cube *cube)
+int	ft_mlx_loop_end(t_cube *cube)
 {
+	int	i;
+
+	i = 0;
 	mlx_destroy_window(cube->mlx, cube->win);
 	mlx_destroy_image(cube->mlx, cube->img.img);
-	for (int i = 0; i < TEXTURE_COUNT; i++)
+	while (i < TEXTURE_COUNT)
 	{
 		if (cube->texture[i].img)
 			mlx_destroy_image(cube->mlx, cube->texture[i].img);
+		i++;
 	}
 	free(cube->map);
 	exit(0);
 	return (0);
 }
 
-int key_hook_press(int keycode, t_cube *cube)
+int	key_hook_press(int keycode, t_cube *cube)
 {
 	if (keycode == 53)
 		cube->hook.key_pressed[KEY_ESC] = true;
@@ -46,23 +50,6 @@ int key_hook_press(int keycode, t_cube *cube)
 		cube->hook.key_pressed[KEY_E] = true;
 	if (keycode == 257)
 		cube->hook.key_pressed[KEY_SHIFT] = !cube->hook.key_pressed[KEY_SHIFT];
-	
-	mlx_mouse_get_pos(cube->mlx, &cube->hook.mouse_x, &cube->hook.mouse_y);
-	if (cube->hook.mouse_x < WIDTH / 2)
-	{
-		cube->hook.mouse_pos[0] = true;
-		cube->hook.mouse_pos[1] = false;
-	}
-	else if (cube->hook.mouse_x > WIDTH / 2)
-	{
-		cube->hook.mouse_pos[0] = false;
-		cube->hook.mouse_pos[1] = true;
-	}
-	else
-	{
-		cube->hook.mouse_pos[0] = false;
-		cube->hook.mouse_pos[1] = false;
-	}
 	return (0);
 }
 
@@ -71,10 +58,9 @@ int	update_game_state(t_cube *cube)
 	int	k;
 
 	k = 0;
-	
 	if (cube->hook.key_pressed[KEY_SHIFT])
 	{
-		cube->move_speed =  WALK_SPEED + SPRINT_SPEED;
+		cube->move_speed = WALK_SPEED + SPRINT_SPEED;
 	}
 	else
 	{
@@ -179,17 +165,17 @@ int	update_game_state(t_cube *cube)
 			cube->hook.key_pressed[KEY_E] = false;
 		}
 	}
-		mlx_destroy_image(cube->mlx, cube->img.img);
-		cube->img.img = mlx_new_image(cube->mlx, WIDTH, HEIGHT);
-		cube->img.addr = mlx_get_data_addr(cube->img.img,
-				&cube->img.bits_per_pixel, &cube->img.line_length,
-				&cube->img.endian);
-		raycast(cube);
-		mlx_put_image_to_window(cube->mlx, cube->win, cube->img.img, 0, 0);
+	mlx_destroy_image(cube->mlx, cube->img.img);
+	cube->img.img = mlx_new_image(cube->mlx, WIDTH, HEIGHT);
+	cube->img.addr = mlx_get_data_addr(cube->img.img,
+			&cube->img.bits_per_pixel, &cube->img.line_length,
+			&cube->img.endian);
+	raycast(cube);
+	mlx_put_image_to_window(cube->mlx, cube->win, cube->img.img, 0, 0);
 	return (0);
 }
 
-int key_release_hook(int keycode, t_cube *cube)
+int	key_release_hook(int keycode, t_cube *cube)
 {
 	if (keycode == 123)
 		cube->hook.key_pressed[KEY_LEFT] = false;
