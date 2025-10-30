@@ -6,18 +6,14 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/10/24 19:01:34 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/10/30 19:30:04 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/include.h"
 
-int	validate_map_closed(t_cube *cube)
+int	check_spawn(t_cube *cube)
 {
-	char	**visited;
-	int		i;
-	int		result;
-
 	if ((int)cube->player_x < 0 || (int)cube->player_x >= cube->map_width
 		|| (int)cube->player_y < 0 || (int)cube->player_y >= cube->map_height)
 	{
@@ -31,33 +27,60 @@ int	validate_map_closed(t_cube *cube)
 			cube->map[(int)cube->player_y][(int)cube->player_x]);
 		return (0);
 	}
-	visited = malloc(sizeof(char *) * cube->map_height);
-	if (!visited)
-		return (0);
+	return (1);
+}
+
+void	free_checker(char ***visited, t_cube *cube)
+{
+	int	i;
+
 	i = 0;
 	while (i < cube->map_height)
 	{
-		visited[i] = malloc(sizeof(char) * (cube->map_width + 1));
-		if (!visited[i])
+		free((*visited)[i]);
+		i++;
+	}
+	free(*visited);
+}
+
+int	init_visit(char ***visited, t_cube *cube)
+{
+	int	i;
+
+	i = 0;
+	*visited = malloc(sizeof(char *) * cube->map_height);
+	if (!(*visited))
+		return (0);
+	while (i < cube->map_height)
+	{
+		(*visited)[i] = malloc(sizeof(char) * (cube->map_width + 1));
+		if (!(*visited)[i])
 		{
 			while (--i >= 0)
-				free(visited[i]);
-			free(visited);
+				free((*visited)[i]);
+			free((*visited));
 			return (0);
 		}
-		memset(visited[i], '0', cube->map_width);
-		visited[i][cube->map_width] = '\0';
+		memset((*visited)[i], '0', cube->map_width);
+		(*visited)[i][cube->map_width] = '\0';
 		i++;
 	}
-	printf("c'est bieng fermé ??? (%d, %d)...\n", (int)cube->player_x, (int)cube->player_y);
+	return (1);
+}
+
+int	validate_map_closed(t_cube *cube)
+{
+	char	**visited;
+	int		result;
+
+	if (!check_spawn(cube))
+		return (0);
+	if (!init_visit(&visited, cube))
+		return (0);
+	printf("c'est bieng fermé ??? (%d, %d)...\n",
+		(int)cube->player_x, (int)cube->player_y);
 	result = bcktrck(cube, (int)cube->player_x, (int)cube->player_y, visited);
-	i = 0;
-	while (i < cube->map_height)
-	{
-		free(visited[i]);
-		i++;
-	}
-	free(visited);
+	free_checker(&visited, cube);
 	if (result)
 		printf("map bien fermée\n");
 	else

@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:43:21 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/10/24 19:19:25 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/10/25 12:52:02 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -306,7 +306,7 @@ void init_map(char ***map, const char *file_path, t_cube *cube)
                 (*map)[line_count][i] = '0';
                 cube->dir_x = (ch == 'E') - (ch == 'W');
                 cube->dir_y = (ch == 'S') - (ch == 'N');
-                cube->plane_x = -cube->dir_y * 0.66;
+            	cube->plane_x = -cube->dir_y * 0.66;
                 cube->plane_y = cube->dir_x * 0.66;
                 cube->player_x = (double)i + 0.5;
                 cube->player_y = (double)line_count + 0.5;
