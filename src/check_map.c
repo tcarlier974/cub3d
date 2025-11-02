@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 19:34:55 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/10/30 19:35:43 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/02 21:06:17 by igilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

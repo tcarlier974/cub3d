@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   algo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:44:29 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/10/07 17:32:43 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/02 21:46:45 by igilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,37 +22,38 @@ void	second_init_ray(t_raycast *ray, t_cube *cube, int x)
 	else
 	{
 		ray->step_y = 1;
-		ray->side_dist_y = (ray->map_y + 1.0 - cube->player_y) * ray->delta_dist_y;
+		ray->side_dist_y = (ray->map_y + 1.0 - cube->player_y)
+			* ray->delta_dist_y;
 	}
 }
-	
-void	init_raycast_values(t_raycast *ray, t_cube *cube, int x)
+
+void	init_raycast_values(t_raycast *r, t_cube *cube, int x)
 {
-	ray->hit = 0;
-	ray->map_x = (int)cube->player_x;
-	ray->map_y = (int)cube->player_y;
-	ray->camera_x = 2 * (double)x / (double)WIDTH - 1;
-	ray->ray_dir_x = cube->dir_x + cube->plane_x * ray->camera_x;
-	ray->ray_dir_y = cube->dir_y + cube->plane_y * ray->camera_x;
-	if (ray->ray_dir_x == 0)
-		ray->delta_dist_x = 1e30;
+	r->hit = 0;
+	r->map_x = (int)cube->player_x;
+	r->map_y = (int)cube->player_y;
+	r->camera_x = 2 * (double)x / (double)WIDTH - 1;
+	r->ray_dir_x = cube->dir_x + cube->plane_x * r->camera_x;
+	r->ray_dir_y = cube->dir_y + cube->plane_y * r->camera_x;
+	if (r->ray_dir_x == 0)
+		r->delta_dist_x = 1e30;
 	else
-		ray->delta_dist_x = fabs(1 / ray->ray_dir_x);
-	if (ray->ray_dir_y == 0)
-		ray->delta_dist_y = 1e30;
+		r->delta_dist_x = fabs(1 / r->ray_dir_x);
+	if (r->ray_dir_y == 0)
+		r->delta_dist_y = 1e30;
 	else
-		ray->delta_dist_y = fabs(1 / ray->ray_dir_y);
-	if (ray->ray_dir_x < 0)
+		r->delta_dist_y = fabs(1 / r->ray_dir_y);
+	if (r->ray_dir_x < 0)
 	{
-		ray->step_x = -1;
-		ray->side_dist_x = (cube->player_x - ray->map_x) * ray->delta_dist_x;
+		r->step_x = -1;
+		r->side_dist_x = (cube->player_x - r->map_x) * r->delta_dist_x;
 	}
 	else
 	{
-		ray->step_x = 1;
-		ray->side_dist_x = (ray->map_x + 1.0 - cube->player_x) * ray->delta_dist_x;
+		r->step_x = 1;
+		r->side_dist_x = (r->map_x + 1.0 - cube->player_x) * r->delta_dist_x;
 	}
-	second_init_ray(ray, cube, x);
+	second_init_ray(r, cube, x);
 }
 
 void	dda_algo(t_raycast *ray, t_cube *cube)
@@ -102,16 +103,14 @@ int color_map(char c)
 
 void raycast(t_cube *cube)
 {
-	t_raycast ray;
-	int x;
-	int	y;
-	int	color;
-	int tex_num = 0;
+	t_raycast	ray;
+	t_algo		var;
 
-	x = 0;
-	while (x < WIDTH)
+	var.x = 0;
+	var.tex_num = 0;
+	while (var.x < WIDTH)
 	{
-		init_raycast_values(&ray, cube, x);
+		init_raycast_values(&ray, cube, var.x);
 		dda_algo(&ray, cube);
 		if (cube->map[ray.map_y][ray.map_x] != '0' && cube->map[ray.map_y][ray.map_x] != '3')
 		{
