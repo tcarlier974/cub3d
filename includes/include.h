@@ -6,7 +6,11 @@
 /*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
+<<<<<<< Updated upstream
 /*   Updated: 2025/11/02 21:27:31 by igilbert         ###   ########.fr       */
+=======
+/*   Updated: 2025/11/02 21:29:50 by igilbert         ###   ########.fr       */
+>>>>>>> Stashed changes
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +29,6 @@
 # include <stdbool.h>
 
 # define TEXTURE_COUNT 5
-# define RENDER_FPS 30
 # ifndef WIDTH
 #  define WIDTH 1200
 # endif
@@ -33,7 +36,7 @@
 #  define HEIGHT 800
 # endif
 # ifndef MINIMAP_SIZE
-#  define MINIMAP_SIZE (WIDTH / 100)
+#  define MINIMAP_SIZE 12
 # endif
 # ifndef ENABLE_MINIMAP
 #  define ENABLE_MINIMAP 1
@@ -45,13 +48,13 @@
 #  define WALK_SPEED 0.02
 # endif
 # ifndef SENSI
-# define SENSI 2.0
+#  define SENSI 2.0
 # endif
-# ifndef LA_ROTA
-# define LA_ROTA 0.01
+# ifndef ROTA
+#  define ROTA 0.01
 # endif
-# ifndef MARGE_COLLISION
-# define MARGE_COLLISION 0.1
+# ifndef MARGIN_COLLISION
+#  define MARGIN_COLLISION 0.1
 # endif
 
 typedef enum e_keycode
@@ -67,12 +70,20 @@ typedef enum e_keycode
 	KEY_E,
 }	t_keycode;
 
+typedef struct s_algo
+{
+	int	x;
+	int	y;
+	int	color;
+	int	tex_num;
+}	t_algo;
+
 typedef struct s_hook
 {
-	bool key_pressed[9];
-	bool mouse_pos[2];
-	int mouse_x;
-	int mouse_y;
+	bool	key_pressed[9];
+	bool	mouse_pos[2];
+	int		mouse_x;
+	int		mouse_y;
 }	t_hook;
 
 hy
@@ -136,6 +147,10 @@ typedef struct s_cube
 	t_hook	hook;
 	double	move_speed;
 	int		minimap_counter;
+	double	old_dir_x;
+	double	old_dir_y;
+	double	old_plane_x;
+	double	old_plane_y;
 }	t_cube;
 
 // Function prototypes
@@ -145,9 +160,9 @@ void	recup_texture(t_cube *cube, const char *map_file);
 void	draw_texture(t_cube *cube, int x, int y, t_img texture);
 void	init_map(char ***map, const char *file_path, t_cube *cube);
 void	raycast(t_cube *cube);
-int     key_hook_press(int keycode, t_cube *cube);
-int     count_lines(const char *file_path);
-int     count_max_col(const char *file_path);
+int		key_hook_press(int keycode, t_cube *cube);
+int		count_lines(const char *file_path);
+int		count_max_col(const char *file_path);
 int		bcktrck(t_cube *cube, int x, int y, char **visited);
 int		validate_map_closed(t_cube *cube);
 // Thread related functions
@@ -156,10 +171,9 @@ int		update_game_state(t_cube *cube);
 // Add new function prototypes
 int		key_release_hook(int keycode, t_cube *cube);
 void	process_keys(t_cube *cube);
-int     ft_mlx_loop_end(t_cube *cube);
+int		ft_mlx_loop_end(t_cube *cube);
 int		rgb_to_int(const char *rgb);
 int		color_map(char c);
 void	draw_minimap(t_cube *cube);
-
 
 #endif
