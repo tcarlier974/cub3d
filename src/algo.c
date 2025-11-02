@@ -6,7 +6,7 @@
 /*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:44:29 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/02 21:46:45 by igilbert         ###   ########.fr       */
+/*   Updated: 2025/11/02 22:46:28 by igilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	dda_algo(t_raycast *ray, t_cube *cube)
 		if (cube->map[ray->map_y][ray->map_x] == '1')
 		{
 			ray->hit = 1;
-			if (ray->side == 0) 
+			if (ray->side == 0)
 				ray->perp_wall_dist = (ray->side_dist_x - ray->delta_dist_x);
 			else
 				ray->perp_wall_dist = (ray->side_dist_y - ray->delta_dist_y);
@@ -83,7 +83,7 @@ void	dda_algo(t_raycast *ray, t_cube *cube)
 		else if (cube->map[ray->map_y][ray->map_x] == '2')
 		{
 			ray->hit = 2;
-			if (ray->side == 0) 
+			if (ray->side == 0)
 				ray->perp_wall_dist = (ray->side_dist_x - ray->delta_dist_x);
 			else
 				ray->perp_wall_dist = (ray->side_dist_y - ray->delta_dist_y);
@@ -91,7 +91,7 @@ void	dda_algo(t_raycast *ray, t_cube *cube)
 	}
 }
 
-int color_map(char c)
+int	color_map(char c)
 {
 	if (c == '1')
 		return (0x222222);
@@ -101,7 +101,7 @@ int color_map(char c)
 		return (0x808080);
 }
 
-void raycast(t_cube *cube)
+void	raycast(t_cube *cube)
 {
 	t_raycast	ray;
 	t_algo		var;
@@ -112,68 +112,19 @@ void raycast(t_cube *cube)
 	{
 		init_raycast_values(&ray, cube, var.x);
 		dda_algo(&ray, cube);
-		if (cube->map[ray.map_y][ray.map_x] != '0' && cube->map[ray.map_y][ray.map_x] != '3')
+		what_to_draw(cube, &var, ray);
+		while (var.y < ray.draw_start)
 		{
-			ray.line_height = (int)(HEIGHT / ray.perp_wall_dist);
-			ray.draw_start = (-ray.line_height / 2) + (HEIGHT / 2);
-			if(ray.draw_start < 0)
-				ray.draw_start = 0;
-			ray.draw_end = (ray.line_height / 2) + (HEIGHT / 2);
-			if(ray.draw_end >= HEIGHT)
-				ray.draw_end = HEIGHT - 1;
-			y = 0;
+			my_mlx_pixel_put(&cube->img, var.x, var.y, cube->ceiling_color);
+			var.y++;
 		}
-		while (y < ray.draw_start)
+		draw_col(cube, &var, ray);
+		while (var.y < HEIGHT)
 		{
-			my_mlx_pixel_put(&cube->img, x, y, cube->ceiling_color);
-			y++;
+			my_mlx_pixel_put(&cube->img, var.x, var.y, cube->floor_color);
+			var.y++;
 		}
-		while (y < ray.draw_end)
-		{
-			if (cube->map[ray.map_y][ray.map_x] != '0')
-			{
-				if (ray.side == 0)
-				{
-					if (ray.ray_dir_x < 0)
-						tex_num = 3;
-					else
-						tex_num = 2;
-				}
-				else
-				{
-					if (ray.ray_dir_y < 0)
-						tex_num = 0;
-					else
-						tex_num = 1;
-				}
-				if (cube->map[ray.map_y][ray.map_x] == '2')
-					tex_num = 4;
-				int tex_height = cube->texture[tex_num].height;
-				int tex_width = cube->texture[tex_num].width;
-				int d = (y * 2 - HEIGHT + ray.line_height) * 128;
-				int tex_y = ((d * tex_height) / ray.line_height) / 256;
-				double wall_x;
-				if (ray.side == 0)
-					wall_x = cube->player_y + ray.perp_wall_dist * ray.ray_dir_y;
-				else
-					wall_x = cube->player_x + ray.perp_wall_dist * ray.ray_dir_x;
-				wall_x -= floor(wall_x);
-				int tex_x = (int)(wall_x * (double)tex_width);
-				if (tex_x < 0) tex_x += tex_width;
-				if ((ray.side == 0 && ray.ray_dir_x < 0) || (ray.side == 1 && ray.ray_dir_y > 0))
-					tex_x = tex_width - tex_x - 1;
-				if (tex_y < 0) tex_y += tex_height;
-				color = *(unsigned int *)(cube->texture[tex_num].addr + (tex_y * cube->texture[tex_num].line_length + tex_x * (cube->texture[tex_num].bits_per_pixel / 8)));
-			}
-			my_mlx_pixel_put(&cube->img, x, y, color);
-			y++;
-		}
-		while (y < HEIGHT)
-		{
-			my_mlx_pixel_put(&cube->img, x, y, cube->floor_color);
-			y++;
-		}
-		x++;
+		var.x++;
 	}
 	if (ENABLE_MINIMAP)
 		draw_minimap(cube);
