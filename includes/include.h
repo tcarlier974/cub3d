@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   include.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/10/30 19:44:17 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/02 21:46:30 by igilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 #  define HEIGHT 800
 # endif
 # ifndef MINIMAP_SIZE
-#  define MINIMAP_SIZE (WIDTH / 100)
+#  define MINIMAP_SIZE 12
 # endif
 # ifndef ENABLE_MINIMAP
 #  define ENABLE_MINIMAP 1
@@ -45,13 +45,13 @@
 #  define WALK_SPEED 0.02
 # endif
 # ifndef SENSI
-# define SENSI 2.0
+#  define SENSI 2.0
 # endif
-# ifndef LA_ROTA
-# define LA_ROTA 0.01
+# ifndef ROTA
+#  define ROTA 0.01
 # endif
 # ifndef MARGE_COLLISION
-# define MARGE_COLLISION 0.1
+#  define MARGE_COLLISION 0.1
 # endif
 
 typedef enum e_keycode
@@ -67,12 +67,20 @@ typedef enum e_keycode
 	KEY_E,
 }	t_keycode;
 
+typedef struct s_algo
+{
+	int	x;
+	int	y;
+	int	color;
+	int	tex_num;
+}	t_algo;
+
 typedef struct s_hook
 {
-	bool key_pressed[9];
-	bool mouse_pos[2];
-	int mouse_x;
-	int mouse_y;
+	bool	key_pressed[9];
+	bool	mouse_pos[2];
+	int		mouse_x;
+	int		mouse_y;
 }	t_hook;
 
 typedef struct s_raycast
@@ -159,6 +167,5 @@ int     ft_mlx_loop_end(t_cube *cube);
 int		rgb_to_int(const char *rgb);
 int		color_map(char c);
 void	draw_minimap(t_cube *cube);
-
 
 #endif
