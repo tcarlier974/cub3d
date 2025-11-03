@@ -6,7 +6,7 @@
 /*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:44:29 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/02 22:46:28 by igilbert         ###   ########.fr       */
+/*   Updated: 2025/11/02 23:00:11 by igilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,22 +72,7 @@ void	dda_algo(t_raycast *ray, t_cube *cube)
 			ray->map_y += ray->step_y;
 			ray->side = 1;
 		}
-		if (cube->map[ray->map_y][ray->map_x] == '1')
-		{
-			ray->hit = 1;
-			if (ray->side == 0)
-				ray->perp_wall_dist = (ray->side_dist_x - ray->delta_dist_x);
-			else
-				ray->perp_wall_dist = (ray->side_dist_y - ray->delta_dist_y);
-		}
-		else if (cube->map[ray->map_y][ray->map_x] == '2')
-		{
-			ray->hit = 2;
-			if (ray->side == 0)
-				ray->perp_wall_dist = (ray->side_dist_x - ray->delta_dist_x);
-			else
-				ray->perp_wall_dist = (ray->side_dist_y - ray->delta_dist_y);
-		}
+		dda_algo_conditions(cube, ray);
 	}
 }
 

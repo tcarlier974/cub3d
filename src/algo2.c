@@ -6,7 +6,7 @@
 /*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 22:16:45 by igilbert          #+#    #+#             */
-/*   Updated: 2025/11/02 22:46:11 by igilbert         ###   ########.fr       */
+/*   Updated: 2025/11/02 23:01:09 by igilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,5 +86,25 @@ void	what_to_draw(t_cube *cube, t_algo *var, t_raycast ray)
 		if (ray.draw_end >= HEIGHT)
 			ray.draw_end = HEIGHT - 1;
 		var->y = 0;
+	}
+}
+
+void	dda_algo_conditions(t_cube *cube, t_raycast *ray)
+{
+	if (cube->map[ray->map_y][ray->map_x] == '1')
+	{
+		ray->hit = 1;
+		if (ray->side == 0)
+			ray->perp_wall_dist = (ray->side_dist_x - ray->delta_dist_x);
+		else
+			ray->perp_wall_dist = (ray->side_dist_y - ray->delta_dist_y);
+	}
+	else if (cube->map[ray->map_y][ray->map_x] == '2')
+	{
+		ray->hit = 2;
+		if (ray->side == 0)
+			ray->perp_wall_dist = (ray->side_dist_x - ray->delta_dist_x);
+		else
+			ray->perp_wall_dist = (ray->side_dist_y - ray->delta_dist_y);
 	}
 }
