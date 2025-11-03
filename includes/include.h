@@ -25,7 +25,6 @@
 # include <stdbool.h>
 
 # define TEXTURE_COUNT 5
-# define RENDER_FPS 30
 # ifndef WIDTH
 #  define WIDTH 1200
 # endif
@@ -149,6 +148,10 @@ typedef struct s_cube
 	t_hook	hook;
 	double	move_speed;
 	int		minimap_counter;
+	double	old_dir_x;
+	double	old_dir_y;
+	double	old_plane_x;
+	double	old_plane_y;
 }	t_cube;
 
 // Function prototypes
@@ -158,9 +161,9 @@ void	recup_texture(t_cube *cube, const char *map_file);
 void	draw_texture(t_cube *cube, int x, int y, t_img texture);
 void	init_map(char ***map, const char *file_path, t_cube *cube);
 void	raycast(t_cube *cube);
-int     key_hook_press(int keycode, t_cube *cube);
-int     count_lines(const char *file_path);
-int     count_max_col(const char *file_path);
+int		key_hook_press(int keycode, t_cube *cube);
+int		count_lines(const char *file_path);
+int		count_max_col(const char *file_path);
 int		bcktrck(t_cube *cube, int x, int y, char **visited);
 int		validate_map_closed(t_cube *cube);
 // Thread related functions
@@ -169,7 +172,7 @@ int		update_game_state(t_cube *cube);
 // Add new function prototypes
 int		key_release_hook(int keycode, t_cube *cube);
 void	process_keys(t_cube *cube);
-int     ft_mlx_loop_end(t_cube *cube);
+int		ft_mlx_loop_end(t_cube *cube);
 int		rgb_to_int(const char *rgb);
 int		color_map(char c);
 void	draw_minimap(t_cube *cube);
