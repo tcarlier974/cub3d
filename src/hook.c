@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:42:11 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/10/30 19:40:43 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/02 22:58:42 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,31 @@ int	key_hook_press(int keycode, t_cube *cube)
 	return (0);
 }
 
+bool	can_move_x(t_cube *cube, t_gs gs)
+{
+	if (gs.new_x > cube->player_x)
+		gs.new_x += MARGE_COLLISION;
+	else
+		gs.new_x -= MARGE_COLLISION;
+	return ((cube->map[(int)(cube->player_y)][(int)(gs.new_x)] == '0')
+		|| (cube->map[(int)(cube->player_y)][(int)(gs.new_x)] == '3'));
+}
+
+bool	can_move_y(t_cube *cube, t_gs gs)
+{
+	if (gs.new_y > cube->player_y)
+		gs.new_y += MARGE_COLLISION;
+	else
+		gs.new_y -= MARGE_COLLISION;
+	return ((cube->map[(int)(gs.new_y)][(int)(cube->player_x)] &&
+		(cube->map[(int)(gs.new_y)][(int)(cube->player_x)] == '0')
+		|| (cube->map[(int)(gs.new_y)][(int)(cube->player_x)] == '3')));
+}
+
 int	update_game_state(t_cube *cube)
 {
-	int	k;
+	t_gs	gs;
 
-	k = 0;
 	if (cube->hook.key_pressed[KEY_SHIFT])
 	{
 		cube->move_speed = WALK_SPEED + SPRINT_SPEED;
@@ -71,97 +91,30 @@ int	update_game_state(t_cube *cube)
 		ft_mlx_loop_end(cube);
 		return (0);
 	}
-	if (cube->hook.key_pressed[KEY_LEFT] || cube->hook.mouse_pos[0])
-	{
-		while (k < SENSI)
-		{
-			double old_dir_x = cube->dir_x;
-			cube->dir_x = cube->dir_x * cos(-LA_ROTA) - cube->dir_y * sin(-LA_ROTA);
-			cube->dir_y = old_dir_x * sin(-LA_ROTA) + cube->dir_y * cos(-LA_ROTA);
-			double old_plane_x = cube->plane_x;
-			cube->plane_x = cube->plane_x * cos(-LA_ROTA) - cube->plane_y * sin(-LA_ROTA);
-			cube->plane_y = old_plane_x * sin(-LA_ROTA) + cube->plane_y * cos(-LA_ROTA);
-			k++;
-		}
-	}
-	k = 0;
-	if (cube->hook.key_pressed[KEY_RIGHT] || cube->hook.mouse_pos[1])
-	{
-		while (k < SENSI)
-		{
-			double old_dir_x = cube->dir_x;
-			cube->dir_x = cube->dir_x * cos(LA_ROTA) - cube->dir_y * sin(LA_ROTA);
-			cube->dir_y = old_dir_x * sin(LA_ROTA) + cube->dir_y * cos(LA_ROTA);
-			double old_plane_x = cube->plane_x;
-			cube->plane_x = cube->plane_x * cos(LA_ROTA) - cube->plane_y * sin(LA_ROTA);
-			cube->plane_y = old_plane_x * sin(LA_ROTA) + cube->plane_y * cos(LA_ROTA);
-			k++;
-		}
-	}
+	if (cube->hook.key_pressed[KEY_LEFT])
+		do_key_left(gs, cube);
+	if (cube->hook.key_pressed[KEY_RIGHT])
+		do_key_right(gs, cube);
 	if (cube->hook.key_pressed[KEY_W])
-	{
-		double new_x = cube->player_x + (cube->dir_x * cube->move_speed);
-		double new_y = cube->player_y + (cube->dir_y * cube->move_speed);
-
-		bool can_move_x = (cube->map[(int)(cube->player_y)][(int)(new_x + (new_x > cube->player_x ? MARGE_COLLISION : -MARGE_COLLISION))] == '0') || (cube->map[(int)(cube->player_y)][(int)(new_x + (new_x > cube->player_x ? MARGE_COLLISION : -MARGE_COLLISION))] == '3');
-		bool can_move_y = (cube->map[(int)(new_y + (new_y > cube->player_y ? MARGE_COLLISION : -MARGE_COLLISION))] != NULL &&
-						   (cube->map[(int)(new_y + (new_y > cube->player_y ? MARGE_COLLISION : -MARGE_COLLISION))][(int)(cube->player_x)] == '0')) || (cube->map[(int)(new_y + (new_y > cube->player_y ? MARGE_COLLISION : -MARGE_COLLISION))][(int)(cube->player_x)] == '3');
-		if (can_move_x)
-			cube->player_x += (cube->dir_x * cube->move_speed);
-		if (can_move_y)
-			cube->player_y += (cube->dir_y * cube->move_speed);
-    }
+		do_key_w(gs, cube);
 	if (cube->hook.key_pressed[KEY_A])
-	{
-		double new_x = cube->player_x - (cube->plane_x * cube->move_speed);
-		double new_y = cube->player_y - (cube->plane_y * cube->move_speed);
-		
-		bool can_move_x = (cube->map[(int)(cube->player_y)][(int)(new_x + (new_x < cube->player_x ? -MARGE_COLLISION : MARGE_COLLISION))] == '0') || (cube->map[(int)(cube->player_y)][(int)(new_x + (new_x < cube->player_x ? -MARGE_COLLISION : MARGE_COLLISION))] == '3');
-		bool can_move_y = (cube->map[(int)(new_y + (new_y < cube->player_y ? -MARGE_COLLISION : MARGE_COLLISION))] != NULL && 
-						   (cube->map[(int)(new_y + (new_y < cube->player_y ? -MARGE_COLLISION : MARGE_COLLISION))][(int)(cube->player_x)] == '0')) || (cube->map[(int)(new_y + (new_y < cube->player_y ? -MARGE_COLLISION : MARGE_COLLISION))][(int)(cube->player_x)] == '3');
-		if (can_move_x)
-			cube->player_x -= (cube->plane_x * cube->move_speed);
-		if (can_move_y)
-			cube->player_y -= (cube->plane_y * cube->move_speed);
-	}
+		do_key_a(gs, cube);
 	if (cube->hook.key_pressed[KEY_D])
-	{
-		double new_x = cube->player_x + (cube->plane_x * cube->move_speed);
-		double new_y = cube->player_y + (cube->plane_y * cube->move_speed);
-		
-		bool can_move_x = (cube->map[(int)(cube->player_y)][(int)(new_x + (new_x > cube->player_x ? MARGE_COLLISION : -MARGE_COLLISION))] == '0') || (cube->map[(int)(cube->player_y)][(int)(new_x + (new_x > cube->player_x ? MARGE_COLLISION : -MARGE_COLLISION))] == '3');
-		bool can_move_y = (cube->map[(int)(new_y + (new_y > cube->player_y ? MARGE_COLLISION : -MARGE_COLLISION))] != NULL &&
-						   (cube->map[(int)(new_y + (new_y > cube->player_y ? MARGE_COLLISION : -MARGE_COLLISION))][(int)(cube->player_x)] == '0' || cube->map[(int)(new_y + (new_y > cube->player_y ? MARGE_COLLISION : -MARGE_COLLISION))][(int)(cube->player_x)] == '3'));
-		if (can_move_x)
-			cube->player_x += (cube->plane_x * cube->move_speed);
-		if (can_move_y)
-			cube->player_y += (cube->plane_y * cube->move_speed);
-	}
+		do_key_d(gs, cube);
 	if (cube->hook.key_pressed[KEY_S])
-	{
-		double new_x = cube->player_x - (cube->dir_x * cube->move_speed);
-		double new_y = cube->player_y - (cube->dir_y * cube->move_speed);
-
-		bool can_move_x = (cube->map[(int)(cube->player_y)][(int)(new_x + (new_x < cube->player_x ? -MARGE_COLLISION : MARGE_COLLISION))] == '0' || cube->map[(int)(cube->player_y)][(int)(new_x + (new_x < cube->player_x ? -MARGE_COLLISION : MARGE_COLLISION))] == '3');
-		bool can_move_y = (cube->map[(int)(new_y + (new_y < cube->player_y ? -MARGE_COLLISION : MARGE_COLLISION))] != NULL && 
-						   (cube->map[(int)(new_y + (new_y < cube->player_y ? -MARGE_COLLISION : MARGE_COLLISION))][(int)(cube->player_x)] == '0' || cube->map[(int)(new_y + (new_y < cube->player_y ? -MARGE_COLLISION : MARGE_COLLISION))][(int)(cube->player_x)] == '3'));
-		if (can_move_x)
-			cube->player_x -= (cube->dir_x * cube->move_speed);
-		if (can_move_y)
-			cube->player_y -= (cube->dir_y * cube->move_speed);
-	}
+		do_key_s(gs, cube);
 	if (cube->hook.key_pressed[KEY_E])
 	{
-		int front_x = (int)(cube->player_x + cube->dir_x);
-		int front_y = (int)(cube->player_y + cube->dir_y);
-		if (cube->map[front_y][front_x] == '2')
+		gs.front_x = (int)(cube->player_x + cube->dir_x);
+		gs.front_y = (int)(cube->player_y + cube->dir_y);
+		if (cube->map[gs.front_y][gs.front_x] == '2')
 		{
-			cube->map[front_y][front_x] = '3';
+			cube->map[gs.front_y][gs.front_x] = '3';
 			cube->hook.key_pressed[KEY_E] = false;
 		}
-		else if (cube->map[front_y][front_x] == '3')
+		else if (cube->map[gs.front_y][gs.front_x] == '3')
 		{
-			cube->map[front_y][front_x] = '2';
+			cube->map[gs.front_y][gs.front_x] = '2';
 			cube->hook.key_pressed[KEY_E] = false;
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/10/30 19:44:17 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/02 22:58:50 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 #  define HEIGHT 800
 # endif
 # ifndef MINIMAP_SIZE
-#  define MINIMAP_SIZE (WIDTH / 100)
+#  define MINIMAP_SIZE 12
 # endif
 # ifndef ENABLE_MINIMAP
 #  define ENABLE_MINIMAP 1
@@ -47,8 +47,8 @@
 # ifndef SENSI
 # define SENSI 2.0
 # endif
-# ifndef LA_ROTA
-# define LA_ROTA 0.01
+# ifndef ROTA
+# define ROTA 0.01
 # endif
 # ifndef MARGE_COLLISION
 # define MARGE_COLLISION 0.1
@@ -114,6 +114,18 @@ typedef struct s_color
 	int	b;
 }	t_color;
 
+typedef struct s_gs
+{
+	double	old_dir_x;
+	double	old_dir_y;
+	double	old_plane_x;
+	double	old_plane_y;
+	double	new_x;
+	double	new_y;
+	int		front_x;
+	int		front_y;
+}	t_gs;
+
 typedef struct s_cube
 {
 	void	*mlx;
@@ -151,6 +163,14 @@ int		bcktrck(t_cube *cube, int x, int y, char **visited);
 int		validate_map_closed(t_cube *cube);
 // Thread related functions
 int		update_game_state(t_cube *cube);
+void	do_key_left(t_gs gs, t_cube *cube);
+void	do_key_right(t_gs gs, t_cube *cube);
+void	do_key_w(t_gs gs, t_cube *cube);
+void	do_key_a(t_gs gs, t_cube *cube);
+void	do_key_s(t_gs gs, t_cube *cube);
+void	do_key_d(t_gs gs, t_cube *cube);
+bool	can_move_y(t_cube *cube, t_gs gs);
+bool	can_move_x(t_cube *cube, t_gs gs);
 
 // Add new function prototypes
 int		key_release_hook(int keycode, t_cube *cube);
