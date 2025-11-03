@@ -6,7 +6,7 @@
 /*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/02 21:36:24 by igilbert         ###   ########.fr       */
+/*   Updated: 2025/11/02 22:45:39 by igilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@
 # ifndef ROTA
 #  define ROTA 0.01
 # endif
-# ifndef MARGIN_COLLISION
-#  define MARGIN_COLLISION 0.1
+# ifndef MARGE_COLLISION
+#  define MARGE_COLLISION 0.1
 # endif
 
 typedef enum e_keycode
@@ -68,10 +68,16 @@ typedef enum e_keycode
 
 typedef struct s_algo
 {
-	int	x;
-	int	y;
-	int	color;
-	int	tex_num;
+	int		x;
+	int		y;
+	int		color;
+	int		tex_num;
+	int		tex_height;
+	int		tex_width;
+	int		d;
+	int		tex_y;
+	double	wall_x;
+	int		tex_x;
 }	t_algo;
 
 typedef struct s_hook
@@ -170,5 +176,11 @@ int		ft_mlx_loop_end(t_cube *cube);
 int		rgb_to_int(const char *rgb);
 int		color_map(char c);
 void	draw_minimap(t_cube *cube);
+
+//algo
+void	chose_tex(t_raycast ray, t_algo *var, t_cube *cube);
+void	draw_col_conditions(t_cube *cube, t_algo *var, t_raycast ray);
+void	draw_col(t_cube *cube, t_algo *var, t_raycast ray);
+void	what_to_draw(t_cube *cube, t_algo *var, t_raycast ray);
 
 #endif
