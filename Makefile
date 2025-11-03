@@ -12,7 +12,8 @@ SRC = ./get_next_line/get_next_line.c \
 	src/draw.c \
 	src/algo.c \
 	src/algo2.c \
-	src/check_map.c
+	src/check_map.c \
+	src/hook2.c
 
 OBJ = $(SRC:.c=.o)
 
