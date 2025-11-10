@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/03 02:18:51 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/03 02:30:54 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,6 +201,7 @@ void	draw_minimap(t_cube *cube);
 void	chose_tex(t_raycast ray, t_algo *var, t_cube *cube);
 void	draw_col_conditions(t_cube *cube, t_algo *var, t_raycast ray);
 void	draw_col(t_cube *cube, t_algo *var, t_raycast ray);
-void	what_to_draw(t_cube *cube, t_algo *var, t_raycast ray);
+void	what_to_draw(t_cube *cube, t_algo *var, t_raycast *ray);
+void	dda_algo_conditions(t_cube *cube, t_raycast *ray);
 
 #endif

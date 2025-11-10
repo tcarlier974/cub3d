@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   algo2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 22:16:45 by igilbert          #+#    #+#             */
-/*   Updated: 2025/11/02 23:01:09 by igilbert         ###   ########.fr       */
+/*   Updated: 2025/11/03 02:30:31 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,30 +61,30 @@ void	draw_col(t_cube *cube, t_algo *var, t_raycast ray)
 	{
 		if (cube->map[ray.map_y][ray.map_x] != '0')
 		{
-			chose_tex(ray, &var, cube);
+			chose_tex(ray, var, cube);
 			var->tex_height = cube->texture[var->tex_num].height;
 			var->tex_width = cube->texture[var->tex_num].width;
 			var->d = (var->y * 2 - HEIGHT + ray.line_height) * 128;
 			var->tex_y = ((var->d * var->tex_height) / ray.line_height) / 256;
-			draw_col_conditions(cube, &var, ray);
+			draw_col_conditions(cube, var, ray);
 		}
 		my_mlx_pixel_put(&cube->img, var->x, var->y, var->color);
 		var->y++;
 	}
 }
 
-void	what_to_draw(t_cube *cube, t_algo *var, t_raycast ray)
+void	what_to_draw(t_cube *cube, t_algo *var, t_raycast *ray)
 {
-	if (cube->map[ray.map_y][ray.map_x] != '0'
-			&& cube->map[ray.map_y][ray.map_x] != '3')
+	if (cube->map[ray->map_y][ray->map_x] != '0'
+			&& cube->map[ray->map_y][ray->map_x] != '3')
 	{
-		ray.line_height = (int)(HEIGHT / ray.perp_wall_dist);
-		ray.draw_start = (-ray.line_height / 2) + (HEIGHT / 2);
-		if (ray.draw_start < 0)
-			ray.draw_start = 0;
-		ray.draw_end = (ray.line_height / 2) + (HEIGHT / 2);
-		if (ray.draw_end >= HEIGHT)
-			ray.draw_end = HEIGHT - 1;
+		ray->line_height = (int)(HEIGHT / ray->perp_wall_dist);
+		ray->draw_start = (-ray->line_height / 2) + (HEIGHT / 2);
+		if (ray->draw_start < 0)
+			ray->draw_start = 0;
+		ray->draw_end = (ray->line_height / 2) + (HEIGHT / 2);
+		if (ray->draw_end >= HEIGHT)
+			ray->draw_end = HEIGHT - 1;
 		var->y = 0;
 	}
 }

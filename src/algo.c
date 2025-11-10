@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   algo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:44:29 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/02 23:00:11 by igilbert         ###   ########.fr       */
+/*   Updated: 2025/11/03 02:30:36 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	raycast(t_cube *cube)
 	{
 		init_raycast_values(&ray, cube, var.x);
 		dda_algo(&ray, cube);
-		what_to_draw(cube, &var, ray);
+		what_to_draw(cube, &var, &ray);
 		while (var.y < ray.draw_start)
 		{
 			my_mlx_pixel_put(&cube->img, var.x, var.y, cube->ceiling_color);

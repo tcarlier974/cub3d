@@ -1,5 +1,5 @@
 NAME = cub3D
-CC = gcc  -fsanitize=address -g
+CC = gcc -fsanitize=address -g
 CFLAGS = -I./includes
 LIBFT = ./libft/libft.a
 MLX = libmlx.a
