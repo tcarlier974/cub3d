@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 22:16:45 by igilbert          #+#    #+#             */
-/*   Updated: 2025/11/03 02:30:31 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/11 16:49:19 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,16 @@ void	draw_col_conditions(t_cube *cube, t_algo *var, t_raycast ray)
 	var->wall_x -= floor(var->wall_x);
 	var->tex_x = (int)(var->wall_x * (double)var->tex_width);
 	if (var->tex_x < 0)
-		var->tex_x += var->tex_width;
+		var->tex_x = 0;
+	if (var->tex_x >= var->tex_width)
+		var->tex_x = var->tex_width - 1;
 	if ((ray.side == 0 && ray.ray_dir_x < 0)
 		|| (ray.side == 1 && ray.ray_dir_y > 0))
 		var->tex_x = var->tex_width - var->tex_x - 1;
 	if (var->tex_y < 0)
-		var->tex_y += var->tex_height;
+		var->tex_y = 0;
+	if (var->tex_y >= var->tex_height)
+		var->tex_y = var->tex_height - 1;
 	var->color = *(unsigned int *)(cube->texture[var->tex_num].addr
 			+ (var->tex_y
 				* cube->texture[var->tex_num].line_length + var->tex_x
