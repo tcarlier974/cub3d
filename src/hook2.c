@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 22:47:38 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/02 22:58:54 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/11 17:35:41 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,14 +60,4 @@ void	do_key_w(t_gs gs, t_cube *cube)
 		cube->player_x += (cube->dir_x * cube->move_speed);
 	if (can_move_y(cube, gs))
 		cube->player_y += (cube->dir_y * cube->move_speed);
-}
-
-void	do_key_d(t_gs gs, t_cube *cube)
-{
-	gs.new_x = cube->player_x + (cube->plane_x * cube->move_speed);
-	gs.new_y = cube->player_y + (cube->plane_y * cube->move_speed);
-	if (can_move_x(cube, gs))
-		cube->player_x += (cube->plane_x * cube->move_speed);
-	if (can_move_y(cube, gs))
-		cube->player_y += (cube->plane_y * cube->move_speed);
 }

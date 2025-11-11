@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:42:11 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/11 16:49:31 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/11 17:36:04 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,33 +91,7 @@ int	update_game_state(t_cube *cube)
 		ft_mlx_loop_end(cube);
 		return (0);
 	}
-	if (cube->hook.key_pressed[KEY_LEFT])
-		do_key_left(gs, cube);
-	if (cube->hook.key_pressed[KEY_RIGHT])
-		do_key_right(gs, cube);
-	if (cube->hook.key_pressed[KEY_W])
-		do_key_w(gs, cube);
-	if (cube->hook.key_pressed[KEY_A])
-		do_key_a(gs, cube);
-	if (cube->hook.key_pressed[KEY_D])
-		do_key_d(gs, cube);
-	if (cube->hook.key_pressed[KEY_S])
-		do_key_s(gs, cube);
-	if (cube->hook.key_pressed[KEY_E])
-	{
-		gs.front_x = (int)(cube->player_x + cube->dir_x);
-		gs.front_y = (int)(cube->player_y + cube->dir_y);
-		if (cube->map[gs.front_y][gs.front_x] == '2')
-		{
-			cube->map[gs.front_y][gs.front_x] = '3';
-			cube->hook.key_pressed[KEY_E] = false;
-		}
-		else if (cube->map[gs.front_y][gs.front_x] == '3')
-		{
-			cube->map[gs.front_y][gs.front_x] = '2';
-			cube->hook.key_pressed[KEY_E] = false;
-		}
-	}
+	hooking(&gs, cube);
 	mlx_destroy_image(cube->mlx, cube->img.img);
 	cube->img.img = mlx_new_image(cube->mlx, WIDTH, HEIGHT);
 	cube->img.addr = mlx_get_data_addr(cube->img.img,
@@ -125,24 +99,5 @@ int	update_game_state(t_cube *cube)
 			&cube->img.endian);
 	raycast(cube);
 	mlx_put_image_to_window(cube->mlx, cube->win, cube->img.img, 0, 0);
-	return (0);
-}
-
-int	key_release_hook(int keycode, t_cube *cube)
-{
-	if (keycode == 123)
-		cube->hook.key_pressed[KEY_LEFT] = false;
-	if (keycode == 124)
-		cube->hook.key_pressed[KEY_RIGHT] = false;
-	if (keycode == 13)
-		cube->hook.key_pressed[KEY_W] = false;
-	if (keycode == 0)
-		cube->hook.key_pressed[KEY_A] = false;
-	if (keycode == 2)
-		cube->hook.key_pressed[KEY_D] = false;
-	if (keycode == 1)
-		cube->hook.key_pressed[KEY_S] = false;
-	if (keycode == 14)
-		cube->hook.key_pressed[KEY_E] = false;
 	return (0);
 }

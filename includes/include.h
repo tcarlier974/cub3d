@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/11 16:49:09 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/11 17:35:57 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,6 +186,7 @@ void	do_key_w(t_gs gs, t_cube *cube);
 void	do_key_a(t_gs gs, t_cube *cube);
 void	do_key_s(t_gs gs, t_cube *cube);
 void	do_key_d(t_gs gs, t_cube *cube);
+void	do_key_e(t_gs gs, t_cube *cube);
 bool	can_move_y(t_cube *cube, t_gs gs);
 bool	can_move_x(t_cube *cube, t_gs gs);
 
@@ -203,5 +204,6 @@ void	draw_col_conditions(t_cube *cube, t_algo *var, t_raycast ray);
 void	draw_col(t_cube *cube, t_algo *var, t_raycast ray);
 void	what_to_draw(t_cube *cube, t_algo *var, t_raycast *ray);
 void	dda_algo_conditions(t_cube *cube, t_raycast *ray);
+void	hooking(t_gs *gs, t_cube *cube);
 
 #endif
