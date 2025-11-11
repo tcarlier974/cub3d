@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/08 18:43:08 by igilbert         ###   ########.fr       */
+/*   Updated: 2025/11/11 15:24:46 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,16 @@
 void	mlx_shit(t_cube *cube)
 {
 	raycast(cube);
-	mlx_put_image_to_window((*cube).mlx, (*cube).win, (*cube).img.img, 0, 0);
-	mlx_do_key_autorepeaton((*cube).mlx);
-	mlx_hook((*cube).win, 17, 0, ft_mlx_loop_end, cube);
-	mlx_hook((*cube).win, 2, 1L << 0, key_hook_press, cube);
-	mlx_hook((*cube).win, 3, 1L << 1, key_release_hook, cube);
-	mlx_loop_hook((*cube).mlx, update_game_state, cube);
-	mlx_loop((*cube).mlx);
+	mlx_put_image_to_window(cube->mlx, cube->win, cube->img.img, 0, 0);
+	mlx_do_key_autorepeaton(cube->mlx);
+	mlx_hook(cube->win, 17, 0, ft_mlx_loop_end, cube);
+	mlx_hook(cube->win, 2, 1L << 0, key_hook_press, cube);
+	mlx_hook(cube->win, 3, 1L << 1, key_release_hook, cube);
+	mlx_loop_hook(cube->mlx, update_game_state, cube);
+	mlx_loop(cube->mlx);
 }
 
-int	main_messages_one(int code, int j, char **av, t_cube *cube)
+int	main_mes(int code, int j, char **av, t_cube *cube)
 {
 	if (code == 1)
 	{
@@ -39,12 +39,12 @@ int	main_messages_one(int code, int j, char **av, t_cube *cube)
 		if (!validate_map_closed(cube))
 		{
 			fprintf(stderr, "Error: non la map est pas bien fermée :3\n");
-			while (j < (*cube).map_height)
+			while (j < cube->map_height)
 			{
-				free((*cube).map[j]);
+				free(cube->map[j]);
 				j++;
 			}
-			free((*cube).map);
+			free(cube->map);
 			return (0);
 		}
 		printf("Carte chargée:\n");
@@ -54,10 +54,10 @@ int	main_messages_one(int code, int j, char **av, t_cube *cube)
 
 void	main_print_map(int y, t_cube *cube)
 {
-	while (y < (*cube).map_height)
+	while (y < cube->map_height)
 	{
-		if ((*cube).map[y])
-			printf("[%d] %s\n", y, (*cube).map[y]);
+		if (cube->map[y])
+			printf("[%d] %s\n", y, cube->map[y]);
 		y++;
 	}
 }
@@ -73,12 +73,12 @@ int	main(int ac, char **av)
 		fprintf(stderr, "Usage: %s <map_file>\n", av[0]);
 		return (1);
 	}
-	if (!main_err_mes(1, 0, av, &cube))
+	if (!main_mes(1, 0, av, &cube))
 		return (1);
 	init_cube(&cube, av[1]);
 	recup_texture(&cube, av[1]);
 	init_map(&cube.map, av[1], &cube);
-	if (!main_err_mes(2077, 0, av, &cube))
+	if (!main_mes(2077, 0, av, &cube))
 		return (1);
 	main_print_map(0, &cube);
 	printf("Player initialized at position: %.2f, %.2f\n",

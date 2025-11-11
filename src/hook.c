@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:42:11 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/10/30 19:40:43 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/11 15:09:59 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,11 @@ int	update_game_state(t_cube *cube)
 		while (k < SENSI)
 		{
 			double old_dir_x = cube->dir_x;
-			cube->dir_x = cube->dir_x * cos(-LA_ROTA) - cube->dir_y * sin(-LA_ROTA);
-			cube->dir_y = old_dir_x * sin(-LA_ROTA) + cube->dir_y * cos(-LA_ROTA);
+			cube->dir_x = cube->dir_x * cos(-ROTA) - cube->dir_y * sin(-ROTA);
+			cube->dir_y = old_dir_x * sin(-ROTA) + cube->dir_y * cos(-ROTA);
 			double old_plane_x = cube->plane_x;
-			cube->plane_x = cube->plane_x * cos(-LA_ROTA) - cube->plane_y * sin(-LA_ROTA);
-			cube->plane_y = old_plane_x * sin(-LA_ROTA) + cube->plane_y * cos(-LA_ROTA);
+			cube->plane_x = cube->plane_x * cos(-ROTA) - cube->plane_y * sin(-ROTA);
+			cube->plane_y = old_plane_x * sin(-ROTA) + cube->plane_y * cos(-ROTA);
 			k++;
 		}
 	}
@@ -90,11 +90,11 @@ int	update_game_state(t_cube *cube)
 		while (k < SENSI)
 		{
 			double old_dir_x = cube->dir_x;
-			cube->dir_x = cube->dir_x * cos(LA_ROTA) - cube->dir_y * sin(LA_ROTA);
-			cube->dir_y = old_dir_x * sin(LA_ROTA) + cube->dir_y * cos(LA_ROTA);
+			cube->dir_x = cube->dir_x * cos(ROTA) - cube->dir_y * sin(ROTA);
+			cube->dir_y = old_dir_x * sin(ROTA) + cube->dir_y * cos(ROTA);
 			double old_plane_x = cube->plane_x;
-			cube->plane_x = cube->plane_x * cos(LA_ROTA) - cube->plane_y * sin(LA_ROTA);
-			cube->plane_y = old_plane_x * sin(LA_ROTA) + cube->plane_y * cos(LA_ROTA);
+			cube->plane_x = cube->plane_x * cos(ROTA) - cube->plane_y * sin(ROTA);
+			cube->plane_y = old_plane_x * sin(ROTA) + cube->plane_y * cos(ROTA);
 			k++;
 		}
 	}

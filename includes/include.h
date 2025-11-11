@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   include.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/02 22:45:39 by igilbert         ###   ########.fr       */
+/*   Updated: 2025/11/11 15:10:35 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,5 +182,6 @@ void	chose_tex(t_raycast ray, t_algo *var, t_cube *cube);
 void	draw_col_conditions(t_cube *cube, t_algo *var, t_raycast ray);
 void	draw_col(t_cube *cube, t_algo *var, t_raycast ray);
 void	what_to_draw(t_cube *cube, t_algo *var, t_raycast ray);
+void	dda_algo_conditions(t_cube *cube, t_raycast *ray);
 
 #endif

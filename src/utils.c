@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 12:00:00 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/08 18:46:03 by igilbert         ###   ########.fr       */
+/*   Updated: 2025/11/11 15:08:46 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	count_lines_loop(char **line, int *j, int fd)
 		}
 		if (*line[0] != '\n' && *line[0] != '\0')
 		{
-			*j++;
+			(*j)++;
 		}
 		free(*line);
 		*line = get_next_line(fd);
