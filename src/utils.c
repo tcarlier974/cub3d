@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 12:00:00 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/11 16:50:48 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/11 16:55:44 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,27 +34,21 @@ void	count_lines_loop(char **line, int *j, int fd)
 
 int	count_lines(const char *file_path)
 {
-    int     fd;
-    char    *line;
-    int     count;
-	int j = 0;
+	int		fd;
+	char	*line;
+	int		count;
+	int		j;
 
-    count = 0;
-    fd = open(file_path, O_RDONLY);
-    if (fd < 0)
-        return (0);
-    line = get_next_line(fd);
-		while (j < 6)
+	j = 0;
+	count = 0;
+	fd = open(file_path, O_RDONLY);
+	if (fd < 0)
+		return (0);
+	line = get_next_line(fd);
+	count_lines_loop(&line, &j, fd);
+	while (line)
 	{
-		while(line[0] == '\n')
-		{
-			free(line);
-			line = get_next_line(fd);
-		}
-		if (line[0] != '\n' && line[0] != '\0')
-		{
-			j++;
-		}
+		count++;
 		free(line);
 		line = get_next_line(fd);
 	}
@@ -78,21 +72,14 @@ int	count_max_col_setup(const char *file_path, int *fd, char **line)
 
 int	count_max_col(const char *file_path)
 {
-    int     fd;
-    char    *line;
-    int     max;
-    int     i;
+	int		fd;
+	char	*line;
+	int		max;
+	int		i;
 
-    fd = open(file_path, O_RDONLY);
-    if (fd < 0)
-        return (0);
-    line = get_next_line(fd);
-    if (!line)
-    {
-        close(fd);
-        return (0);
-    }
-    max = 0;
+	if (!count_max_col_setup(file_path, &fd, &line))
+		return (0);
+	max = 0;
 	while (line)
 	{
 		i = 0;
@@ -103,7 +90,7 @@ int	count_max_col(const char *file_path)
 		free(line);
 		line = get_next_line(fd);
 	}
-    free(line);
-    close(fd);
-    return (max);
+	free(line);
+	close(fd);
+	return (max);
 }
