@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 22:16:45 by igilbert          #+#    #+#             */
-/*   Updated: 2025/11/11 15:21:19 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/11 16:43:56 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,18 +77,18 @@ void	draw_col(t_cube *cube, t_algo *var, t_raycast ray)
 	}
 }
 
-void	what_to_draw(t_cube *cube, t_algo *var, t_raycast ray)
+void	what_to_draw(t_cube *cube, t_algo *var, t_raycast *ray)
 {
-	if (cube->map[ray.map_y][ray.map_x] != '0'
-			&& cube->map[ray.map_y][ray.map_x] != '3')
+	if (cube->map[ray->map_y][ray->map_x] != '0'
+			&& cube->map[ray->map_y][ray->map_x] != '3')
 	{
-		ray.line_height = (int)(HEIGHT / ray.perp_wall_dist);
-		ray.draw_start = (-ray.line_height / 2) + (HEIGHT / 2);
-		if (ray.draw_start < 0)
-			ray.draw_start = 0;
-		ray.draw_end = (ray.line_height / 2) + (HEIGHT / 2);
-		if (ray.draw_end >= HEIGHT)
-			ray.draw_end = HEIGHT - 1;
+		ray->line_height = (int)(HEIGHT / ray->perp_wall_dist);
+		ray->draw_start = (-ray->line_height / 2) + (HEIGHT / 2);
+		if (ray->draw_start < 0)
+			ray->draw_start = 0;
+		ray->draw_end = (ray->line_height / 2) + (HEIGHT / 2);
+		if (ray->draw_end >= HEIGHT)
+			ray->draw_end = HEIGHT - 1;
 		var->y = 0;
 	}
 }

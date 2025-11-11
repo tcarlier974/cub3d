@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 12:00:00 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/11 15:08:46 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/11 16:35:27 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,16 @@
 
 void	count_lines_loop(char **line, int *j, int fd)
 {
-	while (*j < 6)
+	while (*j < 6 && *line)
 	{
-		while (*line[0] == '\n')
+		while (*line && (*line)[0] == '\n')
 		{
 			free(*line);
 			*line = get_next_line(fd);
 		}
-		if (*line[0] != '\n' && *line[0] != '\0')
+		if (!*line)
+			return ;
+		if ((*line)[0] != '\n' && (*line)[0] != '\0')
 		{
 			(*j)++;
 		}
@@ -60,7 +62,7 @@ int	count_max_col_setup(const char *file_path, int *fd, char **line)
 	if (*fd < 0)
 		return (0);
 	*line = get_next_line(*fd);
-	if (!*line)
+	if (!(*line))
 	{
 		close(*fd);
 		return (0);
