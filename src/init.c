@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:43:21 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/10/25 12:52:02 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/14 03:28:47 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void	recup_textures_path(char **textures, const char *map_file, t_cube *cube)
 		}
 		else if (line[j] == 'W')
 		{
-			j+=2;
+			j += 2;
 			while (line[j] == ' ')
 				j++;
 			textures[3] = strdup(line + j);
@@ -186,7 +186,7 @@ void	recup_textures_path(char **textures, const char *map_file, t_cube *cube)
 	}
 	close(fd);
 	i++;
-	textures[4] = strdup("./textures/door.xpm");
+	textures[4] = strdup("./textures/porte.xpm");
 	if (!textures[4])
 	{
 		fprintf(stderr, "Failed to allocate memory for door texture path\n");
@@ -263,7 +263,6 @@ void init_map(char ***map, const char *file_path, t_cube *cube)
         return;
     }
     line = get_next_line(fd);
-    /* skip header/config lines (jusqu'à 6 lignes non vides) */
     while (j < 6 && line)
     {
         while (line && (line[0] == '\n' || line[0] == '\0'))
@@ -278,7 +277,6 @@ void init_map(char ***map, const char *file_path, t_cube *cube)
         free(line);
         line = get_next_line(fd);
     }
-    /* read map lines and normalize each row to cube->map_width */
     while (line)
     {
         len = strlen(line);
@@ -286,18 +284,15 @@ void init_map(char ***map, const char *file_path, t_cube *cube)
         if (!(*map)[line_count])
         {
             free(line);
-            /* cleanup already allocated rows */
             for (int k = 0; k < line_count; k++)
                 free((*map)[k]);
             free(*map);
             close(fd);
             return;
         }
-        /* fill with '0' by default */
         for (int t = 0; t < cube->map_width; t++)
             (*map)[line_count][t] = '0';
         (*map)[line_count][cube->map_width] = '\0';
-        /* copy characters from line (if any) */
         for (int i = 0; i < (int)len && i < cube->map_width && line[i] != '\n'; i++)
         {
             char ch = line[i];

@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 22:16:45 by igilbert          #+#    #+#             */
-/*   Updated: 2025/11/11 16:49:19 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/14 02:58:35 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,8 @@ void	draw_col(t_cube *cube, t_algo *var, t_raycast ray)
 {
 	while (var->y < ray.draw_end)
 	{
-		if (cube->map[ray.map_y][ray.map_x] != '0')
+		if (cube->map[ray.map_y][ray.map_x] != '0' &&
+				cube->map[ray.map_y][ray.map_x] != '3')
 		{
 			chose_tex(ray, var, cube);
 			var->tex_height = cube->texture[var->tex_num].height;
