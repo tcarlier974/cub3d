@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:43:21 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/14 03:28:47 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/16 20:06:44 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,12 @@ void	recup_textures_path(char **textures, const char *map_file, t_cube *cube)
 {
 	int		fd;
 	char	*line;
-	int		i = 0;
-	int		j = 0;
+	int		i;
+	int		j;
+	char	*newline;
 
+	i = 0;
+	j = 0;
 	fd = open(map_file, O_RDONLY);
 	if (fd < 0)
 	{
@@ -57,7 +60,6 @@ void	recup_textures_path(char **textures, const char *map_file, t_cube *cube)
 	line = get_next_line(fd);
 	while (i < TEXTURE_COUNT + 1 && line)
 	{
-		printf("Processing line: %s", line);
 		while (line[0] == '\n' || line[0] == '\0')
 		{
 			free(line);
@@ -67,14 +69,14 @@ void	recup_textures_path(char **textures, const char *map_file, t_cube *cube)
 			j++;
 		if (line[j] == 'N')
 		{
-			j+=2;
+			j += 2;
 			while (line[j] == ' ')
 				j++;
 			printf("Texture N path: %s\n", line + j);
 			textures[0] = strdup(line + j);
-			if (textures[0]) 
+			if (textures[0])
 			{
-				char *newline = strchr(textures[0], '\n');
+				newline = strchr(textures[0], '\n');
 				if (newline)
 					*newline = '\0';
 				printf("Chemin nettoyé: '%s'\n", textures[0]);
@@ -88,13 +90,13 @@ void	recup_textures_path(char **textures, const char *map_file, t_cube *cube)
 		}
 		else if (line[j] == 'S')
 		{
-			j+=2;
+			j += 2;
 			while (line[j] == ' ')
 				j++;
 			textures[1] = strdup(line + j);
-			if (textures[1]) 
+			if (textures[1])
 			{
-				char *newline = strchr(textures[1], '\n');
+				newline = strchr(textures[1], '\n');
 				if (newline)
 					*newline = '\0';
 				printf("Chemin nettoyé: '%s'\n", textures[1]);
@@ -108,13 +110,13 @@ void	recup_textures_path(char **textures, const char *map_file, t_cube *cube)
 		}
 		else if (line[j] == 'E')
 		{
-			j+=2;
+			j += 2;
 			while (line[j] == ' ')
 				j++;
 			textures[2] = strdup(line + j);
-			if (textures[2]) 
+			if (textures[2])
 			{
-				char *newline = strchr(textures[2], '\n');
+				newline = strchr(textures[2], '\n');
 				if (newline)
 					*newline = '\0';
 				printf("Chemin nettoyé: '%s'\n", textures[2]);
@@ -132,9 +134,9 @@ void	recup_textures_path(char **textures, const char *map_file, t_cube *cube)
 			while (line[j] == ' ')
 				j++;
 			textures[3] = strdup(line + j);
-			if (textures[3]) 
+			if (textures[3])
 			{
-				char *newline = strchr(textures[3], '\n');
+				newline = strchr(textures[3], '\n');
 				if (newline)
 					*newline = '\0';
 				printf("Chemin nettoyé: '%s'\n", textures[3]);
@@ -155,7 +157,8 @@ void	recup_textures_path(char **textures, const char *map_file, t_cube *cube)
 			cube->floor_color = rgb_to_int(line + j);
 			if (cube->floor_color < 0 || cube->floor_color > 0xFFFFFF)
 			{
-				fprintf(stderr, "Invalid floor color value: %d\n", cube->floor_color);
+				fprintf(stderr, "Invalid floor color value: %d\n",
+					cube->floor_color);
 				exit(EXIT_FAILURE);
 			}
 			printf("Floor color: %d\n", cube->floor_color);
@@ -169,7 +172,8 @@ void	recup_textures_path(char **textures, const char *map_file, t_cube *cube)
 			cube->ceiling_color = rgb_to_int(line + j);
 			if (cube->ceiling_color < 0 || cube->ceiling_color > 0xFFFFFF)
 			{
-				fprintf(stderr, "Invalid ceiling color value: %d\n", cube->ceiling_color);
+				fprintf(stderr, "Invalid ceiling color value: %d\n",
+					cube->ceiling_color);
 				exit(EXIT_FAILURE);
 			}
 			printf("Ceiling color: %d\n", cube->ceiling_color);
@@ -194,16 +198,18 @@ void	recup_textures_path(char **textures, const char *map_file, t_cube *cube)
 	}
 	if (i < TEXTURE_COUNT)
 	{
-		fprintf(stderr, "Not enough textures found in the map file: %s\n", map_file);
+		fprintf(stderr, "Not enough textures found in the map file: %s\n",
+			map_file);
 		exit(EXIT_FAILURE);
 	}
 }
 
 void	recup_texture(t_cube *cube, const char *map_file)
 {
-	int	i = 0;
+	int		i;
 	char	**textures;
 
+	i = 0;
 	textures = malloc(sizeof(char *) * TEXTURE_COUNT);
 	if (!textures)
 	{
@@ -215,108 +221,95 @@ void	recup_texture(t_cube *cube, const char *map_file)
 	write(1, "Textures recuperées.\n", 22);
 	while (i < TEXTURE_COUNT)
 	{
-		if (!textures[i])
-		{
-			fprintf(stderr, "Texture path not found for index %d\n", i);
-			exit(EXIT_FAILURE);
-		}
-		printf("Loading texture %d: %s\n", i, textures[i]);
-		cube->texture[i].img = NULL;
-		cube->texture[i].bits_per_pixel = 0;
-		cube->texture[i].line_length = 0;
-		cube->texture[i].endian = 0;
-		cube->texture[i].width = 0;
-		cube->texture[i].height = 0;
-		cube->texture[i].img = mlx_xpm_file_to_image(cube->mlx, textures[i], &cube->texture[i].width, &cube->texture[i].height);
-		if (!cube->texture[i].img)
-		{
-			fprintf(stderr, "Failed to load texture: %s\n", textures[i]);
-			exit(EXIT_FAILURE);
-		}
-		free(textures[i]);
-		cube->texture[i].addr = mlx_get_data_addr(cube->texture[i].img, &cube->texture[i].bits_per_pixel, &cube->texture[i].line_length, &cube->texture[i].endian);
-		printf("Texture %d loaded: %dx%d\n", i, cube->texture[i].width, cube->texture[i].height);
+		texture_recup(cube, &textures, i);
 		i++;
 	}
-	
 	free(textures);
 }
 
-void init_map(char ***map, const char *file_path, t_cube *cube)
+void	init_map(char ***map, const char *file_path, t_cube *cube)
 {
-    int		fd;
-    char	*line;
-    int		line_count = 0;
-    int		j = 0;
-    size_t	len;
+	t_init_tool	t;
 
-    fd = open(file_path, O_RDONLY);
-    if (fd < 0)
-    {
-        perror("Failed to open map file");
-        return;
-    }
-    *map = malloc(sizeof(char *) * (cube->map_height + 1));
-    if (!*map)
-    {
-        close(fd);
-        return;
-    }
-    line = get_next_line(fd);
-    while (j < 6 && line)
-    {
-        while (line && (line[0] == '\n' || line[0] == '\0'))
-        {
-            free(line);
-            line = get_next_line(fd);
-        }
-        if (!line)
-            break;
-        if (line[0] != '\n' && line[0] != '\0')
-            j++;
-        free(line);
-        line = get_next_line(fd);
-    }
-    while (line)
-    {
-        len = strlen(line);
-        (*map)[line_count] = malloc(sizeof(char) * (cube->map_width + 1));
-        if (!(*map)[line_count])
-        {
-            free(line);
-            for (int k = 0; k < line_count; k++)
-                free((*map)[k]);
-            free(*map);
-            close(fd);
-            return;
-        }
-        for (int t = 0; t < cube->map_width; t++)
-            (*map)[line_count][t] = '0';
-        (*map)[line_count][cube->map_width] = '\0';
-        for (int i = 0; i < (int)len && i < cube->map_width && line[i] != '\n'; i++)
-        {
-            char ch = line[i];
-            if (ch == 'N' || ch == 'S' || ch == 'E' || ch == 'W')
-            {
-                (*map)[line_count][i] = '0';
-                cube->dir_x = (ch == 'E') - (ch == 'W');
-                cube->dir_y = (ch == 'S') - (ch == 'N');
-            	cube->plane_x = -cube->dir_y * 0.66;
-                cube->plane_y = cube->dir_x * 0.66;
-                cube->player_x = (double)i + 0.5;
-                cube->player_y = (double)line_count + 0.5;
-            }
-            else if (ch == ' ')
-                (*map)[line_count][i] = '0';
-            else if (ch > '0')
-                (*map)[line_count][i] = ch;
-            else
-                (*map)[line_count][i] = '0';
-        }
-        line_count++;
-        free(line);
-        line = get_next_line(fd);
-    }
-    (*map)[line_count] = NULL;
-    close(fd);
+	t.line_count = 0;
+	t.j = 0;
+	t.k = 0;
+	t.l = 0;
+	t.i = 0;
+	t.fd = open(file_path, O_RDONLY);
+	if (t.fd < 0)
+	{
+		perror("Failed to open map file");
+		return ;
+	}
+	*map = malloc(sizeof(char *) * (cube->map_height + 1));
+	if (!*map)
+	{
+		close(t.fd);
+		return ;
+	}
+	t.line = get_next_line(t.fd);
+	while (t.j < 6 && t.line)
+	{
+		while (t.line && (t.line[0] == '\n' || t.line[0] == '\0'))
+		{
+			free(t.line);
+			t.line = get_next_line(t.fd);
+		}
+		if (!t.line)
+			break ;
+		if (t.line[0] != '\n' && t.line[0] != '\0')
+			t.j++;
+		free(t.line);
+		t.line = get_next_line(t.fd);
+	}
+	while (t.line)
+	{
+		t.len = strlen(t.line);
+		(*map)[t.line_count] = malloc(sizeof(char) * (cube->map_width + 1));
+		if (!(*map)[t.line_count])
+		{
+			free(t.line);
+			while (t.k < t.line_count)
+			{
+				free((*map)[t.k]);
+				t.k++;
+			}
+			free(*map);
+			close(t.fd);
+			return ;
+		}
+		while (t.l < cube->map_width)
+		{
+			(*map)[t.line_count][t.l] = '0';
+			t.l++;
+		}
+		(*map)[t.line_count][cube->map_width] = '\0';
+		while (t.i < (int)t.len && t.i < cube->map_width && t.line[t.i] != '\n')
+		{
+			t.ch = t.line[t.i];
+			if (t.ch == 'N' || t.ch == 'S' || t.ch == 'E' || t.ch == 'W')
+			{
+				(*map)[t.line_count][t.i] = '0';
+				cube->dir_x = (t.ch == 'E') - (t.ch == 'W');
+				cube->dir_y = (t.ch == 'S') - (t.ch == 'N');
+				cube->plane_x = -cube->dir_y * 0.66;
+				cube->plane_y = cube->dir_x * 0.66;
+				cube->player_x = (double)t.i + 0.5;
+				cube->player_y = (double)t.line_count + 0.5;
+			}
+			else if (t.ch == ' ')
+				(*map)[t.line_count][t.i] = '0';
+			else if (t.ch > '0')
+				(*map)[t.line_count][t.i] = t.ch;
+			else
+				(*map)[t.line_count][t.i] = '0';
+			t.i++;
+		}
+		t.line_count++;
+		free(t.line);
+		t.line = get_next_line(t.fd);
+	}
+	(*map)[t.line_count] = NULL;
+	close(t.fd);
 }

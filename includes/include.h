@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/11 17:35:57 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/16 20:00:49 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,19 @@ typedef struct s_algo
 	double	wall_x;
 	int		tex_x;
 }	t_algo;
+
+typedef struct s_init_tool
+{
+	int		fd;
+	char	*line;
+	char	ch;
+	int		line_count;
+	int		j;
+	int		k;
+	int		l;
+	int		i;
+	size_t	len;
+}	t_init_tool;
 
 typedef struct s_hook
 {
@@ -178,6 +191,7 @@ int		count_lines(const char *file_path);
 int		count_max_col(const char *file_path);
 int		bcktrck(t_cube *cube, int x, int y, char **visited);
 int		validate_map_closed(t_cube *cube);
+void	texture_recup(t_cube *cube, char ***textures, int i);
 // Thread related functions
 int		update_game_state(t_cube *cube);
 void	do_key_left(t_gs gs, t_cube *cube);

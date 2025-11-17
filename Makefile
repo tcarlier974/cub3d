@@ -1,5 +1,5 @@
 NAME = cub3D
-CC = gcc -g
+CC = gcc -fsanitize=address -g
 CFLAGS = -I./includes
 LIBFT = ./libft/libft.a
 MLX = libmlx.a
@@ -14,7 +14,8 @@ SRC = ./get_next_line/get_next_line.c \
 	src/algo2.c \
 	src/check_map.c \
 	src/hook2.c \
-	src/hook3.c
+	src/hook3.c \
+	src/init2.c
 
 OBJ = $(SRC:.c=.o)
 
