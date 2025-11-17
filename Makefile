@@ -1,8 +1,8 @@
 NAME = cub3D
-CC = gcc -fsanitize=address -g
+CC = gcc -g
 CFLAGS = -I./includes
 LIBFT = ./libft/libft.a
-MLX = libmlx.a
+MLX = libmlx_intel.a
 SRC = ./get_next_line/get_next_line.c \
 	./get_next_line/get_next_line_utils.c \
 	src/main.c \

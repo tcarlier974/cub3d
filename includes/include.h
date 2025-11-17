@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   include.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/16 20:00:49 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/17 05:35:19 by igilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@
 
 # define TEXTURE_COUNT 5
 # ifndef WIDTH
-#  define WIDTH 1200
+#  define WIDTH 1280
 # endif
 # ifndef HEIGHT
-#  define HEIGHT 800
+#  define HEIGHT 720
 # endif
 # ifndef MINIMAP_SIZE
 #  define MINIMAP_SIZE 12

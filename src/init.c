@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:43:21 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/16 20:06:44 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/17 05:09:50 by igilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -265,6 +265,8 @@ void	init_map(char ***map, const char *file_path, t_cube *cube)
 	}
 	while (t.line)
 	{
+		t.i = 0;
+		t.l = 0;
 		t.len = strlen(t.line);
 		(*map)[t.line_count] = malloc(sizeof(char) * (cube->map_width + 1));
 		if (!(*map)[t.line_count])

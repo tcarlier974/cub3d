@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:40:11 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/10/30 19:47:34 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/17 05:29:58 by igilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,17 +72,23 @@ void	draw_texture(t_cube *cube, int x, int y, t_img texture)
 //pas pixel par pixel donc c'est beaucoup plus opti
 void	draw_minimap(t_cube *cube)
 {
-	int minimap_width = 9 * MINIMAP_SIZE;
-	int minimap_height = 9 * MINIMAP_SIZE;
-	int offset_x = 50;
-	int offset_y = HEIGHT - minimap_height - 50;
+	int	minimap_width = 9 * MINIMAP_SIZE;
+	int	minimap_height = 9 * MINIMAP_SIZE;
+	int	offset_x = 50;
+	int	offset_y = HEIGHT - minimap_height - 50;
+	int i;
+	int	j;
+	int	x;
+	int	y;
 
-	for (int j = 0; j <= 9; j++)
+	j = 0;
+	while (j <= 9)
 	{
 		int map_y = (int)cube->player_y - 4 + j;
 		if (map_y < 0 || map_y >= cube->map_height)
 			continue;
-		for (int i = 0; i <= 9; i++)
+		i = 0;
+		while (i <= 9)
 		{
 			int map_x = (int)cube->player_x - 4 + i;
 			if (map_x < 0 || map_x >= cube->map_width)
@@ -97,34 +103,48 @@ void	draw_minimap(t_cube *cube)
 			}
 			else
 			{
-				for (int y = 0; y < MINIMAP_SIZE; y++)
+				y = 0;
+				while (y < MINIMAP_SIZE)
 				{
 					char *dst = cube->img.addr + ((base_y + y) * cube->img.line_length + base_x * (cube->img.bits_per_pixel / 8));
-					for (int x = 0; x < MINIMAP_SIZE; x++)
+					x = 0;
+					while (x < MINIMAP_SIZE)
 					{
 						*(unsigned int*)dst = color;
 						dst += (cube->img.bits_per_pixel / 8);
+						x++;
 					}
+					y++;
 				}
 			}
+			i++;
 		}
+		j++;
 	}
 	int px = offset_x + 4 * MINIMAP_SIZE + MINIMAP_SIZE / 2;
 	int py = offset_y + 4 * MINIMAP_SIZE + MINIMAP_SIZE / 2;
-	for (int y = -2; y <= 2; y++)
+	y = -2;
+	while (y <= 2)
 	{
-		for (int x = -2; x <= 2; x++)
+		x = -2;
+		while (x <= 2)
 		{
 			my_mlx_pixel_put(&cube->img, px + x, py + y, 0xFF0000);
+			x++;
 		}
+		y++;
 	}
 	int dx = (int)(cube->dir_x * MINIMAP_SIZE * 2.5);
 	int dy = (int)(cube->dir_y * MINIMAP_SIZE * 2.5);
-	for (int y = -1; y <= 1; y++)
+	y = -1;
+	while (y <= 1)
 	{
-		for (int x = -1; x <= 1; x++)
+		x = -1;
+		while (x <= 1)
 		{
 			my_mlx_pixel_put(&cube->img, px + dx/2 + x, py + dy/2 + y, 0x00FF00);
+			x++;
 		}
+		y++;
 	}
 }
