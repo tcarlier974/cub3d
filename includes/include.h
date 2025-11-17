@@ -6,7 +6,7 @@
 /*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/17 05:35:19 by igilbert         ###   ########.fr       */
+/*   Updated: 2025/11/17 06:48:21 by igilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,5 +219,28 @@ void	draw_col(t_cube *cube, t_algo *var, t_raycast ray);
 void	what_to_draw(t_cube *cube, t_algo *var, t_raycast *ray);
 void	dda_algo_conditions(t_cube *cube, t_raycast *ray);
 void	hooking(t_gs *gs, t_cube *cube);
+
+// Init helper functions
+void	skip_texture_lines(t_init_tool *t);
+int		alloc_map_line(t_init_tool *t, char ***map, t_cube *cube);
+void	init_map_process_char(t_init_tool *t, char ***map, t_cube *cube);
+void	init_map_parse_line(t_init_tool *t, char ***map, t_cube *cube);
+void	process_map_lines(t_init_tool *t, char ***map, t_cube *cube);
+void	read_texture_lines(int fd, char **textures, t_cube *cube, int *vars);
+void	parse_texture_identifier(char *line, char **textures,
+			t_cube *cube, int *vars);
+void	recup_textures_path(char **textures, const char *map_file,
+			t_cube *cube);
+void	process_texture_wall(char *line, char **textures, int *vars);
+
+// Draw helper functions
+void	init_minimap_vars(int *vars);
+void	draw_minimap_pixel(t_cube *cube, int base_x, int base_y, int color);
+void	draw_minimap_grid(t_cube *cube, int *vars);
+void	draw_minimap_player(t_cube *cube, int *vars);
+void	draw_minimap_direction(t_cube *cube, int px, int py, int *dir_vars);
+char	*ft_strchr(const char *s, int c);
+int		ft_strlen(char *str);
+int		ft_atoi(const char *str);
 
 #endif

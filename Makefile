@@ -8,14 +8,17 @@ SRC = ./get_next_line/get_next_line.c \
 	src/main.c \
 	src/utils.c \
 	src/init.c \
+	src/init2.c \
+	src/init3.c \
+	src/init4.c \
 	src/hook.c \
 	src/draw.c \
+	src/draw2.c \
 	src/algo.c \
 	src/algo2.c \
 	src/check_map.c \
 	src/hook2.c \
-	src/hook3.c \
-	src/init2.c
+	src/hook3.c
 
 OBJ = $(SRC:.c=.o)
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/11 16:51:51 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/17 06:25:37 by igilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	main_mes(int code, int j, char **av, t_cube *cube)
 	{
 		if (count_lines(av[1]) <= 0 || count_max_col(av[1]) <= 0)
 		{
-			fprintf(stderr, "Invalid map file: %s\n", av[1]);
+			write(2, "Invalid map file\n", 18);
 			return (0);
 		}
 	}
@@ -38,7 +38,7 @@ int	main_mes(int code, int j, char **av, t_cube *cube)
 	{
 		if (!validate_map_closed(cube))
 		{
-			fprintf(stderr, "Error: non la map est pas bien fermée :3\n");
+			write(2, "Error: map not properly closed\n", 32);
 			while (j < cube->map_height)
 			{
 				free(cube->map[j]);
@@ -47,19 +47,8 @@ int	main_mes(int code, int j, char **av, t_cube *cube)
 			free(cube->map);
 			return (0);
 		}
-		printf("Carte chargée:\n");
 	}
 	return (1);
-}
-
-void	main_print_map(int y, t_cube *cube)
-{
-	while (y < cube->map_height)
-	{
-		if (cube->map[y])
-			printf("[%d] %s\n", y, cube->map[y]);
-		y++;
-	}
 }
 
 int	main(int ac, char **av)
@@ -70,7 +59,7 @@ int	main(int ac, char **av)
 	i = 0;
 	if (ac != 2)
 	{
-		fprintf(stderr, "Usage: %s <map_file>\n", av[0]);
+		write(2, "Usage: ./cub3D <map_file>\n", 27);
 		return (1);
 	}
 	if (!main_mes(1, 0, av, &cube))
@@ -80,10 +69,6 @@ int	main(int ac, char **av)
 	init_map(&cube.map, av[1], &cube);
 	if (!main_mes(2077, 0, av, &cube))
 		return (1);
-	main_print_map(0, &cube);
-	printf("Player initialized at position: %.2f, %.2f\n",
-		cube.player_x, cube.player_y);
-	printf("Direction: (%.2f, %.2f)\n", cube.dir_x, cube.dir_y);
 	mlx_shit(&cube);
 	return (0);
 }

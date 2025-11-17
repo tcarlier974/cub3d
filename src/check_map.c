@@ -6,7 +6,7 @@
 /*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 19:34:55 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/02 21:06:17 by igilbert         ###   ########.fr       */
+/*   Updated: 2025/11/17 06:45:03 by igilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,10 @@ int	check_spawn(t_cube *cube)
 	if ((int)cube->player_x < 0 || (int)cube->player_x >= cube->map_width
 		|| (int)cube->player_y < 0 || (int)cube->player_y >= cube->map_height)
 	{
-		printf("Error: Spawn point (%d, %d) en dehors de la map\n",
-			(int)cube->player_x, (int)cube->player_y);
 		return (0);
 	}
 	if (cube->map[(int)cube->player_y][(int)cube->player_x] != '0')
 	{
-		printf("Error: Spawn point invalide ('%c')\n",
-			cube->map[(int)cube->player_y][(int)cube->player_x]);
 		return (0);
 	}
 	return (1);
@@ -46,6 +42,7 @@ void	free_checker(char ***visited, t_cube *cube)
 int	init_visit(char ***visited, t_cube *cube)
 {
 	int	i;
+	int	j;
 
 	i = 0;
 	*visited = malloc(sizeof(char *) * cube->map_height);
@@ -61,7 +58,9 @@ int	init_visit(char ***visited, t_cube *cube)
 			free((*visited));
 			return (0);
 		}
-		memset((*visited)[i], '0', cube->map_width);
+		j = 0;
+		while (j < cube->map_width)
+			(*visited)[i][j++] = '0';
 		(*visited)[i][cube->map_width] = '\0';
 		i++;
 	}
@@ -77,14 +76,8 @@ int	validate_map_closed(t_cube *cube)
 		return (0);
 	if (!init_visit(&visited, cube))
 		return (0);
-	printf("c'est bieng fermé ??? (%d, %d)...\n",
-		(int)cube->player_x, (int)cube->player_y);
 	result = bcktrck(cube, (int)cube->player_x, (int)cube->player_y, visited);
 	free_checker(&visited, cube);
-	if (result)
-		printf("map bien fermée\n");
-	else
-		printf("map pas bienfermée :3\n");
 	return (result);
 }
 
