@@ -6,11 +6,25 @@
 /*   By: tcarlier <tcarlier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/18 11:20:18 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/18 12:19:52 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/include.h"
+
+void	ft_putstr_fd(int fd, char *str)
+{
+	int	i;
+
+	if (!str || !fd)
+		return ;
+	i = 0;
+	while (str[i])
+	{
+		write(fd, &str[i], 1);
+		i++;
+	}
+}
 
 void	mlx_shit(t_cube *cube)
 {
@@ -30,7 +44,7 @@ int	main_mes(int code, int j, char **av, t_cube *cube)
 	{
 		if (count_lines(av[1]) <= 0 || count_max_col(av[1]) <= 0)
 		{
-			write(2, "Invalid map file\n", 18);
+			ft_putstr_fd(2, "Invalid map file\n");
 			return (0);
 		}
 	}
@@ -38,7 +52,7 @@ int	main_mes(int code, int j, char **av, t_cube *cube)
 	{
 		if (!validate_map_closed(cube))
 		{
-			write(2, "Error: map not properly closed\n", 32);
+			ft_putstr_fd(2, "Error: map not properly closed\n");
 			while (j < cube->map_height)
 			{
 				free(cube->map[j]);
@@ -57,7 +71,7 @@ int	main(int ac, char **av)
 
 	if (ac != 2)
 	{
-		write(2, "Usage: ./cub3D <map_file>\n", 27);
+		ft_putstr_fd(2, "Usage: ./cub3D <map_file>\n");
 		return (1);
 	}
 	if (!main_mes(1, 0, av, &cube))

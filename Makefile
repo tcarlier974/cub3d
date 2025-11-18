@@ -1,7 +1,7 @@
 NAME = cub3D
-CC = gcc -g
+CC = cc -g
 CFLAGS = -Wall -Wextra -Werror -I./includes
-MLX = mlx_linux.a
+MLX = libmlx_Linux.a
 SRC = ./get_next_line/get_next_line.c \
 	./get_next_line/get_next_line_utils.c \
 	src/main.c \
@@ -27,7 +27,7 @@ LINUX_FRAMEWORKS = -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -
 all: $(NAME)
 
 $(NAME): $(OBJ) $(MLX)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(MLX) $(LINUX_FRAMEWORKS)
+	$(CC) $(OBJ) $(CFLAGS) $(LINUX_FRAMEWORKS) -o $(NAME)  
 
 $(MLX):
 	@echo "Building MLX library..."

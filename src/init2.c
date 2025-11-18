@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: tcarlier <tcarlier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 18:28:08 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/17 06:47:29 by igilbert         ###   ########.fr       */
+/*   Updated: 2025/11/18 12:18:23 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	texture_recup(t_cube *cube, char ***textures, int i)
 {
 	if (!(*textures)[i])
 	{
-		write(2, "Texture path not found\n", 24);
+		ft_putstr_fd(2, "Texture path not found\n");
 		exit(EXIT_FAILURE);
 	}
 	cube->texture[i].img = NULL;
@@ -55,7 +55,7 @@ void	texture_recup(t_cube *cube, char ***textures, int i)
 			&cube->texture[i].width, &cube->texture[i].height);
 	if (!cube->texture[i].img)
 	{
-		write(2, "Failed to load texture\n", 24);
+		ft_putstr_fd(2, "Failed to load texture\n");
 		exit(EXIT_FAILURE);
 	}
 	free((*textures)[i]);

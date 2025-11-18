@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   include.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: tcarlier <tcarlier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/17 06:48:21 by igilbert         ###   ########.fr       */
+/*   Updated: 2025/11/18 12:21:00 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,6 +180,7 @@ typedef struct s_cube
 }	t_cube;
 
 // Function prototypes
+void	ft_putstr_fd(int fd, char *str);
 void	my_mlx_pixel_put(t_img *img, int x, int y, int color);
 void	init_cube(t_cube *cube, const char *map_file);
 void	recup_texture(t_cube *cube, const char *map_file);

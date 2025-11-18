@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: tcarlier <tcarlier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:40:11 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/17 06:43:13 by igilbert         ###   ########.fr       */
+/*   Updated: 2025/11/18 12:17:47 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	rgb_to_int(const char *rgb)
 	c.b = ft_atoi(rgb + i);
 	if (c.r < 0 || c.r > 255 || c.g < 0 || c.g > 255 || c.b < 0 || c.b > 255)
 	{
-		write(2, "Invalid RGB value\n", 19);
+		ft_putstr_fd(2, "Invalid RGB value\n");
 		exit(EXIT_FAILURE);
 	}
 	return (c.r << 16 | c.g << 8 | c.b);

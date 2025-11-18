@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 06:20:00 by igilbert          #+#    #+#             */
-/*   Updated: 2025/11/18 11:21:11 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/18 12:21:14 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char	*process_texture_line(char *line, int *j)
 	}
 	if (!texture)
 	{
-		write(2, "Failed to allocate memory for texture path\n", 44);
+		ft_putstr_fd(2, "Failed to allocate memory for texture path\n");
 		exit(EXIT_FAILURE);
 	}
 	return (texture);
@@ -43,7 +43,7 @@ void	process_floor_color(char *line, int *j, t_cube *cube, int *i)
 	cube->floor_color = rgb_to_int(line + *j);
 	if (cube->floor_color < 0 || cube->floor_color > 0xFFFFFF)
 	{
-		write(2, "Invalid floor color value\n", 27);
+		ft_putstr_fd(2, "Invalid floor color value\n");
 		exit(EXIT_FAILURE);
 	}
 	printf("Floor color: %d\n", cube->floor_color);
@@ -58,7 +58,7 @@ void	process_ceiling_color(char *line, int *j, t_cube *cube, int *i)
 	cube->ceiling_color = rgb_to_int(line + *j);
 	if (cube->ceiling_color < 0 || cube->ceiling_color > 0xFFFFFF)
 	{
-		write(2, "Invalid ceiling color value\n", 29);
+		ft_putstr_fd(2, "Invalid ceiling color value\n");
 		exit(EXIT_FAILURE);
 	}
 	printf("Ceiling color: %d\n", cube->ceiling_color);
@@ -79,7 +79,7 @@ void	parse_texture_identifier(char *line, char **textures,
 		process_ceiling_color(line, &vars[1], cube, &vars[0]);
 	else
 	{
-		write(2, "Unknown texture identifier\n", 28);
+		ft_putstr_fd(2, "Unknown texture identifier\n");
 		exit(EXIT_FAILURE);
 	}
 }
