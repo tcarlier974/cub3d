@@ -3,7 +3,7 @@ SO ./textures/undertrale_wall.xpm
 
 WE ./textures/undertrale_wall.xpm
 
-EA ./textures/undertrale_wall.xpm
+ EA ./textures/undertrale_wall.xpm
 
 F 20, 30, 60
 C 15, 20, 40

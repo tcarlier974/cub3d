@@ -22,19 +22,16 @@ SRC = ./get_next_line/get_next_line.c \
 OBJ = $(SRC:.c=.o)
 
 MACOS_FRAMEWORKS = -framework OpenGL -framework AppKit -framework CoreFoundation
-LINUX_FRAMEWORKS = -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
+LINUX_FRAMEWORKS = -L./minilibx-linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
 
 all: $(NAME)
 
-$(NAME): $(OBJ) $(MLX)
-	$(CC) $(OBJ) $(CFLAGS) $(LINUX_FRAMEWORKS) -o $(NAME)  
-
-$(MLX):
-	@echo "Building MLX library..."
-	@make -C minilibx-linux
-
 %.o: %.c
 	$(CC) $(CFLAGS) -Imlx_linux -O3 -c $< -o $@
+
+$(NAME): $(OBJ)
+	@make -C minilibx-linux
+	$(CC) $(OBJ) $(CFLAGS) $(LINUX_FRAMEWORKS) -o $(NAME)  
 
 clean:
 	rm -f $(OBJ)
@@ -44,4 +41,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all $(MLX) clean fclean re

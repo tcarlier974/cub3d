@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hook3.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: tcarlier <tcarlier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 17:34:41 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/11 17:36:14 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/18 12:50:19 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,19 +58,19 @@ void	hooking(t_gs *gs, t_cube *cube)
 
 int	key_release_hook(int keycode, t_cube *cube)
 {
-	if (keycode == 123)
+	if (keycode == 65361)
 		cube->hook.key_pressed[KEY_LEFT] = false;
-	if (keycode == 124)
+	if (keycode == 65363)
 		cube->hook.key_pressed[KEY_RIGHT] = false;
-	if (keycode == 13)
+	if (keycode == 119)
 		cube->hook.key_pressed[KEY_W] = false;
-	if (keycode == 0)
+	if (keycode == 97)
 		cube->hook.key_pressed[KEY_A] = false;
-	if (keycode == 2)
+	if (keycode == 100)
 		cube->hook.key_pressed[KEY_D] = false;
-	if (keycode == 1)
+	if (keycode == 115)
 		cube->hook.key_pressed[KEY_S] = false;
-	if (keycode == 14)
+	if (keycode == 101)
 		cube->hook.key_pressed[KEY_E] = false;
 	return (0);
 }

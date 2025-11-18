@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:43:21 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/18 12:18:08 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/18 12:57:24 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	init_cube(t_cube *cube, const char *map_file)
 	cube->map_width = count_max_col(map_file);
 	cube->map_height = count_lines(map_file);
 	i = 0;
-	while (i < 6)
+	while (i < 9)
 	{
 		cube->hook.key_pressed[i] = false;
 		i++;

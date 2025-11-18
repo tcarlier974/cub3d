@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:42:11 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/18 11:22:45 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/18 13:01:04 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,12 @@ int	ft_mlx_loop_end(t_cube *cube)
 			mlx_destroy_image(cube->mlx, cube->texture[i].img);
 		i++;
 	}
+	i = 0;
+	while (cube->map[i])
+	{
+		free(cube->map[i]);
+		i++;
+	}
 	free(cube->map);
 	exit(0);
 	return (0);
@@ -32,23 +38,23 @@ int	ft_mlx_loop_end(t_cube *cube)
 
 int	key_hook_press(int keycode, t_cube *cube)
 {
-	if (keycode == 53)
+	if (keycode == 65307)
 		cube->hook.key_pressed[KEY_ESC] = true;
-	if (keycode == 123)
+	if (keycode == 65361)
 		cube->hook.key_pressed[KEY_LEFT] = true;
-	if (keycode == 124)
+	if (keycode == 65363)
 		cube->hook.key_pressed[KEY_RIGHT] = true;
-	if (keycode == 13)
+	if (keycode == 119)
 		cube->hook.key_pressed[KEY_W] = true;
-	if (keycode == 0)
+	if (keycode == 97)
 		cube->hook.key_pressed[KEY_A] = true;
-	if (keycode == 2)
+	if (keycode == 100)
 		cube->hook.key_pressed[KEY_D] = true;
-	if (keycode == 1)
+	if (keycode == 115)
 		cube->hook.key_pressed[KEY_S] = true;
-	if (keycode == 14)
+	if (keycode == 101)
 		cube->hook.key_pressed[KEY_E] = true;
-	if (keycode == 257)
+	if (keycode == 65505)
 		cube->hook.key_pressed[KEY_SHIFT] = !cube->hook.key_pressed[KEY_SHIFT];
 	return (0);
 }
