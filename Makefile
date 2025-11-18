@@ -1,8 +1,7 @@
 NAME = cub3D
 CC = gcc -g
-CFLAGS = -I./includes
-LIBFT = ./libft/libft.a
-MLX = libmlx_intel.a
+CFLAGS = -Wall -Wextra -Werror -I./includes
+MLX = mlx_linux.a
 SRC = ./get_next_line/get_next_line.c \
 	./get_next_line/get_next_line_utils.c \
 	src/main.c \
@@ -23,21 +22,19 @@ SRC = ./get_next_line/get_next_line.c \
 OBJ = $(SRC:.c=.o)
 
 MACOS_FRAMEWORKS = -framework OpenGL -framework AppKit -framework CoreFoundation
+LINUX_FRAMEWORKS = -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
 
 all: $(NAME)
 
 $(NAME): $(OBJ) $(MLX)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(MLX) $(MACOS_FRAMEWORKS)
-
-$(LIBFT):
-	make -C libft
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(MLX) $(LINUX_FRAMEWORKS)
 
 $(MLX):
 	@echo "Building MLX library..."
-	@make -C mlx
+	@make -C minilibx-linux
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -Imlx_linux -O3 -c $< -o $@
 
 clean:
 	rm -f $(OBJ)

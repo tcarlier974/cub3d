@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   init4.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: tcarlier <tcarlier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 06:20:00 by igilbert          #+#    #+#             */
-/*   Updated: 2025/11/17 06:31:28 by igilbert         ###   ########.fr       */
+/*   Updated: 2025/11/18 11:21:11 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/include.h"
 
-char	*process_texture_line(char *line, int *j, int idx)
+char	*process_texture_line(char *line, int *j)
 {
 	char	*texture;
 	char	*newline;
@@ -29,7 +29,7 @@ char	*process_texture_line(char *line, int *j, int idx)
 	}
 	if (!texture)
 	{
-		write(2, "Failed to allocate memory for texture path\n", 45);
+		write(2, "Failed to allocate memory for texture path\n", 44);
 		exit(EXIT_FAILURE);
 	}
 	return (texture);

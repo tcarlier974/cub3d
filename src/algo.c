@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   algo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: tcarlier <tcarlier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:44:29 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/11 16:49:14 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/18 11:23:12 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/include.h"
 
-void	second_init_ray(t_raycast *ray, t_cube *cube, int x)
+void	second_init_ray(t_raycast *ray, t_cube *cube)
 {
 	if (ray->ray_dir_y < 0)
 	{
@@ -53,7 +53,7 @@ void	init_raycast_values(t_raycast *r, t_cube *cube, int x)
 		r->step_x = 1;
 		r->side_dist_x = (r->map_x + 1.0 - cube->player_x) * r->delta_dist_x;
 	}
-	second_init_ray(r, cube, x);
+	second_init_ray(r, cube);
 }
 
 void	dda_algo(t_raycast *ray, t_cube *cube)

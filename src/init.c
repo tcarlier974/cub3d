@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: tcarlier <tcarlier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:43:21 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/17 06:29:21 by igilbert         ###   ########.fr       */
+/*   Updated: 2025/11/18 11:20:38 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	recup_texture(t_cube *cube, const char *map_file)
 	textures = malloc(sizeof(char *) * TEXTURE_COUNT);
 	if (!textures)
 	{
-		write(2, "Failed to allocate memory for textures\n", 41);
+		write(2, "Failed to allocate memory for textures\n", 40);
 		exit(EXIT_FAILURE);
 	}
 	recup_textures_path(textures, map_file, cube);

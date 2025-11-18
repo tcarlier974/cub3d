@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: tcarlier <tcarlier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/17 06:25:37 by igilbert         ###   ########.fr       */
+/*   Updated: 2025/11/18 11:20:18 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,7 @@ int	main_mes(int code, int j, char **av, t_cube *cube)
 int	main(int ac, char **av)
 {
 	t_cube	cube;
-	int		i;
 
-	i = 0;
 	if (ac != 2)
 	{
 		write(2, "Usage: ./cub3D <map_file>\n", 27);

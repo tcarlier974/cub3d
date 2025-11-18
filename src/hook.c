@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hook.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: tcarlier <tcarlier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:42:11 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/14 01:30:48 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/18 11:22:45 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,8 @@ bool	can_move_y(t_cube *cube, t_gs gs)
 		gs.new_y += MARGE_COLLISION;
 	else
 		gs.new_y -= MARGE_COLLISION;
-	return ((cube->map[(int)(gs.new_y)][(int)(cube->player_x)] &&
-		(cube->map[(int)(gs.new_y)][(int)(cube->player_x)] == '0')
+	return (((cube->map[(int)(gs.new_y)][(int)(cube->player_x)] &&
+		(cube->map[(int)(gs.new_y)][(int)(cube->player_x)] == '0'))
 		|| (cube->map[(int)(gs.new_y)][(int)(cube->player_x)] == '3')));
 }
 
