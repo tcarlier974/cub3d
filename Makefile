@@ -38,7 +38,7 @@ intel: MLX_INC = -I.
 intel: MLX_BUILD = 
 intel: $(NAME)
 
-silicon: MLX_FLAGS = libmlx_sillicon.a $(MACOS_FRAMEWORKS)
+silicon: MLX_FLAGS = libmlx_silicon.a $(MACOS_FRAMEWORKS)
 silicon: MLX_INC = -I.
 silicon: MLX_BUILD = 
 silicon: $(NAME)
