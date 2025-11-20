@@ -6,7 +6,7 @@
 /*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 06:10:00 by igilbert          #+#    #+#             */
-/*   Updated: 2025/11/17 06:36:00 by igilbert         ###   ########.fr       */
+/*   Updated: 2025/11/20 18:39:32 by igilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,11 @@ int	alloc_map_line(t_init_tool *t, char ***map, t_cube *cube)
 
 void	process_map_lines(t_init_tool *t, char ***map, t_cube *cube)
 {
+	while (t->line && (t->line[0] == '\n' || t->line[0] == '\0'))
+	{
+		free(t->line);
+		t->line = get_next_line(t->fd);
+	}
 	while (t->line)
 	{
 		t->i = 0;

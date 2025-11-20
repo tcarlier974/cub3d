@@ -6,7 +6,7 @@
 /*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 12:00:00 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/17 06:47:20 by igilbert         ###   ########.fr       */
+/*   Updated: 2025/11/20 18:39:38 by igilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,11 @@ int	count_lines(const char *file_path)
 		return (0);
 	line = get_next_line(fd);
 	count_lines_loop(&line, &j, fd);
+	while (line && (line[0] == '\n' || line[0] == '\0'))
+	{
+		free(line);
+		line = get_next_line(fd);
+	}
 	while (line)
 	{
 		count++;
@@ -76,9 +81,17 @@ int	count_max_col(const char *file_path)
 	char	*line;
 	int		max;
 	int		i;
+	int		j;
 
+	j = 0;
 	if (!count_max_col_setup(file_path, &fd, &line))
 		return (0);
+	count_lines_loop(&line, &j, fd);
+	while (line && (line[0] == '\n' || line[0] == '\0'))
+	{
+		free(line);
+		line = get_next_line(fd);
+	}
 	max = 0;
 	while (line)
 	{

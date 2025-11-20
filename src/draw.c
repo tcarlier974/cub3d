@@ -6,7 +6,7 @@
 /*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:40:11 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/20 17:36:57 by igilbert         ###   ########.fr       */
+/*   Updated: 2025/11/20 18:48:41 by igilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,31 +28,31 @@ int	rgb_to_int(const char *rgb)
 	int		i;
 
 	i = 0;
-	while (rgb[i] == ' ')
+	while (rgb[i] == ' ' || rgb[i] == '\t')
 		i++;
 	if (rgb[i] < '0' || rgb[i] > '9')
 		return (-1);
 	c.r = ft_atoi(rgb + i);
 	while (rgb[i] >= '0' && rgb[i] <= '9')
 		i++;
-	while (rgb[i] == ' ')
+	while (rgb[i] == ' ' || rgb[i] == '\t')
 		i++;
 	if (rgb[i] != ',')
 		return (-1);
 	i++;
-	while (rgb[i] == ' ')
+	while (rgb[i] == ' ' || rgb[i] == '\t')
 		i++;
 	if (rgb[i] < '0' || rgb[i] > '9')
 		return (-1);
 	c.g = ft_atoi(rgb + i);
 	while (rgb[i] >= '0' && rgb[i] <= '9')
 		i++;
-	while (rgb[i] == ' ')
+	while (rgb[i] == ' ' || rgb[i] == '\t')
 		i++;
 	if (rgb[i] != ',')
 		return (-1);
 	i++;
-	while (rgb[i] == ' ')
+	while (rgb[i] == ' ' || rgb[i] == '\t')
 		i++;
 	if (rgb[i] < '0' || rgb[i] > '9')
 		return (-1);
