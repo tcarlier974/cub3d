@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcarlier <tcarlier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:43:21 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/18 12:57:24 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/20 17:12:31 by igilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,12 @@ void	init_cube(t_cube *cube, const char *map_file)
 	cube->map = NULL;
 	cube->map_width = count_max_col(map_file);
 	cube->map_height = count_lines(map_file);
+	cube->floor_color = -1;
+	cube->ceiling_color = -1;
 	i = 0;
 	while (i < 9)
 	{
 		cube->hook.key_pressed[i] = false;
-		i++;
-	}
-	while (i < 8)
-	{
-		cube->hook.mouse_pos[i - 6] = false;
 		i++;
 	}
 }
@@ -75,7 +72,10 @@ void	recup_texture(t_cube *cube, const char *map_file)
 		ft_putstr_fd(2, "Failed to allocate memory for textures\n");
 		exit(EXIT_FAILURE);
 	}
+	while (i < TEXTURE_COUNT)
+		textures[i++] = NULL;
 	recup_textures_path(textures, map_file, cube);
+	i = 0;
 	while (i < TEXTURE_COUNT)
 	{
 		texture_recup(cube, &textures, i);

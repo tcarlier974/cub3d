@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcarlier <tcarlier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:40:11 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/18 12:17:47 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/20 17:36:57 by igilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,20 +30,35 @@ int	rgb_to_int(const char *rgb)
 	i = 0;
 	while (rgb[i] == ' ')
 		i++;
+	if (rgb[i] < '0' || rgb[i] > '9')
+		return (-1);
 	c.r = ft_atoi(rgb + i);
 	while (rgb[i] >= '0' && rgb[i] <= '9')
 		i++;
+	while (rgb[i] == ' ')
+		i++;
+	if (rgb[i] != ',')
+		return (-1);
 	i++;
+	while (rgb[i] == ' ')
+		i++;
+	if (rgb[i] < '0' || rgb[i] > '9')
+		return (-1);
 	c.g = ft_atoi(rgb + i);
 	while (rgb[i] >= '0' && rgb[i] <= '9')
 		i++;
+	while (rgb[i] == ' ')
+		i++;
+	if (rgb[i] != ',')
+		return (-1);
 	i++;
+	while (rgb[i] == ' ')
+		i++;
+	if (rgb[i] < '0' || rgb[i] > '9')
+		return (-1);
 	c.b = ft_atoi(rgb + i);
 	if (c.r < 0 || c.r > 255 || c.g < 0 || c.g > 255 || c.b < 0 || c.b > 255)
-	{
-		ft_putstr_fd(2, "Invalid RGB value\n");
-		exit(EXIT_FAILURE);
-	}
+		return (-1);
 	return (c.r << 16 | c.g << 8 | c.b);
 }
 
