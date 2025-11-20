@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init4.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcarlier <tcarlier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 06:20:00 by igilbert          #+#    #+#             */
-/*   Updated: 2025/11/18 12:21:14 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/20 16:46:24 by igilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,14 @@ void	parse_texture_identifier(char *line, char **textures,
 {
 	while (line[vars[1]] == ' ')
 		vars[1]++;
-	if (line[vars[1]] == 'N' || line[vars[1]] == 'S'
-		|| line[vars[1]] == 'E' || line[vars[1]] == 'W')
+	if (!ft_strncmp(&line[vars[1]], "NO ", 3)
+		|| !ft_strncmp(&line[vars[1]], "SO ", 3)
+		|| !ft_strncmp(&line[vars[1]], "WE ", 3)
+		|| !ft_strncmp(&line[vars[1]], "EA ", 3))
 		process_texture_wall(line, textures, vars);
-	else if (line[vars[1]] == 'F')
+	else if (!ft_strncmp(&line[vars[1]], "F ", 2))
 		process_floor_color(line, &vars[1], cube, &vars[0]);
-	else if (line[vars[1]] == 'C')
+	else if (!ft_strncmp(&line[vars[1]], "C ", 2))
 		process_ceiling_color(line, &vars[1], cube, &vars[0]);
 	else
 	{

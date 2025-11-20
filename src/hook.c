@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hook.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcarlier <tcarlier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:42:11 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/18 13:01:04 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/20 16:00:27 by igilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ int	ft_mlx_loop_end(t_cube *cube)
 	exit(0);
 	return (0);
 }
-
+//linux
+/*
 int	key_hook_press(int keycode, t_cube *cube)
 {
 	if (keycode == 65307)
@@ -57,7 +58,52 @@ int	key_hook_press(int keycode, t_cube *cube)
 	if (keycode == 65505)
 		cube->hook.key_pressed[KEY_SHIFT] = !cube->hook.key_pressed[KEY_SHIFT];
 	return (0);
+}*/
+//macos
+
+int	key_release_hook(int keycode, t_cube *cube)
+{
+	if (keycode == 123)
+		cube->hook.key_pressed[KEY_LEFT] = false;
+	if (keycode == 124)
+		cube->hook.key_pressed[KEY_RIGHT] = false;
+	if (keycode == 13)
+		cube->hook.key_pressed[KEY_W] = false;
+	if (keycode == 0)
+		cube->hook.key_pressed[KEY_A] = false;
+	if (keycode == 2)
+		cube->hook.key_pressed[KEY_D] = false;
+	if (keycode == 1)
+		cube->hook.key_pressed[KEY_S] = false;
+	if (keycode == 14)
+		cube->hook.key_pressed[KEY_E] = false;
+	return (0);
 }
+
+int	key_hook_press(int keycode, t_cube *cube)
+{
+	if (keycode == 53)
+		cube->hook.key_pressed[KEY_ESC] = true;
+	if (keycode == 123)
+		cube->hook.key_pressed[KEY_LEFT] = true;
+	if (keycode == 124)
+		cube->hook.key_pressed[KEY_RIGHT] = true;
+	if (keycode == 13)
+		cube->hook.key_pressed[KEY_W] = true;
+	if (keycode == 0)
+		cube->hook.key_pressed[KEY_A] = true;
+	if (keycode == 2)
+		cube->hook.key_pressed[KEY_D] = true;
+	if (keycode == 1)
+		cube->hook.key_pressed[KEY_S] = true;
+	if (keycode == 14)
+		cube->hook.key_pressed[KEY_E] = true;
+	if (keycode == 257)
+		cube->hook.key_pressed[KEY_SHIFT] = !cube->hook.key_pressed[KEY_SHIFT];
+	return (0);
+}
+
+//end macos
 
 bool	can_move_x(t_cube *cube, t_gs gs)
 {

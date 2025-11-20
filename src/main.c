@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcarlier <tcarlier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/18 12:19:52 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/11/20 16:56:41 by igilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,17 @@ int	main_mes(int code, int j, char **av, t_cube *cube)
 int	main(int ac, char **av)
 {
 	t_cube	cube;
+	int		len;
 
 	if (ac != 2)
 	{
 		ft_putstr_fd(2, "Usage: ./cub3D <map_file>\n");
+		return (1);
+	}
+	len = ft_strlen(av[1]);
+	if (len < 4 || ft_strncmp(av[1] + len - 4, ".cub", 4) != 0)
+	{
+		ft_putstr_fd(2, "Error: Invalid file extension. Expected .cub\n");
 		return (1);
 	}
 	if (!main_mes(1, 0, av, &cube))

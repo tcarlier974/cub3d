@@ -6,6 +6,7 @@ SRC = ./get_next_line/get_next_line.c \
 	./get_next_line/get_next_line_utils.c \
 	src/main.c \
 	src/utils.c \
+	src/utils2.c \
 	src/init.c \
 	src/init2.c \
 	src/init3.c \
