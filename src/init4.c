@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init4.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 06:20:00 by igilbert          #+#    #+#             */
-/*   Updated: 2025/11/20 18:49:36 by igilbert         ###   ########.fr       */
+/*   Updated: 2025/11/30 18:52:25 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	process_floor_color(char *line, int *j, t_cube *cube, int *i)
 	cube->floor_color = rgb_to_int(line + *j);
 	if (cube->floor_color == -1)
 	{
-		ft_putstr_fd(2, "Error: Invalid floor color value. Using default Brown.\n");
+		ft_putstr_fd(2, "Error: Invalid floor color. Using default Brown.\n");
 		cube->floor_color = 0x8B4513;
 	}
 	(*i)++;
@@ -67,7 +67,7 @@ void	process_ceiling_color(char *line, int *j, t_cube *cube, int *i)
 	cube->ceiling_color = rgb_to_int(line + *j);
 	if (cube->ceiling_color == -1)
 	{
-		ft_putstr_fd(2, "Error: Invalid ceiling color value. Using default Sky Blue.\n");
+		ft_putstr_fd(2, "Error: Invalid ceiling color. Using default SkyB.\n");
 		cube->ceiling_color = 0x87CEEB;
 	}
 	(*i)++;
@@ -78,14 +78,20 @@ void	parse_texture_identifier(char *line, char **textures,
 {
 	while (line[vars[1]] == ' ' || line[vars[1]] == '\t')
 		vars[1]++;
-	if ((!ft_strncmp(&line[vars[1]], "NO", 2) && (line[vars[1] + 2] == ' ' || line[vars[1] + 2] == '\t'))
-		|| (!ft_strncmp(&line[vars[1]], "SO", 2) && (line[vars[1] + 2] == ' ' || line[vars[1] + 2] == '\t'))
-		|| (!ft_strncmp(&line[vars[1]], "WE", 2) && (line[vars[1] + 2] == ' ' || line[vars[1] + 2] == '\t'))
-		|| (!ft_strncmp(&line[vars[1]], "EA", 2) && (line[vars[1] + 2] == ' ' || line[vars[1] + 2] == '\t')))
+	if ((!ft_strncmp(&line[vars[1]], "NO", 2) && (line[vars[1] + 2] == ' '
+				|| line[vars[1] + 2] == '\t'))
+		|| (!ft_strncmp(&line[vars[1]], "SO", 2) && (line[vars[1] + 2] == ' '
+				|| line[vars[1] + 2] == '\t'))
+		|| (!ft_strncmp(&line[vars[1]], "WE", 2) && (line[vars[1] + 2] == ' '
+				|| line[vars[1] + 2] == '\t'))
+		|| (!ft_strncmp(&line[vars[1]], "EA", 2) && (line[vars[1] + 2] == ' '
+				|| line[vars[1] + 2] == '\t')))
 		process_texture_wall(line, textures, vars);
-	else if (!ft_strncmp(&line[vars[1]], "F", 1) && (line[vars[1] + 1] == ' ' || line[vars[1] + 1] == '\t'))
+	else if (!ft_strncmp(&line[vars[1]], "F", 1) && (line[vars[1] + 1] == ' '
+			|| line[vars[1] + 1] == '\t'))
 		process_floor_color(line, &vars[1], cube, &vars[0]);
-	else if (!ft_strncmp(&line[vars[1]], "C", 1) && (line[vars[1] + 1] == ' ' || line[vars[1] + 1] == '\t'))
+	else if (!ft_strncmp(&line[vars[1]], "C", 1) && (line[vars[1] + 1] == ' '
+			|| line[vars[1] + 1] == '\t'))
 		process_ceiling_color(line, &vars[1], cube, &vars[0]);
 	else
 	{

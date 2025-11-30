@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:40:11 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/20 18:48:41 by igilbert         ###   ########.fr       */
+/*   Updated: 2025/11/30 19:01:20 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,27 @@ void	my_mlx_pixel_put(t_img *img, int x, int y, int color)
 		return ;
 	dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
 	*(unsigned int *)dst = color;
+}
+
+int	rgb_to_int2(const char *rgb, int i, t_color *c)
+{
+	c->g = ft_atoi(rgb + i);
+	while (rgb[i] >= '0' && rgb[i] <= '9')
+		i++;
+	while (rgb[i] == ' ' || rgb[i] == '\t')
+		i++;
+	if (rgb[i] != ',')
+		return (-1);
+	i++;
+	while (rgb[i] == ' ' || rgb[i] == '\t')
+		i++;
+	if (rgb[i] < '0' || rgb[i] > '9')
+		return (-1);
+	c->b = ft_atoi(rgb + i);
+	if (c->r < 0 || c->r > 255 || c->g < 0 || c->g > 255
+		|| c->b < 0 || c->b > 255)
+		return (-1);
+	return (c->r << 16 | c->g << 8 | c->b);
 }
 
 int	rgb_to_int(const char *rgb)
@@ -44,22 +65,7 @@ int	rgb_to_int(const char *rgb)
 		i++;
 	if (rgb[i] < '0' || rgb[i] > '9')
 		return (-1);
-	c.g = ft_atoi(rgb + i);
-	while (rgb[i] >= '0' && rgb[i] <= '9')
-		i++;
-	while (rgb[i] == ' ' || rgb[i] == '\t')
-		i++;
-	if (rgb[i] != ',')
-		return (-1);
-	i++;
-	while (rgb[i] == ' ' || rgb[i] == '\t')
-		i++;
-	if (rgb[i] < '0' || rgb[i] > '9')
-		return (-1);
-	c.b = ft_atoi(rgb + i);
-	if (c.r < 0 || c.r > 255 || c.g < 0 || c.g > 255 || c.b < 0 || c.b > 255)
-		return (-1);
-	return (c.r << 16 | c.g << 8 | c.b);
+	return (rgb_to_int2(rgb, i, &c));
 }
 
 void	draw_minimap(t_cube *cube)

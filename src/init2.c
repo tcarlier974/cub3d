@@ -3,16 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   init2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 18:28:08 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/20 17:10:33 by igilbert         ###   ########.fr       */
+/*   Updated: 2025/11/30 19:10:49 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/include.h"
 
 char	*process_texture_line(char *line, int *j, int idx);
+
+void	process_texture_wall2(char *line, char **textures, int *vars)
+{
+	if (line[vars[1]] == 'E')
+	{
+		if (textures[2])
+		{
+			ft_putstr_fd(2, "Error: Duplicate EA texture identifier\n");
+			exit(EXIT_FAILURE);
+		}
+		textures[2] = process_texture_line(line, &vars[1], 2);
+		vars[0]++;
+	}
+	else if (line[vars[1]] == 'W')
+	{
+		if (textures[3])
+		{
+			ft_putstr_fd(2, "Error: Duplicate WE texture identifier\n");
+			exit(EXIT_FAILURE);
+		}
+		textures[3] = process_texture_line(line, &vars[1], 3);
+		vars[0]++;
+	}
+}
 
 void	process_texture_wall(char *line, char **textures, int *vars)
 {
@@ -36,26 +60,8 @@ void	process_texture_wall(char *line, char **textures, int *vars)
 		textures[1] = process_texture_line(line, &vars[1], 1);
 		vars[0]++;
 	}
-	else if (line[vars[1]] == 'E')
-	{
-		if (textures[2])
-		{
-			ft_putstr_fd(2, "Error: Duplicate EA texture identifier\n");
-			exit(EXIT_FAILURE);
-		}
-		textures[2] = process_texture_line(line, &vars[1], 2);
-		vars[0]++;
-	}
-	else if (line[vars[1]] == 'W')
-	{
-		if (textures[3])
-		{
-			ft_putstr_fd(2, "Error: Duplicate WE texture identifier\n");
-			exit(EXIT_FAILURE);
-		}
-		textures[3] = process_texture_line(line, &vars[1], 3);
-		vars[0]++;
-	}
+	else
+		process_texture_wall2(line, textures, vars);
 }
 
 void	texture_recup(t_cube *cube, char ***textures, int i)

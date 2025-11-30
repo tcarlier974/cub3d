@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   include.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/20 16:50:14 by igilbert         ###   ########.fr       */
+/*   Updated: 2025/11/30 18:55:31 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,15 @@ typedef struct s_color
 	int	g;
 	int	b;
 }	t_color;
+
+typedef struct s_colcmp
+{
+	int		fd;
+	char	*line;
+	int		max;
+	int		i;
+	int		j;
+}	t_colcmp;
 
 typedef struct s_gs
 {
