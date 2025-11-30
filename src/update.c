@@ -6,11 +6,34 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 19:11:59 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/30 19:12:19 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/12/01 00:33:24 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/include.h"
+
+char	*fps_calculator(void)
+{
+	static struct timeval	last_time = {0, 0};
+	static int				frame_count = 0;
+	static char				fps_str[20];
+	struct timeval			current_time;
+	double					elapsed;
+	int						fps;
+
+	gettimeofday(&current_time, NULL);
+	frame_count++;
+	elapsed = (current_time.tv_sec - last_time.tv_sec)
+		+ (current_time.tv_usec - last_time.tv_usec) / 1000000.0;
+	if (elapsed >= 1.0)
+	{
+		fps = (int)(frame_count / elapsed);
+		snprintf(fps_str, sizeof(fps_str), "FPS: %d", fps);
+		last_time = current_time;
+		frame_count = 0;
+	}
+	return (fps_str);
+}
 
 int	update_game_state(t_cube *cube)
 {
@@ -35,5 +58,6 @@ int	update_game_state(t_cube *cube)
 	}
 	raycast(cube);
 	mlx_put_image_to_window(cube->mlx, cube->win, cube->img.img, 0, 0);
+	mlx_string_put(cube->mlx, cube->win, 10, 10, 0x00FF00, fps_calculator());
 	return (0);
 }
