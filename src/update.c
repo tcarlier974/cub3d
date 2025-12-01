@@ -6,20 +6,19 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/30 19:11:59 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/12/01 00:33:24 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/12/01 02:04:38 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/include.h"
 
-char	*fps_calculator(void)
+char	*fps_calculator(int fps)
 {
 	static struct timeval	last_time = {0, 0};
 	static int				frame_count = 0;
 	static char				fps_str[20];
 	struct timeval			current_time;
 	double					elapsed;
-	int						fps;
 
 	gettimeofday(&current_time, NULL);
 	frame_count++;
@@ -38,6 +37,7 @@ char	*fps_calculator(void)
 int	update_game_state(t_cube *cube)
 {
 	t_gs	gs;
+	int		fps;
 
 	if (cube->hook.key_pressed[KEY_SHIFT])
 		cube->move_speed = WALK_SPEED + SPRINT_SPEED;
@@ -58,6 +58,6 @@ int	update_game_state(t_cube *cube)
 	}
 	raycast(cube);
 	mlx_put_image_to_window(cube->mlx, cube->win, cube->img.img, 0, 0);
-	mlx_string_put(cube->mlx, cube->win, 10, 10, 0x00FF00, fps_calculator());
+	mlx_string_put(cube->mlx, cube->win, 10, 10, 0x00FF00, fps_calculator(fps));
 	return (0);
 }
