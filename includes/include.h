@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/12/01 00:26:26 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/12/01 17:26:17 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,6 +187,7 @@ typedef struct s_cube
 	double	old_dir_y;
 	double	old_plane_x;
 	double	old_plane_y;
+	char	*fps_str;
 }	t_cube;
 
 // Function prototypes

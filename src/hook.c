@@ -6,7 +6,7 @@
 /*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:42:11 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/30 19:12:15 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/12/01 17:29:03 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int	ft_mlx_loop_end(t_cube *cube)
 		i++;
 	}
 	free(cube->map);
+	free(cube->fps_str);
 	exit(0);
 	return (0);
 }
