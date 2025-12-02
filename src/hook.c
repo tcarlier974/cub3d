@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hook.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: tcarlier <tcarlier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:42:11 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/12/01 17:29:03 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/12/02 14:38:17 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,11 @@ int	ft_mlx_loop_end(t_cube *cube)
 		i++;
 	}
 	free(cube->map);
-	free(cube->fps_str);
 	exit(0);
 	return (0);
 }
 //linux
-/*
+
 int	key_hook_press(int keycode, t_cube *cube)
 {
 	if (keycode == 65307)
@@ -59,9 +58,9 @@ int	key_hook_press(int keycode, t_cube *cube)
 	if (keycode == 65505)
 		cube->hook.key_pressed[KEY_SHIFT] = !cube->hook.key_pressed[KEY_SHIFT];
 	return (0);
-}*/
+}
 //macos
-
+/*
 int	key_release_hook(int keycode, t_cube *cube)
 {
 	if (keycode == 123)
@@ -102,7 +101,7 @@ int	key_hook_press(int keycode, t_cube *cube)
 	if (keycode == 257)
 		cube->hook.key_pressed[KEY_SHIFT] = !cube->hook.key_pressed[KEY_SHIFT];
 	return (0);
-}
+}*/
 
 //end macos
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hook3.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: tcarlier <tcarlier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 17:34:41 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/20 15:55:52 by igilbert         ###   ########.fr       */
+/*   Updated: 2025/12/02 14:35:20 by tcarlier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	hooking(t_gs *gs, t_cube *cube)
 }
 
 //linux
-/*
+
 int	key_release_hook(int keycode, t_cube *cube)
 {
 	if (keycode == 65361)
@@ -75,4 +75,4 @@ int	key_release_hook(int keycode, t_cube *cube)
 	if (keycode == 101)
 		cube->hook.key_pressed[KEY_E] = false;
 	return (0);
-}*/
+}
