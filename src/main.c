@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: igilbert <igilbert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/20 16:56:41 by igilbert         ###   ########.fr       */
+/*   Updated: 2025/12/02 17:57:59 by igilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,27 +38,32 @@ void	mlx_shit(t_cube *cube)
 	mlx_loop(cube->mlx);
 }
 
-int	main_mes(int code, int j, char **av, t_cube *cube)
+int	nofile(void)
+{
+	ft_putstr_fd(2, "Error : Can't open file. Make sure it exists\n");
+	return (0);
+}
+
+int	main_mes(int code, char **av, t_cube *cube)
 {
 	if (code == 1)
 	{
-		if (count_lines(av[1]) <= 0 || count_max_col(av[1]) <= 0)
+		if (count_lines(av[1]) == 0 || count_max_col(av[1]) == 0)
 		{
-			ft_putstr_fd(2, "Invalid map file\n");
+			ft_putstr_fd(2, "Error : Invalid map file\n");
 			return (0);
 		}
+		if (count_lines(av[1]) == -1 || count_max_col(av[1]) == -1)
+			return (nofile());
 	}
 	else
 	{
+		if (!cube->player_exists)
+			ft_exit(7, cube, "Error : No spawn point\n");
 		if (!validate_map_closed(cube))
 		{
-			ft_putstr_fd(2, "Error: map not properly closed\n");
-			while (j < cube->map_height)
-			{
-				free(cube->map[j]);
-				j++;
-			}
-			free(cube->map);
+			ft_putstr_fd(2, "Error : map not properly closed\n");
+			ft_exit(1, cube, NULL);
 			return (0);
 		}
 	}
@@ -71,22 +76,21 @@ int	main(int ac, char **av)
 	int		len;
 
 	if (ac != 2)
-	{
-		ft_putstr_fd(2, "Usage: ./cub3D <map_file>\n");
-		return (1);
-	}
+		return (ft_putstr_fd(2, "Usage : ./cub3D <map_file>\n"), 1);
 	len = ft_strlen(av[1]);
 	if (len < 4 || ft_strncmp(av[1] + len - 4, ".cub", 4) != 0)
-	{
-		ft_putstr_fd(2, "Error: Invalid file extension. Expected .cub\n");
-		return (1);
-	}
-	if (!main_mes(1, 0, av, &cube))
+		return (ft_putstr_fd(2,
+				"Error : Invalid file extension. Expected .cub\n"), 1);
+	if (!main_mes(1, av, &cube))
 		return (1);
 	init_cube(&cube, av[1]);
 	recup_texture(&cube, av[1]);
 	init_map(&cube.map, av[1], &cube);
-	if (!main_mes(2077, 0, av, &cube))
+	if (cube.player_exists > 1)
+		ft_exit(7, &cube, "Error : There are multiple spawn points\n");
+	if (cube.wrongmap == 1)
+		ft_exit(7, &cube, "Error : Invalid map\n");
+	if (!main_mes(2077, av, &cube))
 		return (1);
 	mlx_shit(&cube);
 	return (0);

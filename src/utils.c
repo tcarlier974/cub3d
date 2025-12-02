@@ -43,7 +43,7 @@ int	count_lines(const char *file_path)
 	count = 0;
 	fd = open(file_path, O_RDONLY);
 	if (fd < 0)
-		return (0);
+		return (-1);
 	line = get_next_line(fd);
 	count_lines_loop(&line, &j, fd);
 	while (line && (line[0] == '\n' || line[0] == '\0'))
@@ -81,7 +81,7 @@ int	count_max_col(const char *file_path)
 
 	col.j = 0;
 	if (!count_max_col_setup(file_path, &col.fd, &col.line))
-		return (0);
+		return (-1);
 	count_lines_loop(&col.line, &col.j, col.fd);
 	while (col.line && (col.line[0] == '\n' || col.line[0] == '\0'))
 	{

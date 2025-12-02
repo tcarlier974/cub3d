@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hook.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcarlier <tcarlier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igilbert <igilbert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:42:11 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/12/02 14:38:17 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/12/02 17:48:42 by igilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	ft_mlx_loop_end(t_cube *cube)
 	while (i < TEXTURE_COUNT)
 	{
 		if (cube->texture[i].img)
-			mlx_destroy_image(cube->mlx, cube->texture[i].img);
+		mlx_destroy_image(cube->mlx, cube->texture[i].img);
 		i++;
 	}
 	i = 0;
@@ -32,6 +32,7 @@ int	ft_mlx_loop_end(t_cube *cube)
 		i++;
 	}
 	free(cube->map);
+	free(cube->mlx);
 	exit(0);
 	return (0);
 }

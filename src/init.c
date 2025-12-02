@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: igilbert <igilbert@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: igilbert <igilbert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 16:43:21 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/20 18:39:22 by igilbert         ###   ########.fr       */
+/*   Updated: 2025/12/02 17:34:39 by igilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,16 @@ void	init_cube(t_cube *cube, const char *map_file)
 	cube->map_height = count_lines(map_file);
 	cube->floor_color = -1;
 	cube->ceiling_color = -1;
+	cube->player_exists = 0;
+	cube->wrongmap = 0;
+	cube->player_x = -1;
+	cube->player_y = -1;
+	i = 0;
+	while (i < TEXTURE_COUNT)
+		cube->texture[i++].img = NULL;
 	i = 0;
 	while (i < 9)
-	{
-		cube->hook.key_pressed[i] = false;
-		i++;
-	}
+		cube->hook.key_pressed[i++] = false;
 }
 
 void	recup_textures_path(char **textures, const char *map_file, t_cube *cube)
@@ -47,8 +51,8 @@ void	recup_textures_path(char **textures, const char *map_file, t_cube *cube)
 	fd = open(map_file, O_RDONLY);
 	if (fd < 0)
 	{
-		ft_putstr_fd(2, "Failed to open map file\n");
-		exit(EXIT_FAILURE);
+		ft_putstr_fd(2, "Error : Failed to open map file\n");
+		ft_exit(1, cube, NULL);
 	}
 	read_texture_lines(fd, textures, cube, vars);
 	close(fd);
@@ -56,7 +60,7 @@ void	recup_textures_path(char **textures, const char *map_file, t_cube *cube)
 	if (!textures[4] || vars[0] < 6)
 	{
 		ft_putstr_fd(2, "Error loading textures\n");
-		exit(EXIT_FAILURE);
+		ft_exit(1, cube, NULL);
 	}
 }
 
@@ -69,8 +73,8 @@ void	recup_texture(t_cube *cube, const char *map_file)
 	textures = malloc(sizeof(char *) * TEXTURE_COUNT);
 	if (!textures)
 	{
-		ft_putstr_fd(2, "Failed to allocate memory for textures\n");
-		exit(EXIT_FAILURE);
+		ft_putstr_fd(2, "Error : Failed to allocate memory for textures\n");
+		ft_exit(1, cube, NULL);
 	}
 	while (i < TEXTURE_COUNT)
 		textures[i++] = NULL;

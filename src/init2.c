@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcarlier <tcarlier@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: igilbert <igilbert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 18:28:08 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/11/30 19:10:49 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/12/02 16:49:12 by igilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,15 @@
 
 char	*process_texture_line(char *line, int *j, int idx);
 
-void	process_texture_wall2(char *line, char **textures, int *vars)
+static void	process_texture_wall2(char *line, char **textures, int *vars,
+		t_cube *cube)
 {
 	if (line[vars[1]] == 'E')
 	{
 		if (textures[2])
 		{
-			ft_putstr_fd(2, "Error: Duplicate EA texture identifier\n");
-			exit(EXIT_FAILURE);
+			ft_putstr_fd(2, "Error : Duplicate EA texture identifier\n");
+			ft_exit(1, cube, NULL);
 		}
 		textures[2] = process_texture_line(line, &vars[1], 2);
 		vars[0]++;
@@ -30,22 +31,23 @@ void	process_texture_wall2(char *line, char **textures, int *vars)
 	{
 		if (textures[3])
 		{
-			ft_putstr_fd(2, "Error: Duplicate WE texture identifier\n");
-			exit(EXIT_FAILURE);
+			ft_putstr_fd(2, "Error : Duplicate WE texture identifier\n");
+			ft_exit(1, cube, NULL);
 		}
 		textures[3] = process_texture_line(line, &vars[1], 3);
 		vars[0]++;
 	}
 }
 
-void	process_texture_wall(char *line, char **textures, int *vars)
+void	process_texture_wall(char *line, char **textures, int *vars,
+		t_cube *cube)
 {
 	if (line[vars[1]] == 'N')
 	{
 		if (textures[0])
 		{
-			ft_putstr_fd(2, "Error: Duplicate NO texture identifier\n");
-			exit(EXIT_FAILURE);
+			ft_putstr_fd(2, "Error : Duplicate NO texture identifier\n");
+			ft_exit(1, cube, NULL);
 		}
 		textures[0] = process_texture_line(line, &vars[1], 0);
 		vars[0]++;
@@ -54,24 +56,23 @@ void	process_texture_wall(char *line, char **textures, int *vars)
 	{
 		if (textures[1])
 		{
-			ft_putstr_fd(2, "Error: Duplicate SO texture identifier\n");
-			exit(EXIT_FAILURE);
+			ft_putstr_fd(2, "Error : Duplicate SO texture identifier\n");
+			ft_exit(1, cube, NULL);
 		}
 		textures[1] = process_texture_line(line, &vars[1], 1);
 		vars[0]++;
 	}
 	else
-		process_texture_wall2(line, textures, vars);
+		process_texture_wall2(line, textures, vars, cube);
 }
 
 void	texture_recup(t_cube *cube, char ***textures, int i)
 {
 	if (!(*textures)[i])
 	{
-		ft_putstr_fd(2, "Texture path not found\n");
-		exit(EXIT_FAILURE);
+		ft_putstr_fd(2, "Error : Texture path not found\n");
+		ft_exit(1, cube, NULL);
 	}
-	cube->texture[i].img = NULL;
 	cube->texture[i].bits_per_pixel = 0;
 	cube->texture[i].line_length = 0;
 	cube->texture[i].endian = 0;
@@ -81,8 +82,8 @@ void	texture_recup(t_cube *cube, char ***textures, int i)
 			&cube->texture[i].width, &cube->texture[i].height);
 	if (!cube->texture[i].img)
 	{
-		ft_putstr_fd(2, "Failed to load texture\n");
-		exit(EXIT_FAILURE);
+		ft_putstr_fd(2, "Error : Failed to load texture\n");
+		ft_exit(1, cube, NULL);
 	}
 	free((*textures)[i]);
 	cube->texture[i].addr = mlx_get_data_addr(cube->texture[i].img,

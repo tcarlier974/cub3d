@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   include.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcarlier <tcarlier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: igilbert <igilbert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 19:31:49 by tcarlier          #+#    #+#             */
-/*   Updated: 2025/12/02 14:45:33 by tcarlier         ###   ########.fr       */
+/*   Updated: 2025/12/02 16:31:57 by igilbert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@
 #  define ENABLE_MINIMAP 1
 # endif
 # ifndef SPRINT_SPEED
-#  define SPRINT_SPEED 0.02
+#  define SPRINT_SPEED 0.05
 # endif
 # ifndef WALK_SPEED
 #  define WALK_SPEED 0.02
@@ -48,7 +48,7 @@
 #  define SENSI 2.0
 # endif
 # ifndef ROTA
-#  define ROTA 0.01
+#  define ROTA 0.05
 # endif
 # ifndef MARGE_COLLISION
 #  define MARGE_COLLISION 0.1
@@ -187,6 +187,8 @@ typedef struct s_cube
 	double	old_dir_y;
 	double	old_plane_x;
 	double	old_plane_y;
+	int		player_exists;
+	int		wrongmap;
 }	t_cube;
 
 // Function prototypes
@@ -242,7 +244,9 @@ void	parse_texture_identifier(char *line, char **textures,
 			t_cube *cube, int *vars);
 void	recup_textures_path(char **textures, const char *map_file,
 			t_cube *cube);
-void	process_texture_wall(char *line, char **textures, int *vars);
+void	process_texture_wall(char *line, char **textures, int *vars,
+			t_cube *cube);
+void	ft_exit(int code, t_cube *cube, char *str);
 
 // Draw helper functions
 void	init_minimap_vars(int *vars);
